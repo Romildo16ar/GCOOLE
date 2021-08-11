@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="..\:/Users/romil/AndroidStudioProjects/gcoole/app/src/main/res/layout/acitivity_vaca.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/romil/AndroidStudioProjects/gcoole/app/src/main/res/layout/activity_adapter_produtor.xml" value="0.2907608695652174" />
+        <entry key="..\:/Users/romil/AndroidStudioProjects/gcoole/app/src/main/res/layout/activity_adapter_vaca.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/romil/AndroidStudioProjects/gcoole/app/src/main/res/layout/activity_produtor.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/romil/AndroidStudioProjects/gcoole/app/src/main/res/layout/listview_produtor.xml" value="0.16621376811594202" />
+        <entry key="..\:/Users/romil/AndroidStudioProjects/gcoole/app/src/main/res/layout/listview_vaca.xml" value="0.16621376811594202" />
+        <entry key="..\:/Users/romil/AndroidStudioProjects/gcoole/app/src/main/res/layout/view_cadastro_produtor.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/romil/AndroidStudioProjects/gcoole/app/src/main/res/layout/view_casdastro_vaca.xml" value="0.16621376811594202" />
+        <entry key="..\:/Users/romil/AndroidStudioProjects/gcoole/app/src/main/res/layout/view_editar_produtor.xml" value="0.20572916666666666" />
+        <entry key="..\:/Users/romil/AndroidStudioProjects/gcoole/app/src/main/res/layout/view_editar_vaca.xml" value="0.25181159420289856" />
+        <entry key="..\:/Users/romil/AndroidStudioProjects/gcoole/app/src/main/res/menu/main.xml" value="0.20416666666666666" />
+        <entry key="..\:/Users/romil/AndroidStudioProjects/gcoole/app/src/main/res/menu/menu.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/romil/AndroidStudioProjects/gcoole/app/src/main/res/menu/menu_activity_produtor.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/romil/AndroidStudioProjects/gcoole/app/src/main/res/menu/menu_activity_vaca.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/romil/AndroidStudioProjects/gcoole/app/src/main/res/menu/menu_cadastro_produtor.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/romil/AndroidStudioProjects/gcoole/app/src/main/res/menu/menu_cadastro_vaca.xml" value="0.20416666666666666" />
+        <entry key="..\:/Users/romil/AndroidStudioProjects/gcoole/app/src/main/res/menu/menu_editar_cadastro_produtor.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/romil/AndroidStudioProjects/gcoole/app/src/main/res/menu/menu_listaprod.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/romil/AndroidStudioProjects/gcoole/app/src/main/res/menu/menu_listview_prod.xml" value="0.20416666666666666" />
+        <entry key="..\:/Users/romil/AndroidStudioProjects/gcoole/app/src/main/res/menu/menu_listview_vaca.xml" value="0.20416666666666666" />
+      </map>
+    </option>
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="11" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/build/classes" />
+  </component>
+  <component name="ProjectType">
+    <option name="id" value="Android" />
+  </component>
+</project>

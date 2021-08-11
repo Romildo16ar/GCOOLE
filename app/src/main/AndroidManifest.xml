@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.example.gcoole">
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/vaca"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/vaca"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.Gcoole">
+        <activity android:name=".MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".CRUD.CadastroProdutor"
+            android:label="Cadastro de Produtores"
+            />
+        <activity
+            android:name=".Activity_Produtor"
+            android:label="Produtor Cadastrado"
+            />
+        <activity android:name=".Listviews.ListviewProdutor"
+            android:label="Produtores Cadastrados"/>
+        <activity android:name=".CRUD.EditarProdutor"
+            android:label="Editar Produtor"/>
+        <activity android:name=".Listviews.ListviewsVaca"
+            android:label="Vacas Cadastradas"/>
+        <activity android:name=".CRUD.CadastroVaca"
+            android:label="Cadastro de Vaca"/>
+        <activity android:name=".Activity_Vaca"
+            android:label="Vaca Cadastrada"/>
+        <activity android:name=".CRUD.EditarVaca"
+            android:label="Editar Vaca"/>
+
+
+    </application>
+
+</manifest>

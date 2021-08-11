@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">gcoole</string>
+    <string name="Prop">Proprietario</string>
+    <string name="Prod">Produtor</string>
+    <string name="Vaca">Vaca</string>
+    <string name="Salvar">Salvar</string>
+    <string name="nome">Nome:</string>
+    <string name="tipo">Tipo:</string>
+    <string name="propTaque">Proprietario do Taque</string>
+    <string name="numProp">Número do Produtor</string>
+    <string name="nomecomp">Nome Completo</string>
+    <string name="numeroProd">Numero do Produtor</string>
+    <string name="delete">Deletar</string>
+    <string name="Editar">Editar</string>
+    <string name="PropDoTaque">Proprietario do Tanque</string>
+    <string name="nomeVaca">Nome da Vaca</string>
+    <string name="numeVaca">Número de Indetificação da Vaca</string>
+</resources>
