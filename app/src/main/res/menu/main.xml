@@ -8,4 +8,10 @@
     <item
         android:id="@+id/ListVaca"
         android:title="@string/Vaca" />
+    <item
+        android:id="@+id/idInserirProducao"
+        android:title="@string/inserirProducao" />
+    <item
+        android:id="@+id/idListProducao"
+        android:title="@string/producao" />
 </menu>

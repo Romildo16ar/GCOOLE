@@ -15,4 +15,13 @@
     <string name="PropDoTaque">Proprietario do Tanque</string>
     <string name="nomeVaca">Nome da Vaca</string>
     <string name="numeVaca">Número de Indetificação da Vaca</string>
+    <string name="inserir">Inserir</string>
+    <string name="inserirProducao">Inserir Produção</string>
+    <string name="quantLeite">Quantidade de Leite</string>
+    <string name="DataProducao">Data da Produção</string>
+    <string name="NomeProdutor">Nome do Produtor:</string>
+    <string name="quant">Quantidade:</string>
+    <string name="data">Data da Produção:</string>
+    <string name="producao">Produção</string>
+
 </resources>

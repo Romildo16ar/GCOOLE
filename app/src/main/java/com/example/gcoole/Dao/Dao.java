@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import com.example.gcoole.Modelo.Producao;
 import com.example.gcoole.Modelo.Produtor;
 import com.example.gcoole.Modelo.Vaca;
 
@@ -26,6 +27,10 @@ public class Dao extends SQLiteOpenHelper {
         String tbProdutor = "CREATE TABLE produtor(id INTEGER PRIMARY KEY AUTOINCREMENT, nome VARCHAR(50), tipo INTEGER, "+
                 "numProd INTEGER)";
         String tbVaca = "CREATE TABLE vaca(id INTEGER PRIMARY KEY AUTOINCREMENT, nome VARCHAR(50), numVaca INTEGER)";
+
+        String tbProducao = "CREATE TABLE producao(id INTEGER PRIMARY KEY AUTOINCREMENT, quant INTEGER, data VARCHAR(20), idProdutor INTEGER)";
+
+        db.execSQL(tbProducao);
         db.execSQL(tbProdutor);
         db.execSQL(tbVaca);
     }
@@ -34,9 +39,13 @@ public class Dao extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         String dropTbProdutor = "DROP TABLE IF EXISTS produtor";
         String dropTbVaca = "DROP TABLE IF EXISTS vaca";
+        String dropTbProducao = "DROP TABLE IF EXISTS producao";
+
+
 
         db.execSQL(dropTbProdutor);
         db.execSQL(dropTbVaca);
+        db.execSQL(dropTbProducao);
         onCreate(db);
 
 
@@ -77,7 +86,7 @@ public class Dao extends SQLiteOpenHelper {
     }
 
 
-    public List<Produtor> selecionarProd(){
+    public List<Produtor> selecionarProdutor(){
         List<Produtor> listaProd = new ArrayList<>();
         SQLiteDatabase db = getReadableDatabase();
         String sql = "SELECT * FROM produtor";
@@ -156,6 +165,44 @@ public class Dao extends SQLiteOpenHelper {
 
 
 
-//Fim do Crud VACA -----------------------------------------------------------------------------------------------------------------
+//Fim do Crud VACA ----------------------------------------------------------------------------------------------------------------
+// Incio Crud Inserir Produção ---------------------------------------------------------------------------------------------------
+
+    public void inserirProducao(Producao producao){
+        SQLiteDatabase db = getWritableDatabase();
+        ContentValues vc = new ContentValues();
+        vc.put("quant", producao.getQuant());
+        vc.put("data", producao.getData());
+        vc.put("idProdutor", producao.getIdProdutor());
+
+        db.insert("producao", null, vc);
+        db.close();
+    }
+
+    public List<Producao> selecionarProducao(){
+        List<Producao> listaProducao = new ArrayList<>();
+        SQLiteDatabase db = getReadableDatabase();
+        String sql = "SELECT * FROM producao";
+        Cursor cur = db.rawQuery(sql, null);
+        if (cur.moveToFirst()){
+            do{
+                Producao producao = new Producao();
+                producao.setId(cur.getInt(0));
+                producao.setQuant(cur.getInt(1));
+                producao.setData(cur.getString(2));
+                producao.setIdProdutor(cur.getInt(3));
+
+                listaProducao.add(producao);
+            }while (cur.moveToNext());
+        }
+        db.close();
+        return listaProducao;
+
+    }
+
+
+
+
+// Fim Inserir Produção ----------------------------------------------------------------------------------------------------
 
 }

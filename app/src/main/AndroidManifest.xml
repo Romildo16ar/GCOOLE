@@ -36,6 +36,13 @@
             android:label="Vaca Cadastrada"/>
         <activity android:name=".CRUD.EditarVaca"
             android:label="Editar Vaca"/>
+        <activity android:name=".CRUD.InserirProducao"
+            android:label="Inserir Produção"/>
+        <activity android:name=".Listviews.ListviewProducao"
+            android:label="Produção"/>
+        <activity android:name=".Activity_Producao"
+            android:label="Produção"/>.
+
 
 
     </application>

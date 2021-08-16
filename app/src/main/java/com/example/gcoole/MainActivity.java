@@ -7,6 +7,8 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.example.gcoole.CRUD.InserirProducao;
+import com.example.gcoole.Listviews.ListviewProducao;
 import com.example.gcoole.Listviews.ListviewProdutor;
 import com.example.gcoole.Listviews.ListviewsVaca;
 
@@ -32,6 +34,14 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             case R.id.ListVaca:
                 startActivity(new Intent(this, ListviewsVaca.class));
+
+                return true;
+            case R.id.idInserirProducao:
+                startActivity(new Intent(this, InserirProducao.class));
+
+                return true;
+            case R.id.idListProducao:
+                startActivity(new Intent(this, ListviewProducao.class));
 
                 return true;
 
