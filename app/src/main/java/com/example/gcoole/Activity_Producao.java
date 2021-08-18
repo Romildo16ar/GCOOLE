@@ -12,10 +12,12 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.gcoole.CRUD.EditarProducao;
 import com.example.gcoole.CRUD.EditarProdutor;
 import com.example.gcoole.Dao.Dao;
 import com.example.gcoole.Listviews.ListviewProducao;
 import com.example.gcoole.Listviews.ListviewProdutor;
+import com.example.gcoole.Listviews.Listview_Producao_Por_Produtor;
 
 public class Activity_Producao extends AppCompatActivity {
     private TextView textViewNomeProdutor;
@@ -29,42 +31,42 @@ public class Activity_Producao extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
 
-        textViewNomeProdutor = findViewById(R.id.idNomeProdutorActivity);
-        textViewQuant = findViewById(R.id.idQuant);
-        textViewData = findViewById(R.id.idDataProducaoAcitivity);
+        textViewNomeProdutor = findViewById(R.id.idNomeProdutorActProducao);
+        textViewQuant = findViewById(R.id.idQuantActProducao);
+        textViewData = findViewById(R.id.idDataActProducao);
 
-        textViewNomeProdutor.setText("Nome do Produtor: "+ ListviewProducao.producao.getIdProdutor());
-        textViewQuant.setText("Quantidade: "+ ListviewProducao.producao.getQuant());
-        textViewData.setText("Data da Produção: "+ListviewProducao.producao.getData());
-
+        textViewNomeProdutor.setText("Produtor: "+Listview_Producao_Por_Produtor.nomeProdutor);
+        textViewQuant.setText("Quantidade: "+Listview_Producao_Por_Produtor.producao.getQuant());
+        textViewData.setText("Data da Produção: "+Listview_Producao_Por_Produtor.producao.getData() );
 
     }
+
+
     public boolean onCreateOptionsMenu(Menu menu){
-        getMenuInflater().inflate(R.menu.menu, menu);
+        getMenuInflater().inflate(R.menu.menu_activity_producao, menu);
         return true;
     }
-
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
+    public boolean onOptionsItemSelected(MenuItem item){
+        switch (item.getItemId()){
             case android.R.id.home:
-                startActivity(new Intent(this, ListviewProducao.class));
+                startActivity(new Intent(this, Listview_Producao_Por_Produtor.class));
                 finishAffinity();
                 break;
 
-           /* case R.id.idBTEditarProd:
-                startActivity(new Intent(Activity_Produtor.this, EditarProdutor.class));
+            case R.id.idEditarProducao:
+                startActivity(new Intent(Activity_Producao.this, EditarProducao.class));
                 finishAffinity();
                 break;
-            case R.id.idBTDeletarProd:
+            case R.id.idDeletarProducao:
                 Dao bd = new Dao(this);
-                bd.deleteProdutor(ListviewProdutor.produtor.getId());
+                bd.deleteProducao(Listview_Producao_Por_Produtor.producao.getId());
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                builder.setTitle("Produtor Excluido com Sucesso!");
+                builder.setTitle("Produçao Excluida com Sucesso!");
                 builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        Toast.makeText(Activity_Produtor.this,  "", Toast.LENGTH_SHORT);
-                        startActivity(new Intent(Activity_Produtor.this, ListviewProdutor.class));
+                        Toast.makeText(Activity_Producao.this,  "", Toast.LENGTH_SHORT);
+                        startActivity(new Intent(Activity_Producao.this, Listview_Producao_Por_Produtor.class));
                         finishAffinity();
 
                     }
@@ -73,7 +75,7 @@ public class Activity_Producao extends AppCompatActivity {
 
 
 
-                break;*/
+                break;
             default:
                 break;
 

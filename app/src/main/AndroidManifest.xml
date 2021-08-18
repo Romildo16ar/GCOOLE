@@ -39,12 +39,13 @@
         <activity android:name=".CRUD.InserirProducao"
             android:label="Inserir Produção"/>
         <activity android:name=".Listviews.ListviewProducao"
-            android:label="Produção"/>
+            android:label="Selecione um Produtor"/>
+        <activity android:name=".Listviews.Listview_Producao_Por_Produtor"
+            android:label="Produções"/>
         <activity android:name=".Activity_Producao"
-            android:label="Produção"/>.
-
-
-
+            android:label="Editar Produção"/>
+        <activity android:name=".CRUD.EditarProducao"
+            android:label="Editar Produção" />
     </application>
 
 </manifest>

@@ -7,42 +7,30 @@
     android:orientation="vertical"
     tools:context="com.example.gcoole.Adapters.AdapterProdutor">
 
-
     <TextView
 
 
-        android:id="@+id/idNomeProdutorActProducao"
+        android:id="@+id/idDataProducaoAdapter"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="15dp"
         android:layout_marginLeft="15dp"
         android:layout_marginTop="15dp"
-        android:text="@string/NomeProdutor"
+        android:text="@string/DataProducao"
         android:textColor="#000000"
-        android:textSize="24sp" />
-
-    <TextView
-
-
-        android:id="@+id/idQuantActProducao"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="15dp"
-        android:layout_marginLeft="15dp"
-        android:layout_marginBottom="5dp"
-        android:text="@string/quantLeite"
-        android:textColor="#615C5C"
         android:textSize="16sp" />
 
     <TextView
-        android:id="@+id/idDataActProducao"
+
+
+        android:id="@+id/idQuantAdapter"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="15dp"
         android:layout_marginLeft="15dp"
-        android:layout_marginBottom="5dp"
-        android:text="@string/DataProducao"
-        android:textColor="#615C5C"
+        android:layout_marginBottom="15dp"
+        android:text="@string/quantLeite"
+        android:textColor="#000000"
         android:textSize="16sp" />
 
 

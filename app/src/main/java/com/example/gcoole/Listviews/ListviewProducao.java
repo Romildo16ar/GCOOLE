@@ -2,7 +2,6 @@ package com.example.gcoole.Listviews;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -11,19 +10,19 @@ import android.widget.ListView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.gcoole.Activity_Producao;
 import com.example.gcoole.Adapters.AdapterProducao;
-import com.example.gcoole.Adapters.AdapterProdutor;
 import com.example.gcoole.Dao.Dao;
 import com.example.gcoole.MainActivity;
-import com.example.gcoole.Modelo.Producao;
+import com.example.gcoole.Modelo.Produtor;
 import com.example.gcoole.R;
 
 import java.util.List;
 
 public class ListviewProducao extends AppCompatActivity {
-    public static Producao producao;
-    private ListView producoes;
+   // public static Producao producao;
+   // private ListView producoes;
+   public static Produtor produtor;
+   private ListView produtores;
 
 
     @Override
@@ -33,18 +32,19 @@ public class ListviewProducao extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
 
-        producoes= (ListView)findViewById(R.id.idlistviewProducao);
+        produtores= (ListView)findViewById(R.id.idlistviewProducao);
 
 
         Dao bd = new Dao(this);
-        List<Producao> listaProducao = bd.selecionarProducao();
-        Log.e("Erro", "Entrei"+listaProducao.get(0).getQuant());
-        producoes.setAdapter(new AdapterProducao(ListviewProducao.this, listaProducao));
+       // List<Producao> listaProducao = bd.selecionarProducao();
+        List<Produtor> listaProdutor = bd.selecionarProdutor();
+        //Log.e("Erro", "Entrei"+listaProducao.get(0).getQuant());
+        produtores.setAdapter(new AdapterProducao(ListviewProducao.this, listaProdutor));
 
-        producoes.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        produtores.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                producao = (Producao) producoes.getItemAtPosition(position);
+                produtor = (Produtor) produtores.getItemAtPosition(position);
                 click(view);
             }
 
@@ -53,7 +53,7 @@ public class ListviewProducao extends AppCompatActivity {
     }
 
     private void click(View view) {
-        startActivity(new Intent(this, Activity_Producao.class));
+        startActivity(new Intent(this, Listview_Producao_Por_Produtor.class));
     }
 
     public boolean onCreateOptionsMenu(Menu menu){
@@ -85,9 +85,8 @@ public class ListviewProducao extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         Dao bd = new Dao(this);
-        List<Producao> producaoList = null;
-        producaoList = bd.selecionarProducao();
-        producoes.setAdapter(new AdapterProducao(ListviewProducao.this, producaoList));
+        List<Produtor> listaProdutor = bd.selecionarProdutor();
+        produtores.setAdapter(new AdapterProducao(ListviewProducao.this, listaProdutor));
     }
 
 }

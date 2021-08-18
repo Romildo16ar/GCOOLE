@@ -200,6 +200,27 @@ public class Dao extends SQLiteOpenHelper {
 
     }
 
+    public void deleteProducao(int id){
+        String delete = "id ='" + id +"'";
+        SQLiteDatabase bd = getReadableDatabase();
+        bd.delete("producao", delete, null);
+        bd.close();
+    }
+
+
+    public void updateProducao(Producao producao){
+        SQLiteDatabase db = getReadableDatabase();
+        String where = "id='"+producao.getId()+"'";
+        //  Log.e("Erro", "Entrei"+vaca.getId());
+        ContentValues cv = new ContentValues();
+        cv.put("quant", producao.getQuant());
+        cv.put("data", producao.getData());
+        cv.put("idProdutor", producao.getIdProdutor());
+
+        db.update("producao",cv,where, null);
+        db.close();
+
+    }
 
 
 
