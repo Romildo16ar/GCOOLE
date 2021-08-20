@@ -1,5 +1,6 @@
 package com.example.gcoole.Listviews;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -18,11 +19,12 @@ import com.example.gcoole.R;
 
 import java.util.List;
 
-public class ListviewProducao extends AppCompatActivity {
+public class ListviewProdutorParaProducao extends AppCompatActivity {
    // public static Producao producao;
    // private ListView producoes;
    public static Produtor produtor;
    private ListView produtores;
+    private Dialog myDialog;
 
 
     @Override
@@ -39,11 +41,14 @@ public class ListviewProducao extends AppCompatActivity {
        // List<Producao> listaProducao = bd.selecionarProducao();
         List<Produtor> listaProdutor = bd.selecionarProdutor();
         //Log.e("Erro", "Entrei"+listaProducao.get(0).getQuant());
-        produtores.setAdapter(new AdapterProducao(ListviewProducao.this, listaProdutor));
+
+        produtores.setAdapter(new AdapterProducao(ListviewProdutorParaProducao.this, listaProdutor));
 
         produtores.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
                 produtor = (Produtor) produtores.getItemAtPosition(position);
                 click(view);
             }
@@ -53,6 +58,7 @@ public class ListviewProducao extends AppCompatActivity {
     }
 
     private void click(View view) {
+
         startActivity(new Intent(this, Listview_Producao_Por_Produtor.class));
     }
 
@@ -81,12 +87,13 @@ public class ListviewProducao extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+
     @Override
     protected void onResume() {
         super.onResume();
         Dao bd = new Dao(this);
         List<Produtor> listaProdutor = bd.selecionarProdutor();
-        produtores.setAdapter(new AdapterProducao(ListviewProducao.this, listaProdutor));
+        produtores.setAdapter(new AdapterProducao(ListviewProdutorParaProducao.this, listaProdutor));
     }
 
 }

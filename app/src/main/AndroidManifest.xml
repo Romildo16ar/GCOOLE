@@ -38,7 +38,7 @@
             android:label="Editar Vaca"/>
         <activity android:name=".CRUD.InserirProducao"
             android:label="Inserir Produção"/>
-        <activity android:name=".Listviews.ListviewProducao"
+        <activity android:name=".Listviews.ListviewProdutorParaProducao"
             android:label="Selecione um Produtor"/>
         <activity android:name=".Listviews.Listview_Producao_Por_Produtor"
             android:label="Produções"/>

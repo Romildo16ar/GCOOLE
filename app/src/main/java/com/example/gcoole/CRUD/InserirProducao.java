@@ -1,7 +1,6 @@
 package com.example.gcoole.CRUD;
 
 import android.app.AlertDialog;
-import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,7 +10,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -20,18 +18,14 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.gcoole.Dao.Dao;
-import com.example.gcoole.Listviews.ListviewProducao;
-import com.example.gcoole.Listviews.ListviewProdutor;
 import com.example.gcoole.MainActivity;
+import com.example.gcoole.MaskEditUtil;
 import com.example.gcoole.Modelo.Producao;
 import com.example.gcoole.Modelo.Produtor;
 import com.example.gcoole.R;
 
 
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.List;
-import java.util.Locale;
 
 public class InserirProducao extends AppCompatActivity implements View.OnClickListener {
 
@@ -69,6 +63,8 @@ public class InserirProducao extends AppCompatActivity implements View.OnClickLi
 
         quant = (EditText) findViewById(R.id.idQuant);
         dataProducao = (EditText) findViewById(R.id.idDataProducao);
+
+        dataProducao.addTextChangedListener(MaskEditUtil.mask(dataProducao, MaskEditUtil.FORMAT_DATE));
 
 
         Button btInserir = (Button) findViewById(R.id.idBTInserirProducao);
@@ -118,8 +114,8 @@ public class InserirProducao extends AppCompatActivity implements View.OnClickLi
         if(quant.getText().toString().isEmpty()){
             quant.setError("Preencha esse campo!");
             quant.requestFocus();
-        }else if(dataProducao.getText().toString().isEmpty()){
-            dataProducao.setError("Preencha esse campo!");
+        }else if(!dataProducao.getText().toString().isEmpty() && !validaData(dataProducao.getText().toString())){
+            dataProducao.setError("Data Inválida!");
             dataProducao.requestFocus();
         }else{
             producao.setQuant(Integer.parseInt(quant.getText().toString()));
@@ -150,6 +146,22 @@ public class InserirProducao extends AppCompatActivity implements View.OnClickLi
         }
 
 
+    }
+
+    private boolean validaData(String data){
+        String[] vet;
+        vet=data.split("/");
+        try {
+            int dia = Integer.parseInt(vet[0]);
+            int mes = Integer.parseInt(vet[1]);
+            int ano = Integer.parseInt(vet[2]);
+            if(dia>0 && dia<=31 && mes>0 && mes<=12)
+                return true;
+        }catch (Exception e){
+            dataProducao.setError("Data Inválida!");
+            dataProducao.requestFocus();
+        }
+        return false;
     }
 
 

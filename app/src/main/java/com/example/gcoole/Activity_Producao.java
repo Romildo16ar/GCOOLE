@@ -13,10 +13,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.gcoole.CRUD.EditarProducao;
-import com.example.gcoole.CRUD.EditarProdutor;
 import com.example.gcoole.Dao.Dao;
-import com.example.gcoole.Listviews.ListviewProducao;
-import com.example.gcoole.Listviews.ListviewProdutor;
 import com.example.gcoole.Listviews.Listview_Producao_Por_Produtor;
 
 public class Activity_Producao extends AppCompatActivity {

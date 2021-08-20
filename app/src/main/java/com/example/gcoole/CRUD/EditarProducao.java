@@ -22,6 +22,7 @@ import com.example.gcoole.Activity_Vaca;
 import com.example.gcoole.Dao.Dao;
 import com.example.gcoole.Listviews.Listview_Producao_Por_Produtor;
 import com.example.gcoole.Listviews.ListviewsVaca;
+import com.example.gcoole.MaskEditUtil;
 import com.example.gcoole.Modelo.Producao;
 import com.example.gcoole.Modelo.Produtor;
 import com.example.gcoole.R;
@@ -47,6 +48,8 @@ public class EditarProducao extends AppCompatActivity implements View.OnClickLis
         spinnerProdutor = (Spinner) findViewById(R.id.idEditarSpinnerProdutor);
         editTextQuant = (EditText) findViewById(R.id.idEditarQuant);
         editTextData = (EditText) findViewById(R.id.idEditarDataProducao);
+
+        editTextData.addTextChangedListener(MaskEditUtil.mask(editTextData, MaskEditUtil.FORMAT_DATE));
 
         Dao bd = new Dao(this);
 
@@ -103,8 +106,8 @@ public class EditarProducao extends AppCompatActivity implements View.OnClickLis
         if (editTextQuant.getText().toString().isEmpty()){
             editTextQuant.setError("Campo Obrigatório");
             editTextQuant.requestFocus();
-        }else if(editTextData.getText().toString().isEmpty()){
-            editTextData.setError("Campo Obrigatório");
+        }else if(!editTextData.getText().toString().isEmpty() && !validaData(editTextData.getText().toString())){
+            editTextData.setError("Data Inválida");
             editTextData.requestFocus();
         }else{
 
@@ -138,4 +141,20 @@ public class EditarProducao extends AppCompatActivity implements View.OnClickLis
         }
 
     }
+    private boolean validaData(String data){
+        String[] vet;
+        vet=data.split("/");
+        try {
+            int dia = Integer.parseInt(vet[0]);
+            int mes = Integer.parseInt(vet[1]);
+            int ano = Integer.parseInt(vet[2]);
+            if(dia>0 && dia<=31 && mes>0 && mes<=12)
+                return true;
+        }catch (Exception e){
+            editTextData.setError("Data Inválida!");
+            editTextData.requestFocus();
+        }
+        return false;
+    }
+
 }

@@ -1,16 +1,13 @@
 package com.example.gcoole.Adapters;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-import com.example.gcoole.Listviews.ListviewProducao;
 import com.example.gcoole.Modelo.Producao;
-import com.example.gcoole.Modelo.Produtor;
 import com.example.gcoole.R;
 
 import java.util.ArrayList;
