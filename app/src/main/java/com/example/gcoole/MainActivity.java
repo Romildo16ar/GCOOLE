@@ -1,16 +1,22 @@
 package com.example.gcoole;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.example.gcoole.CRUD.InserirProducao;
 import com.example.gcoole.Listviews.ListviewProdutorParaProducao;
 import com.example.gcoole.Listviews.ListviewProdutor;
 import com.example.gcoole.Listviews.ListviewsVaca;
+import com.example.gcoole.Ultil.Util;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -18,6 +24,18 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.R){
+
+            String permissao[] = new String[]{
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                    Manifest.permission.READ_EXTERNAL_STORAGE,
+            };
+
+            Util.validate(this, 17, permissao);
+       // }
+
+
     }
 
     @Override
@@ -50,4 +68,24 @@ public class MainActivity extends AppCompatActivity {
 
         }
     }
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        boolean permissao = true;
+        for(int result: grantResults){
+            if(result == PackageManager.PERMISSION_DENIED){
+                permissao = false;
+                break;
+            }
+        }
+
+        if(!permissao){
+            Toast.makeText(getBaseContext(), "Aceite as permição necessárias para o plicativo funcionar", Toast.LENGTH_SHORT).show();
+        }
+
+
+    }
+
+
 }

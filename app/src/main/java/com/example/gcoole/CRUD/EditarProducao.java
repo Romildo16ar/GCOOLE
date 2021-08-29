@@ -18,11 +18,9 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.gcoole.Activity_Producao;
-import com.example.gcoole.Activity_Vaca;
 import com.example.gcoole.Dao.Dao;
 import com.example.gcoole.Listviews.Listview_Producao_Por_Produtor;
-import com.example.gcoole.Listviews.ListviewsVaca;
-import com.example.gcoole.MaskEditUtil;
+import com.example.gcoole.Ultil.MaskEditUtil;
 import com.example.gcoole.Modelo.Producao;
 import com.example.gcoole.Modelo.Produtor;
 import com.example.gcoole.R;

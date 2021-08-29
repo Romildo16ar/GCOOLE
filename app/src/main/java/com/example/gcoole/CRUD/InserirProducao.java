@@ -19,7 +19,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.gcoole.Dao.Dao;
 import com.example.gcoole.MainActivity;
-import com.example.gcoole.MaskEditUtil;
+import com.example.gcoole.Ultil.MaskEditUtil;
 import com.example.gcoole.Modelo.Producao;
 import com.example.gcoole.Modelo.Produtor;
 import com.example.gcoole.R;

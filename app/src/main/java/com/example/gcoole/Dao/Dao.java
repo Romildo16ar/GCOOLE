@@ -5,13 +5,27 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.os.Environment;
 import android.util.Log;
 
 import com.example.gcoole.Modelo.Producao;
 import com.example.gcoole.Modelo.Produtor;
 import com.example.gcoole.Modelo.Vaca;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Font;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfWriter;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class Dao extends SQLiteOpenHelper {
@@ -225,5 +239,71 @@ public class Dao extends SQLiteOpenHelper {
 
 
 // Fim Inserir Produção ----------------------------------------------------------------------------------------------------
+
+    public void gerarPdfProducao() throws IOException, DocumentException {
+
+        File pdfFolder = new File(Environment.getExternalStorageDirectory(),"Produ");
+
+        if (!pdfFolder.exists()) {
+            pdfFolder.mkdir();
+            Log.e("deu certo", "Pdf Directory created");
+        }
+
+        //Create time stamp
+        Date date = new Date() ;
+        String timeStamp = new SimpleDateFormat("ddMMyyyy").format(date);
+
+        File myFile = new File(pdfFolder + "/Producao.pdf");
+
+        OutputStream output = new FileOutputStream(myFile);
+
+        //Step 1
+        Document document = new Document();
+
+        //Step 2
+        PdfWriter.getInstance(document, output);
+
+        //Step 3
+        document.open();
+        document.addAuthor("Gcoole");
+        document.add(new Paragraph("\n"));
+
+        document.add(new Paragraph(" Produção \n\n"));
+
+        //BaseFont arial = BaseFont.createFont("resources/fonts/Arial.ttf" ,"CP1251", BaseFont.EMBEDDED);
+        Font font = new Font(Font.FontFamily.HELVETICA, 8 );
+        Font fontNegrita = new Font(Font.FontFamily.HELVETICA, 8 , Font.BOLD);
+        PdfPTable tabela1 = new PdfPTable(8);
+        tabela1.addCell(new PdfPCell((new Paragraph("Data", fontNegrita))));
+       // tabela1.addCell(new PdfPCell((new Paragraph("Descrição", fontNegrita))));
+       // tabela1.addCell(new PdfPCell((new Paragraph("Custo" , fontNegrita))));
+       // tabela1.addCell(new PdfPCell((new Paragraph("Tempo Decorrido", fontNegrita))));
+
+
+        Producao p;
+
+
+        for(int i = 0; i < selecionarProducao().size(); i++){
+            p=selecionarProducao().get(i);
+
+            tabela1.addCell(new PdfPCell((new Paragraph(p.getData(), font))));
+           /* tabela13.addCell(new PdfPCell((new Paragraph(m.getDescricao(), font))));
+            tabela13.addCell(new PdfPCell((new Paragraph(String.valueOf(m.getCusto()), font))));
+            tabela13.addCell(new PdfPCell((new Paragraph(String.valueOf(m.getTempoDecorrido()), font ))));
+            tabela13.addCell(new PdfPCell((new Paragraph(m.getTipoOperacao(), font))));
+            tabela13.addCell(new PdfPCell((new Paragraph(m.getTalhao(), font))));
+            tabela13.addCell(new PdfPCell((new Paragraph(m.getPlantio(), font))));
+            tabela13.addCell(new PdfPCell((new Paragraph(m.getTipoInsumos(), font))));*/
+
+
+        }
+        document.add(tabela1);
+
+        //Step 5: Close the document
+        document.close();
+
+
+    }
+
 
 }

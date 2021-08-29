@@ -2,6 +2,12 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.gcoole">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+
+
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/vaca"
@@ -46,6 +52,15 @@
             android:label="Editar Produção"/>
         <activity android:name=".CRUD.EditarProducao"
             android:label="Editar Produção" />
+        
+        <provider
+            android:authorities="com.example.gcoole.Listviews"
+            android:name="androidx.core.content.FileProvider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data android:name="android.support.FILE_PROVIDER_PATHS" android:resource="@xml/providers"/>
+        </provider>
+
     </application>
 
 </manifest>
