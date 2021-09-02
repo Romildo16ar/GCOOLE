@@ -15,6 +15,7 @@ import android.widget.Toast;
 import com.example.gcoole.CRUD.InserirProducao;
 import com.example.gcoole.Listviews.ListviewProdutorParaProducao;
 import com.example.gcoole.Listviews.ListviewProdutor;
+import com.example.gcoole.Listviews.Listview_Valor_Por_Litro;
 import com.example.gcoole.Listviews.ListviewsVaca;
 import com.example.gcoole.Ultil.Util;
 
@@ -60,6 +61,10 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             case R.id.idListProducao:
                 startActivity(new Intent(this, ListviewProdutorParaProducao.class));
+
+                return true;
+            case R.id.idValorPorLitroMain:
+                startActivity(new Intent(this, Listview_Valor_Por_Litro.class));
 
                 return true;
 

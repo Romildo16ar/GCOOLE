@@ -14,4 +14,7 @@
     <item
         android:id="@+id/idListProducao"
         android:title="@string/producao" />
+    <item
+        android:id="@+id/idValorPorLitroMain"
+        android:title="@string/valorPorLitro" />
 </menu>

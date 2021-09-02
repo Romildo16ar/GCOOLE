@@ -26,5 +26,9 @@
     <string name="filtro">Filtro:</string>
     <string name="filtrar">Filtrar</string>
     <string name="ano">Ano</string>
+    <string name="valorPorLitro">Valor Por Litro</string>
+    <string name="valorPorLitroMensal">Valor do Litro Mensal</string>
+    <string name="mesEAno">Mes e Ano Referênte</string>
+    <string name="datainserirvalor">Data:</string>
 
 </resources>

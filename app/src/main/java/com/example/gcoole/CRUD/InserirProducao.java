@@ -25,6 +25,8 @@ import com.example.gcoole.Modelo.Produtor;
 import com.example.gcoole.R;
 
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.List;
 
 public class InserirProducao extends AppCompatActivity implements View.OnClickListener {
@@ -44,6 +46,7 @@ public class InserirProducao extends AppCompatActivity implements View.OnClickLi
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
 
+
         spinnerProdutor = (Spinner) findViewById(R.id.idSpinnerProdutor);
 
         Dao bd = new Dao(this);
@@ -53,7 +56,7 @@ public class InserirProducao extends AppCompatActivity implements View.OnClickLi
         produtor = new Produtor[listaProdutor.size()];
         produtorNome = new String[listaProdutor.size()];
         for (int i = 0; i < listaProdutor.size(); i++) {
-            Log.e("Erro", "Id Produtor " +listaProdutor.get(i).getId() + listaProdutor.get(i).getNome());
+           // Log.e("Erro", "Id Produtor " +listaProdutor.get(i).getId() + listaProdutor.get(i).getNome());
             produtor[i] = listaProdutor.get(i);
             produtorNome[i] = listaProdutor.get(i).getNome();
         }
@@ -66,6 +69,10 @@ public class InserirProducao extends AppCompatActivity implements View.OnClickLi
 
         dataProducao.addTextChangedListener(MaskEditUtil.mask(dataProducao, MaskEditUtil.FORMAT_DATE));
 
+        Calendar c = Calendar.getInstance();
+        SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+        String formatteDate = df.format(c.getTime());
+        dataProducao.setText(formatteDate);
 
         Button btInserir = (Button) findViewById(R.id.idBTInserirProducao);
 
@@ -137,7 +144,6 @@ public class InserirProducao extends AppCompatActivity implements View.OnClickLi
                     Toast.makeText(InserirProducao.this,  "", Toast.LENGTH_SHORT);
                     quant.setText("");
                     quant.requestFocus();
-                    dataProducao.setText("");
 
                 }
             });

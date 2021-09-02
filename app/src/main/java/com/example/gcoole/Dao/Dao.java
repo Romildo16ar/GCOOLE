@@ -11,6 +11,7 @@ import android.util.Log;
 import com.example.gcoole.Modelo.Producao;
 import com.example.gcoole.Modelo.Produtor;
 import com.example.gcoole.Modelo.Vaca;
+import com.example.gcoole.Modelo.ValorPorLitro;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Font;
@@ -29,7 +30,7 @@ import java.util.Date;
 import java.util.List;
 
 public class Dao extends SQLiteOpenHelper {
-    private static final String NOME_BD = "Bando do Aplicativo";
+    private static final String NOME_BD = "Banco do Aplicativo";
     private static final int VERSAO_BD = 1016;
 
     public Dao(Context context){
@@ -44,9 +45,12 @@ public class Dao extends SQLiteOpenHelper {
 
         String tbProducao = "CREATE TABLE producao(id INTEGER PRIMARY KEY AUTOINCREMENT, quant INTEGER, data VARCHAR(20), idProdutor INTEGER)";
 
+        String tbValorPorLitro = "CREATE TABLE valorporlitro(id INTEGER PRIMARY KEY AUTOINCREMENT, valor FLOAT, mes INTEGER , ano INTEGER)";
+
         db.execSQL(tbProducao);
         db.execSQL(tbProdutor);
         db.execSQL(tbVaca);
+        db.execSQL(tbValorPorLitro);
     }
 
     @Override
@@ -54,12 +58,14 @@ public class Dao extends SQLiteOpenHelper {
         String dropTbProdutor = "DROP TABLE IF EXISTS produtor";
         String dropTbVaca = "DROP TABLE IF EXISTS vaca";
         String dropTbProducao = "DROP TABLE IF EXISTS producao";
+        String dropTbValorPorLitro = "DROP TABLE IF EXISTS valorporlitro";
 
 
 
         db.execSQL(dropTbProdutor);
         db.execSQL(dropTbVaca);
         db.execSQL(dropTbProducao);
+        db.execSQL(dropTbValorPorLitro);
         onCreate(db);
 
 
@@ -239,71 +245,68 @@ public class Dao extends SQLiteOpenHelper {
 
 
 // Fim Inserir Produção ----------------------------------------------------------------------------------------------------
+// Incio do crud valor por litro mensal ------------------------------------------------------------------------------------
 
-    public void gerarPdfProducao() throws IOException, DocumentException {
+    public void inserirValorPorLitro(ValorPorLitro valorPorLitro){
+        SQLiteDatabase db = getWritableDatabase();
+        ContentValues vc = new ContentValues();
+        vc.put("valor",valorPorLitro.getValor() );
+        vc.put("mes", valorPorLitro.getMes());
+        vc.put("ano", valorPorLitro.getAno());
 
-        File pdfFolder = new File(Environment.getExternalStorageDirectory(),"Produ");
+        db.insert("valorporlitro", null, vc);
+        db.close();
+    }
 
-        if (!pdfFolder.exists()) {
-            pdfFolder.mkdir();
-            Log.e("deu certo", "Pdf Directory created");
+
+
+    public void deleteValorPorLitro(int id){
+        String delete = "id ='" + id +"'";
+        SQLiteDatabase bd = getReadableDatabase();
+        bd.delete("valorporlitro", delete, null);
+        bd.close();
+    }
+
+    public List<ValorPorLitro> selecionarValorProLitro(){
+        List<ValorPorLitro> listavalorPorLitro = new ArrayList<>();
+        SQLiteDatabase db = getReadableDatabase();
+        String sql = "SELECT * FROM valorporlitro";
+        Cursor cur = db.rawQuery(sql, null);
+        if (cur.moveToFirst()){
+            do{
+                ValorPorLitro valorPorLitro = new ValorPorLitro();
+                valorPorLitro.setId(cur.getInt(0));
+                valorPorLitro.setValor(cur.getFloat(1));
+                valorPorLitro.setMes(cur.getInt(2));
+                valorPorLitro.setAno(cur.getInt(3));
+
+                listavalorPorLitro.add(valorPorLitro);
+            }while (cur.moveToNext());
         }
-
-        //Create time stamp
-        Date date = new Date() ;
-        String timeStamp = new SimpleDateFormat("ddMMyyyy").format(date);
-
-        File myFile = new File(pdfFolder + "/Producao.pdf");
-
-        OutputStream output = new FileOutputStream(myFile);
-
-        //Step 1
-        Document document = new Document();
-
-        //Step 2
-        PdfWriter.getInstance(document, output);
-
-        //Step 3
-        document.open();
-        document.addAuthor("Gcoole");
-        document.add(new Paragraph("\n"));
-
-        document.add(new Paragraph(" Produção \n\n"));
-
-        //BaseFont arial = BaseFont.createFont("resources/fonts/Arial.ttf" ,"CP1251", BaseFont.EMBEDDED);
-        Font font = new Font(Font.FontFamily.HELVETICA, 8 );
-        Font fontNegrita = new Font(Font.FontFamily.HELVETICA, 8 , Font.BOLD);
-        PdfPTable tabela1 = new PdfPTable(8);
-        tabela1.addCell(new PdfPCell((new Paragraph("Data", fontNegrita))));
-       // tabela1.addCell(new PdfPCell((new Paragraph("Descrição", fontNegrita))));
-       // tabela1.addCell(new PdfPCell((new Paragraph("Custo" , fontNegrita))));
-       // tabela1.addCell(new PdfPCell((new Paragraph("Tempo Decorrido", fontNegrita))));
-
-
-        Producao p;
-
-
-        for(int i = 0; i < selecionarProducao().size(); i++){
-            p=selecionarProducao().get(i);
-
-            tabela1.addCell(new PdfPCell((new Paragraph(p.getData(), font))));
-           /* tabela13.addCell(new PdfPCell((new Paragraph(m.getDescricao(), font))));
-            tabela13.addCell(new PdfPCell((new Paragraph(String.valueOf(m.getCusto()), font))));
-            tabela13.addCell(new PdfPCell((new Paragraph(String.valueOf(m.getTempoDecorrido()), font ))));
-            tabela13.addCell(new PdfPCell((new Paragraph(m.getTipoOperacao(), font))));
-            tabela13.addCell(new PdfPCell((new Paragraph(m.getTalhao(), font))));
-            tabela13.addCell(new PdfPCell((new Paragraph(m.getPlantio(), font))));
-            tabela13.addCell(new PdfPCell((new Paragraph(m.getTipoInsumos(), font))));*/
-
-
-        }
-        document.add(tabela1);
-
-        //Step 5: Close the document
-        document.close();
-
+        db.close();
+        return listavalorPorLitro;
 
     }
+
+    public void updateValorPorLitro(ValorPorLitro valorPorLitro){
+        SQLiteDatabase db = getReadableDatabase();
+        String where = "id='"+valorPorLitro.getId()+"'";
+        //  Log.e("Erro", "Entrei"+vaca.getId());
+        ContentValues cv = new ContentValues();
+        cv.put("valor", valorPorLitro.getValor());
+        cv.put("mes", valorPorLitro.getMes());
+        cv.put("ano", valorPorLitro.getAno());
+
+        db.update("valorporlitro",cv,where, null);
+        db.close();
+
+    }
+
+
+
+
+
+// Fim crud valor por litro mensal ------------------------------------------------------------------------------------------
 
 
 }

@@ -52,6 +52,14 @@
             android:label="Editar Produção"/>
         <activity android:name=".CRUD.EditarProducao"
             android:label="Editar Produção" />
+        <activity android:name=".Listviews.Listview_Valor_Por_Litro"
+            android:label="Valor do Litro Mensal"/>
+        <activity android:name=".CRUD.InserirValorPorLitro"
+            android:label="Inserir Valor do Litro Mensal"/>
+        <activity android:name=".Activity_Valor_Por_Litro"
+            android:label="Edição do Valor Mensal"/>
+        <activity android:name=".CRUD.EditarValorPorLitro"
+            android:label="Editar Valor Mensal"/>
         
         <provider
             android:authorities="com.example.gcoole.Listviews"

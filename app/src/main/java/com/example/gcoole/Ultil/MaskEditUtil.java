@@ -9,7 +9,8 @@ public class MaskEditUtil {
     public static final String FORMAT_FONE = "(###)####-#####";
     public static final String FORMAT_CEP = "#####-###";
     public static final String FORMAT_DATE = "##/##/####";
-    public static final String FORMAT_HOUR = "##:##";
+    public static final String FORMAT_VALOR = "#.##";
+    public static final String FORMAT_ANO = "####";
 
     /**
      * Método que deve ser chamado para realizar a formatação
@@ -59,7 +60,7 @@ public class MaskEditUtil {
     }
 
     public static String unmask(final String s) {
-        return s.replaceAll("[.]", "").replaceAll("[-]", "").replaceAll("[/]", "").replaceAll("[(]", "").replaceAll("[ ]","").replaceAll("[:]", "").replaceAll("[)]", "");
+        return s.replaceAll("[.]", "").replaceAll("[-]", "").replaceAll("[/]", "").replaceAll("[(]", "").replaceAll("[ ]","").replaceAll("[,]", "").replaceAll("[)]", "");
     }
 
 }
