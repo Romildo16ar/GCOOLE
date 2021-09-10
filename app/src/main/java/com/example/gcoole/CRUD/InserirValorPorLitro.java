@@ -24,6 +24,8 @@ import com.example.gcoole.Modelo.ValorPorLitro;
 import com.example.gcoole.R;
 import com.example.gcoole.Ultil.MaskEditUtil;
 
+import java.util.List;
+
 public class InserirValorPorLitro extends AppCompatActivity implements View.OnClickListener {
 
     private String[]mes = {"Meses","Janeiro", "Fevereiro", "Março" , "Abril", "Maio", "Junho", "Julho", "Agosto",
@@ -78,6 +80,7 @@ public class InserirValorPorLitro extends AppCompatActivity implements View.OnCl
         ValorPorLitro valorPorLitro = new ValorPorLitro();
         Dao bd = new Dao(this);
 
+
         int p = spinnerMes.getSelectedItemPosition();
 
         if(editTextvalorPorLitro.getText().toString().isEmpty()){
@@ -98,7 +101,19 @@ public class InserirValorPorLitro extends AppCompatActivity implements View.OnCl
                 }
             });
             builder.show();
-        }else{
+        }else if (verificarCadastro(p ,Integer.parseInt(editTextano.getText().toString()))){
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("Valor para o mês referente já cadastrado!");
+            builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    Toast.makeText(InserirValorPorLitro.this,  "", Toast.LENGTH_SHORT);
+
+
+                }
+            });
+            builder.show();
+        }else {
             valorPorLitro.setValor(Float.parseFloat(editTextvalorPorLitro.getText().toString()));
             valorPorLitro.setAno(Integer.parseInt(editTextano.getText().toString()));
             valorPorLitro.setMes(p);
@@ -130,6 +145,17 @@ public class InserirValorPorLitro extends AppCompatActivity implements View.OnCl
 
         }
 
+
+    }
+    public boolean verificarCadastro(int mes , int ano){
+        Dao bd = new Dao(this);
+        List<ValorPorLitro> valorPorLitrosMensal = bd.selecionarValorProLitro();
+        for(int i = 0; i < valorPorLitrosMensal.size(); i++){
+            if(mes == valorPorLitrosMensal.get(i).getMes() && ano == valorPorLitrosMensal.get(i).getAno()){
+                return true;
+            }
+        }
+        return false;
 
     }
 }

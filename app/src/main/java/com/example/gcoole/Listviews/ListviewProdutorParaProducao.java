@@ -75,10 +75,6 @@ public class ListviewProdutorParaProducao extends AppCompatActivity {
                 finishAffinity();
                 break;
 
-            /*case R.id.addProp:
-                startActivity(new Intent(this, CadastroProdutor.class));
-                finishAffinity();
-                break;*/
             default:
                 break;
 

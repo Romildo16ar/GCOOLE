@@ -107,7 +107,10 @@ public class EditarProducao extends AppCompatActivity implements View.OnClickLis
         }else if(!editTextData.getText().toString().isEmpty() && !validaData(editTextData.getText().toString())){
             editTextData.setError("Data Inválida");
             editTextData.requestFocus();
-        }else{
+
+        }else /*if (validarProducao(editTextData.getText().toString(), idprodutor)){
+            editTextData.setError("Data Já Possui Produção!");
+        }else*/{
 
             producao.setId(Listview_Producao_Por_Produtor.producao.getId());
             producao.setQuant(Integer.parseInt(editTextQuant.getText().toString()));
@@ -152,6 +155,34 @@ public class EditarProducao extends AppCompatActivity implements View.OnClickLis
             editTextData.setError("Data Inválida!");
             editTextData.requestFocus();
         }
+        return false;
+    }
+
+    private boolean validarProducao(String dataNova , int idProdutor){
+
+        String[] vetDataNova;
+        vetDataNova=dataNova.split("/");
+        Dao bd = new Dao(this);
+        List<Producao> producao = bd.selecionarProducao();
+
+
+        int diaNova = Integer.parseInt(vetDataNova[0]);
+        int mesNova = Integer.parseInt(vetDataNova[1]);
+        int anoNova = Integer.parseInt(vetDataNova[2]);
+
+        for(int i = 0; i < producao.size(); i++){
+            if(idProdutor == producao.get(i).getIdProdutor()){
+                String[] vetData;
+                vetData=producao.get(i).getData().split("/");
+                int dia = Integer.parseInt(vetData[0]);
+                int mes = Integer.parseInt(vetData[1]);
+                int ano = Integer.parseInt(vetData[2]);
+                if(dia == diaNova && mes == mesNova && ano == anoNova){
+                    return true;
+                }
+            }
+        }
+
         return false;
     }
 

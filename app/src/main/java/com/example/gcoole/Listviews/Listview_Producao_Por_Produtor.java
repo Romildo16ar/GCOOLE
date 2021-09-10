@@ -1,6 +1,7 @@
 package com.example.gcoole.Listviews;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Intent;
@@ -34,8 +35,10 @@ import androidx.core.content.FileProvider;
 
 import com.example.gcoole.Activity_Producao;
 import com.example.gcoole.Adapters.AdapterProducaoPorProdutor;
+import com.example.gcoole.CRUD.InserirProducao;
 import com.example.gcoole.Dao.Dao;
 import com.example.gcoole.Modelo.Producao;
+import com.example.gcoole.Modelo.ValorPorLitro;
 import com.example.gcoole.R;
 import com.example.gcoole.Ultil.PdfCreator;
 import com.itextpdf.text.Document;
@@ -376,10 +379,56 @@ public class Listview_Producao_Por_Produtor extends AppCompatActivity implements
 
 
                 break;
-           /* case R.id.idBTDeletarProd:
+            case R.id.idDinheiro:
+                if(mesFiltro == 13){
+                    //document.add(new Paragraph("Referênte ao Ano: "+anoPdf+" \n\n"));
+                }else if(mesFiltro == -1){
+
+                }else{
+                    //document.add(new Paragraph("Referênte ao Mês: "+mesPdf+" \n\n"));
+                    Producao p;
+                    totalProducao = 0;
+                    float auxValor = 0 , total = 0;
+                    Dao bd = new Dao(this);
+                    List<ValorPorLitro> valorPorLitrosMensal = bd.selecionarValorProLitro();
+
+                    for(int i = 0; i < producaoListPorIdComFiltro.size(); i++){
+                        p=producaoListPorIdComFiltro.get(i);
+                        totalProducao = totalProducao + p.getQuant();
+                    }
+                    for(int i = 0; i < valorPorLitrosMensal.size(); i++){
+                        if (mesFiltro == valorPorLitrosMensal.get(i).getMes() && Integer.parseInt(ano.getText().toString()) == valorPorLitrosMensal.get(i).getAno()){
+
+                            auxValor = valorPorLitrosMensal.get(i).getValor();
 
 
-                break;*/
+                        }
+                    }
+
+                    total = auxValor*totalProducao;
+
+                    if(auxValor == 0){
+                        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                        builder.setTitle("Importante!");
+                        builder.setMessage("Mês Referente não possui valor do litro Cadastrado! \nRetorne a tela inicial para afetual o cadastro.");
+                        builder.setPositiveButton("OK", (dialog, which) -> {
+                            Toast.makeText(Listview_Producao_Por_Produtor.this, "", Toast.LENGTH_SHORT);
+                        });
+                        builder.show();
+                    }else{
+                        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                        builder.setTitle("Valor Total Do mes: "+mes[mesFiltro]);
+                        builder.setMessage("Valor do litro: "+auxValor+" \n Total da Produção:"+totalProducao+"\n Valor a Receber:"+total);
+                        builder.setPositiveButton("OK", (dialog, which) -> {
+                            Toast.makeText(Listview_Producao_Por_Produtor.this, "", Toast.LENGTH_SHORT);
+                        });
+                        builder.show();
+                    }
+
+
+                }
+
+                break;
             default:
                 break;
 

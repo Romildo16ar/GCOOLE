@@ -26,6 +26,7 @@ import com.example.gcoole.R;
 
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
@@ -124,6 +125,8 @@ public class InserirProducao extends AppCompatActivity implements View.OnClickLi
         }else if(!dataProducao.getText().toString().isEmpty() && !validaData(dataProducao.getText().toString())){
             dataProducao.setError("Data Inválida!");
             dataProducao.requestFocus();
+        }else if(validarProducao(dataProducao.getText().toString(), pro)){
+            dataProducao.setError("Data Já Possui Produção!");
         }else{
             producao.setQuant(Integer.parseInt(quant.getText().toString()));
             producao.setData(dataProducao.getText().toString());
@@ -170,5 +173,31 @@ public class InserirProducao extends AppCompatActivity implements View.OnClickLi
         return false;
     }
 
+    private boolean validarProducao(String dataNova , int idProdutor){
 
+        String[] vetDataNova;
+        vetDataNova=dataNova.split("/");
+        Dao bd = new Dao(this);
+        List<Producao> producao = bd.selecionarProducao();
+
+
+        int diaNova = Integer.parseInt(vetDataNova[0]);
+        int mesNova = Integer.parseInt(vetDataNova[1]);
+        int anoNova = Integer.parseInt(vetDataNova[2]);
+
+        for(int i = 0; i < producao.size(); i++){
+            if(idProdutor == producao.get(i).getIdProdutor()){
+                String[] vetData;
+                vetData=producao.get(i).getData().split("/");
+                int dia = Integer.parseInt(vetData[0]);
+                int mes = Integer.parseInt(vetData[1]);
+                int ano = Integer.parseInt(vetData[2]);
+                if(dia == diaNova && mes == mesNova && ano == anoNova){
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
 }

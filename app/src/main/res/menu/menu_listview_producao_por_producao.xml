@@ -3,9 +3,15 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-
-        android:id="@+id/idPdf"
-        android:icon="@drawable/pdf_foreground"
+        android:id="@+id/idDinheiro"
+        android:icon="@drawable/dinheiro_foreground"
         android:title="Item"
         app:showAsAction="always" />
+    <item
+
+        android:id="@+id/idPdf"
+        android:icon="@drawable/pdf8_foreground"
+        android:title="Item"
+        app:showAsAction="always" />
+
 </menu>
