@@ -1,26 +1,31 @@
 package com.example.gcoole.Listviews;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.InputType;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.gcoole.Activity_Vaca;
 import com.example.gcoole.Activity_Valor_Por_Litro;
 import com.example.gcoole.Adapters.AdapterValorPorLitro;
-import com.example.gcoole.CRUD.CadastroProdutor;
 import com.example.gcoole.CRUD.InserirValorPorLitro;
 import com.example.gcoole.Dao.Dao;
+import com.example.gcoole.Grafico.Grafico_Anual_Valor_Por_litro;
 import com.example.gcoole.MainActivity;
-import com.example.gcoole.Modelo.Vaca;
 import com.example.gcoole.Modelo.ValorPorLitro;
 import com.example.gcoole.R;
+import com.example.gcoole.Ultil.MaskEditUtil;
 
 import java.util.List;
 
@@ -28,6 +33,7 @@ public class Listview_Valor_Por_Litro extends AppCompatActivity {
 
     private ListView listViewvalorProLitro;
     public static ValorPorLitro valorPorLitro;
+    public static int anoGrafico =0;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -76,6 +82,41 @@ public class Listview_Valor_Por_Litro extends AppCompatActivity {
             case R.id.idaddValor:
                 startActivity(new Intent(this, InserirValorPorLitro.class));
                 finishAffinity();
+                break;
+
+            case R.id.idGraficoValorPorLitro:
+                AlertDialog.Builder builder = new AlertDialog.Builder(Listview_Valor_Por_Litro.this);
+                builder.setTitle("Digite o ano desejado!");
+                //builder.setMessage("Valor do litro:  Total da Produção");
+                final EditText input = new EditText(Listview_Valor_Por_Litro.this);
+                input.addTextChangedListener(MaskEditUtil.mask(input, MaskEditUtil.FORMAT_ANO));
+                input.setInputType(InputType.TYPE_CLASS_NUMBER);
+                LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+                        LinearLayout.LayoutParams.MATCH_PARENT,
+                        LinearLayout.LayoutParams.MATCH_PARENT);
+                input.setLayoutParams(lp);
+                builder.setView(input);
+
+                builder.setPositiveButton("ok", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface arg0, int arg1) {
+                        if(input.getText().toString().isEmpty()){
+                            Toast.makeText(Listview_Valor_Por_Litro.this, "Campo Obrigatório! Opção Cancelada", Toast.LENGTH_SHORT).show();
+
+                        }else{
+                            anoGrafico = Integer.parseInt(input.getText().toString());
+                            startActivity(new Intent(Listview_Valor_Por_Litro.this, Grafico_Anual_Valor_Por_litro.class));
+                        }
+
+                    }
+                });
+                builder.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface arg0, int arg1) {
+                        Toast.makeText(Listview_Valor_Por_Litro.this, "Opção Cancelada", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+
+                builder.show();
                 break;
             default:
                 break;

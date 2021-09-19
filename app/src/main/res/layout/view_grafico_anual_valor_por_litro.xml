@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:ap="http://schemas.android.com/apk/res-auto"
+    android:background="#EEEEEE"
+    android:orientation="vertical">
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginBottom="5dp"
+        android:layout_marginTop="5dp"
+        />
+
+    <com.androidplot.xy.XYPlot
+        android:id="@+id/idPlot"
+        style="@style/APDefacto.Light"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="10dp"
+        ap:domainTitle="Meses"
+        ap:lineLabelRotationBottom="-45"
+        ap:lineLabels="left|bottom"
+        ap:marginBottom="5dp"
+        ap:marginLeft="5dp"
+        ap:marginRight="5dp"
+        ap:marginTop="5dp"
+        ap:paddingBottom="10dp"
+        ap:paddingTop="10dp"
+        ap:rangeTitle="Valor Por litro Mensal"
+        ap:renderMode="use_background_thread"
+        ap:title="Valor do Litro no ano"
+        ap:titleTextSize="18sp" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginBottom="5dp"
+        android:layout_marginTop="5dp"
+        />
+
+
+</LinearLayout>

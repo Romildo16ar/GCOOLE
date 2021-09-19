@@ -3,6 +3,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
+        android:id="@+id/idGrafico"
+        android:icon="@drawable/grafico_foreground"
+        android:title="Item"
+        app:showAsAction="always" />
+    <item
         android:id="@+id/idDinheiro"
         android:icon="@drawable/dinheiro_foreground"
         android:title="Item"
@@ -13,5 +18,7 @@
         android:icon="@drawable/pdf8_foreground"
         android:title="Item"
         app:showAsAction="always" />
+
+
 
 </menu>

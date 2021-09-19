@@ -1,19 +1,17 @@
 package com.example.gcoole.Listviews;
 
-import android.Manifest;
 import android.app.AlertDialog;
 import android.content.ContentResolver;
 import android.content.ContentValues;
+import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.ParcelFileDescriptor;
 import android.provider.MediaStore;
-import android.util.Log;
+import android.text.InputType;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -21,6 +19,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -29,23 +28,22 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 
 import com.example.gcoole.Activity_Producao;
 import com.example.gcoole.Adapters.AdapterProducaoPorProdutor;
-import com.example.gcoole.CRUD.InserirProducao;
 import com.example.gcoole.Dao.Dao;
+import com.example.gcoole.Grafico.Grafico_Anual_Producao;
+import com.example.gcoole.Grafico.Grafico_Mensal_Producao;
 import com.example.gcoole.Modelo.Producao;
 import com.example.gcoole.Modelo.ValorPorLitro;
 import com.example.gcoole.R;
+import com.example.gcoole.Ultil.MaskEditUtil;
 import com.example.gcoole.Ultil.PdfCreator;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Element;
 import com.itextpdf.text.Font;
-import com.itextpdf.text.PageSize;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.Rectangle;
 import com.itextpdf.text.pdf.PdfPCell;
@@ -54,18 +52,12 @@ import com.itextpdf.text.pdf.PdfWriter;
 
 
 import java.io.File;
-import java.io.FileDescriptor;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
-
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
 
 public class Listview_Producao_Por_Produtor extends AppCompatActivity implements View.OnClickListener{
 
@@ -79,6 +71,8 @@ public class Listview_Producao_Por_Produtor extends AppCompatActivity implements
     private int mesFiltro = -1;
     private String anoPdf = "";
     private int totalProducao = 0;
+    public static int anoGrafico =0;
+    public static int mesGrafico = 0;
 
     private List<Producao> producaoListPorIdComFiltro = new ArrayList<>();
   //  private List<Producao> producaoListPorIdComFiltroAno = new ArrayList<>();
@@ -103,7 +97,7 @@ public class Listview_Producao_Por_Produtor extends AppCompatActivity implements
         producoes = (ListView) findViewById(R.id.idListProducaoPorProdutor);
         spinnerMes = (Spinner) findViewById(R.id.idSpinnerFiltro);
         ano = (EditText) findViewById(R.id.idAnoFiltro);
-
+        ano.addTextChangedListener(MaskEditUtil.mask(ano, MaskEditUtil.FORMAT_ANO));
 
 
         Dao bd = new Dao(this);
@@ -382,8 +376,16 @@ public class Listview_Producao_Por_Produtor extends AppCompatActivity implements
             case R.id.idDinheiro:
                 if(mesFiltro == 13){
                     //document.add(new Paragraph("Referênte ao Ano: "+anoPdf+" \n\n"));
+                    ano.setError("Campo Obrigatorio!");
+                    ano.requestFocus();
                 }else if(mesFiltro == -1){
-
+                    AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                    builder.setTitle("Importante!");
+                    builder.setMessage("Selecione um mês para Referencia!");
+                    builder.setPositiveButton("OK", (dialog, which) -> {
+                        Toast.makeText(Listview_Producao_Por_Produtor.this, "", Toast.LENGTH_SHORT);
+                    });
+                    builder.show();
                 }else{
                     //document.add(new Paragraph("Referênte ao Mês: "+mesPdf+" \n\n"));
                     Producao p;
@@ -427,6 +429,119 @@ public class Listview_Producao_Por_Produtor extends AppCompatActivity implements
 
 
                 }
+
+                break;
+            case R.id.idGrafico:
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setTitle("Gerar Gráfico");
+                builder.setMessage("Selecione a opção desejada:");
+                builder.setPositiveButton("Produção Anual", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface arg0, int arg1) {
+                        AlertDialog.Builder builder = new AlertDialog.Builder(Listview_Producao_Por_Produtor.this);
+                        builder.setTitle("Digite o ano desejado!");
+                        //builder.setMessage("Valor do litro:  Total da Produção");
+                        final EditText inputAno = new EditText(Listview_Producao_Por_Produtor.this);
+                        inputAno.addTextChangedListener(MaskEditUtil.mask(inputAno, MaskEditUtil.FORMAT_ANO));
+                        inputAno.setInputType(InputType.TYPE_CLASS_NUMBER);
+                        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+                                LinearLayout.LayoutParams.MATCH_PARENT,
+                                LinearLayout.LayoutParams.MATCH_PARENT);
+                        inputAno.setLayoutParams(lp);
+                        builder.setView(inputAno);
+
+                        builder.setPositiveButton("ok", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface arg0, int arg1) {
+                                if(inputAno.getText().toString().isEmpty()){
+                                    Toast.makeText(Listview_Producao_Por_Produtor.this, "Campo Obrigatório! Opção Cancelada", Toast.LENGTH_SHORT).show();
+
+
+                                }else{
+                                    anoGrafico = Integer.parseInt(inputAno.getText().toString());
+                                    startActivity(new Intent(Listview_Producao_Por_Produtor.this, Grafico_Anual_Producao.class));
+
+
+                                }
+
+                            }
+                        });
+                        builder.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface arg0, int arg1) {
+                                Toast.makeText(Listview_Producao_Por_Produtor.this, "Opção Cancelada", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+
+
+                        builder.show();
+
+                    }
+                });
+                //define um botão como negativo.
+                builder.setNegativeButton("Produção Mesal", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface arg0, int arg1) {
+                        AlertDialog.Builder builder = new AlertDialog.Builder(Listview_Producao_Por_Produtor.this);
+                        builder.setTitle("Digite o ano desejado!");
+                        //builder.setMessage("Valor do litro:  Total da Produção");
+                        final EditText inputAno = new EditText(Listview_Producao_Por_Produtor.this);
+                        inputAno.addTextChangedListener(MaskEditUtil.mask(inputAno, MaskEditUtil.FORMAT_ANO));
+                        inputAno.setInputType(InputType.TYPE_CLASS_NUMBER);
+                        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+                                LinearLayout.LayoutParams.MATCH_PARENT,
+                                LinearLayout.LayoutParams.MATCH_PARENT);
+                        inputAno.setLayoutParams(lp);
+                        builder.setView(inputAno);
+
+                        builder.setPositiveButton("ok", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface arg0, int arg1) {
+                                if(inputAno.getText().toString().isEmpty()){
+                                    Toast.makeText(Listview_Producao_Por_Produtor.this, "Campo Obrigatório! Opção Cancelada", Toast.LENGTH_SHORT).show();
+
+                                }else{
+                                    anoGrafico = Integer.parseInt(inputAno.getText().toString());
+                                    AlertDialog.Builder builder = new AlertDialog.Builder(Listview_Producao_Por_Produtor.this);
+                                    builder.setTitle("Selecione o Mês");
+
+                                    String[] animals = {"Janeiro","Fevereiro","Março","Abril","Maio","Junho","Julho","Agosto","Sentembro","Outobro","Novenbro","Dezenbro"};
+                                    int checkedItem = 0;
+                                    builder.setSingleChoiceItems(animals, checkedItem, new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            mesGrafico = which + 1;
+                                        }
+                                    });
+
+
+                                    builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+
+                                            startActivity(new Intent(Listview_Producao_Por_Produtor.this, Grafico_Mensal_Producao.class));
+
+
+                                        }
+                                    });
+                                    builder.setNegativeButton("Cancel", null);
+
+                                    AlertDialog dialog = builder.create();
+                                    dialog.show();
+
+                                }
+
+                            }
+                        });
+                        builder.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface arg0, int arg1) {
+                                Toast.makeText(Listview_Producao_Por_Produtor.this, "Opção Cancelada", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+
+
+                        builder.show();
+
+                    }
+                });
+                builder.show();
+
 
                 break;
             default:
