@@ -501,7 +501,7 @@ public class Listview_Producao_Por_Produtor extends AppCompatActivity implements
                                     AlertDialog.Builder builder = new AlertDialog.Builder(Listview_Producao_Por_Produtor.this);
                                     builder.setTitle("Selecione o Mês");
 
-                                    String[] animals = {"Janeiro","Fevereiro","Março","Abril","Maio","Junho","Julho","Agosto","Sentembro","Outobro","Novenbro","Dezenbro"};
+                                    String[] animals = {"Janeiro","Fevereiro","Março","Abril","Maio","Junho","Julho","Agosto","Setembro","Outubro","Novenbro","Dezenbro"};
                                     int checkedItem = 0;
                                     builder.setSingleChoiceItems(animals, checkedItem, new DialogInterface.OnClickListener() {
                                         @Override

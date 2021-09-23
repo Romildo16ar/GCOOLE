@@ -11,6 +11,7 @@ import android.util.Log;
 import com.example.gcoole.Modelo.Producao;
 import com.example.gcoole.Modelo.Produtor;
 import com.example.gcoole.Modelo.Vaca;
+import com.example.gcoole.Modelo.VacaPrenha;
 import com.example.gcoole.Modelo.ValorPorLitro;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
@@ -47,10 +48,13 @@ public class Dao extends SQLiteOpenHelper {
 
         String tbValorPorLitro = "CREATE TABLE valorporlitro(id INTEGER PRIMARY KEY AUTOINCREMENT, valor FLOAT, mes INTEGER , ano INTEGER)";
 
+        String tbInserirVacaPrenha = "CREATE TABLE vacaPrenha(id INTEGER PRIMARY KEY AUTOINCREMENT, dataInicialGestacao VARCHAR(20), numeroGestacao INTEGER, idVaca INTEGER)";
+
         db.execSQL(tbProducao);
         db.execSQL(tbProdutor);
         db.execSQL(tbVaca);
         db.execSQL(tbValorPorLitro);
+        db.execSQL(tbInserirVacaPrenha);
     }
 
     @Override
@@ -59,6 +63,7 @@ public class Dao extends SQLiteOpenHelper {
         String dropTbVaca = "DROP TABLE IF EXISTS vaca";
         String dropTbProducao = "DROP TABLE IF EXISTS producao";
         String dropTbValorPorLitro = "DROP TABLE IF EXISTS valorporlitro";
+        String dropTbInserirVacaPrenha = "DROP TABLE IF EXISTS vacaPrenha";
 
 
 
@@ -66,6 +71,7 @@ public class Dao extends SQLiteOpenHelper {
         db.execSQL(dropTbVaca);
         db.execSQL(dropTbProducao);
         db.execSQL(dropTbValorPorLitro);
+        db.execSQL(dropTbInserirVacaPrenha);
         onCreate(db);
 
 
@@ -309,6 +315,43 @@ public class Dao extends SQLiteOpenHelper {
 
 
 // Fim crud valor por litro mensal ------------------------------------------------------------------------------------------
+//Inicil Crud VacaPenha -----------------------------------------------------------------------------------------------------
+
+    public void inserirVacaPrenha(VacaPrenha vacaPrenha){
+        SQLiteDatabase db = getWritableDatabase();
+        ContentValues vc = new ContentValues();
+        vc.put("dataInicialGestacao", vacaPrenha.getDataInicialGestacao());
+        vc.put("numeroGestacao", vacaPrenha.getNumeroGestacao());
+        vc.put("idVaca", vacaPrenha.getIdVaca());
+        db.insert("vacaPrenha", null, vc);
+        db.close();
+    }
+
+
+    public List<VacaPrenha> selecionarVacaPrenha(){
+        List<VacaPrenha> vacaPrenhaList = new ArrayList<>();
+        SQLiteDatabase db = getReadableDatabase();
+        String sql = "SELECT * FROM vacaPrenha";
+        Cursor cur = db.rawQuery(sql, null);
+        if (cur.moveToFirst()){
+            do{
+                VacaPrenha vacaPrenha = new VacaPrenha();
+                vacaPrenha.setId(cur.getInt(0));
+                vacaPrenha.setDataInicialGestacao(cur.getString(1));
+                vacaPrenha.setNumeroGestacao(cur.getInt(2));
+                vacaPrenha.setIdVaca(cur.getInt(3));
+                vacaPrenhaList.add(vacaPrenha);
+            }while (cur.moveToNext());
+        }
+        db.close();
+        return vacaPrenhaList;
+
+    }
+
+
+
+
+// Fim crud vacaPrenha
 
 
 }

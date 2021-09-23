@@ -21,6 +21,7 @@
         <entry key="..\:/Users/romil/AndroidStudioProjects/gcoole/app/src/main/res/layout/activity_adapter_producao.xml" value="0.21" />
         <entry key="..\:/Users/romil/AndroidStudioProjects/gcoole/app/src/main/res/layout/activity_adapter_produtor.xml" value="0.2907608695652174" />
         <entry key="..\:/Users/romil/AndroidStudioProjects/gcoole/app/src/main/res/layout/activity_adapter_vaca.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/romil/AndroidStudioProjects/gcoole/app/src/main/res/layout/activity_adapter_vaca_prenha.xml" value="0.36367753623188404" />
         <entry key="..\:/Users/romil/AndroidStudioProjects/gcoole/app/src/main/res/layout/activity_adapter_valor_por_litro.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/romil/AndroidStudioProjects/gcoole/app/src/main/res/layout/activity_main.xml" value="0.2798913043478261" />
         <entry key="..\:/Users/romil/AndroidStudioProjects/gcoole/app/src/main/res/layout/activity_produtor.xml" value="0.36666666666666664" />
@@ -29,6 +30,7 @@
         <entry key="..\:/Users/romil/AndroidStudioProjects/gcoole/app/src/main/res/layout/listview_producao_por_produtor.xml" value="0.22" />
         <entry key="..\:/Users/romil/AndroidStudioProjects/gcoole/app/src/main/res/layout/listview_produtor.xml" value="0.16621376811594202" />
         <entry key="..\:/Users/romil/AndroidStudioProjects/gcoole/app/src/main/res/layout/listview_vaca.xml" value="0.16621376811594202" />
+        <entry key="..\:/Users/romil/AndroidStudioProjects/gcoole/app/src/main/res/layout/listview_vaca_prenha.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/romil/AndroidStudioProjects/gcoole/app/src/main/res/layout/listview_valor_por_litro.xml" value="0.1431159420289855" />
         <entry key="..\:/Users/romil/AndroidStudioProjects/gcoole/app/src/main/res/layout/pop_up_filtro_producao.xml" value="0.20416666666666666" />
         <entry key="..\:/Users/romil/AndroidStudioProjects/gcoole/app/src/main/res/layout/view_cadastro_produtor.xml" value="0.36666666666666664" />
@@ -41,6 +43,7 @@
         <entry key="..\:/Users/romil/AndroidStudioProjects/gcoole/app/src/main/res/layout/view_grafico_anual_producao.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/romil/AndroidStudioProjects/gcoole/app/src/main/res/layout/view_grafico_mensal.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/romil/AndroidStudioProjects/gcoole/app/src/main/res/layout/view_inserir_producao.xml" value="0.25" />
+        <entry key="..\:/Users/romil/AndroidStudioProjects/gcoole/app/src/main/res/layout/view_inserir_vaca_prenha.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/romil/AndroidStudioProjects/gcoole/app/src/main/res/layout/view_inserir_valor_por_litro.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/romil/AndroidStudioProjects/gcoole/app/src/main/res/menu/main.xml" value="0.33" />
         <entry key="..\:/Users/romil/AndroidStudioProjects/gcoole/app/src/main/res/menu/menu.xml" value="0.36666666666666664" />
@@ -56,6 +59,7 @@
         <entry key="..\:/Users/romil/AndroidStudioProjects/gcoole/app/src/main/res/menu/menu_listview_producao.xml" value="0.20416666666666666" />
         <entry key="..\:/Users/romil/AndroidStudioProjects/gcoole/app/src/main/res/menu/menu_listview_producao_por_producao.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/romil/AndroidStudioProjects/gcoole/app/src/main/res/menu/menu_listview_vaca.xml" value="0.20416666666666666" />
+        <entry key="..\:/Users/romil/AndroidStudioProjects/gcoole/app/src/main/res/menu/menu_listview_vaca_prenha.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/romil/AndroidStudioProjects/gcoole/app/src/main/res/menu/menu_listview_valor_por_litro.xml" value="0.33" />
         <entry key="..\:/Users/romil/AndroidStudioProjects/gcoole/app/src/main/res/mipmap-anydpi-v26/add.xml" value="0.3828125" />
         <entry key="..\:/Users/romil/AndroidStudioProjects/gcoole/app/src/main/res/mipmap-anydpi-v26/add_round.xml" value="0.3828125" />

@@ -9,6 +9,9 @@
         android:id="@+id/ListVaca"
         android:title="@string/Vaca" />
     <item
+        android:id="@+id/idVacaPrenhaMenu"
+        android:title="@string/vacaPrenha" />
+    <item
         android:id="@+id/idInserirProducao"
         android:title="@string/inserirProducao" />
     <item

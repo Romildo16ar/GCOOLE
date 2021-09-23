@@ -2,7 +2,7 @@
     <string name="app_name">gcoole</string>
     <string name="Prop">Proprietario</string>
     <string name="Prod">Produtor</string>
-    <string name="Vaca">Vaca</string>
+    <string name="Vaca"> Vaca</string>
     <string name="Salvar">Salvar</string>
     <string name="nome">Nome:</string>
     <string name="tipo">Tipo:</string>
@@ -30,5 +30,7 @@
     <string name="valorPorLitroMensal">Valor do Litro Mensal</string>
     <string name="mesEAno">Mes e Ano Referênte</string>
     <string name="datainserirvalor">Data:</string>
-
+    <string name="vacaPrenha">Vacas Prenhas</string>
+    <string name="dataInicilGestacao">Data do inicio da Gestação</string>
+    <string name="numeroGestacao">Número da Gestação</string>
 </resources>

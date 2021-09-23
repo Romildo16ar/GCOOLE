@@ -22,6 +22,8 @@ import com.example.gcoole.Modelo.Produtor;
 import com.example.gcoole.Modelo.Vaca;
 import com.example.gcoole.R;
 
+import java.util.List;
+
 public class CadastroVaca extends AppCompatActivity implements View.OnClickListener {
 
     private EditText nomeVaca;
@@ -69,7 +71,19 @@ public class CadastroVaca extends AppCompatActivity implements View.OnClickListe
         }else if(numVaca.getText().toString().isEmpty()){
             numVaca.setError("Campo Obrigatório!");
             numVaca.requestFocus();
-        }else {
+        }else if (verificarVaca(Integer.parseInt(numVaca.getText().toString()))) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("Número da Vaca já em uso!");
+            builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    Toast.makeText(CadastroVaca.this,  "", Toast.LENGTH_SHORT);
+
+                }
+            });
+            builder.show();
+
+        }else{
 
             vaca.setNome(nomeVaca.getText().toString());
             vaca.setNumVaca(Integer.parseInt(numVaca.getText().toString()));
@@ -98,5 +112,16 @@ public class CadastroVaca extends AppCompatActivity implements View.OnClickListe
 
         }
 
+    }
+
+    public boolean verificarVaca(int numeroVaca){
+        Dao bd = new Dao(this);
+        List<Vaca> vacaList = bd.selecionarVaca();
+        for(int i =0; i< vacaList.size(); i++){
+            if(numeroVaca == vacaList.get(i).getNumVaca()){
+                return true;
+            }
+        }
+        return false;
     }
 }

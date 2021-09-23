@@ -20,6 +20,8 @@ import com.example.gcoole.Listviews.ListviewProdutor;
 import com.example.gcoole.Modelo.Produtor;
 import com.example.gcoole.R;
 
+import java.util.List;
+
 public class CadastroProdutor extends AppCompatActivity implements View.OnClickListener {
 
     private EditText nomeProp;
@@ -72,7 +74,19 @@ public class CadastroProdutor extends AppCompatActivity implements View.OnClickL
         }else if(numProd.getText().toString().isEmpty()){
             numProd.setError("Campo Obrigatório!");
             numProd.requestFocus();
-        }else {
+        }else if (verificarProdutor(Integer.parseInt(numProd.getText().toString()))) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("Número do Produtor já em uso!");
+            builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    Toast.makeText(CadastroProdutor.this,  "", Toast.LENGTH_SHORT);
+
+                }
+            });
+            builder.show();
+
+        }else{
 
             prod.setNome(nomeProp.getText().toString());
             prod.setNumProd(Integer.parseInt(numProd.getText().toString()));
@@ -109,5 +123,18 @@ public class CadastroProdutor extends AppCompatActivity implements View.OnClickL
 
 
 
+    }
+
+    public boolean verificarProdutor(int numeroProdutor){
+        Dao bd = new Dao(this);
+        List<Produtor> produtorList = bd.selecionarProdutor();
+        for(int i =0; i< produtorList.size(); i++){
+            if(numeroProdutor == produtorList.get(i).getNumProd()){
+                return true;
+            }
+        }
+
+
+        return false;
     }
 }

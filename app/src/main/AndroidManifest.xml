@@ -66,6 +66,10 @@
             android:label="Gráfico Mensal"/>
         <activity android:name=".Grafico.Grafico_Anual_Producao"
             android:label="Grafico Anual"/>
+        <activity android:name=".Listviews.ListviewVacaPrenha"
+            android:label="Vacas Prenhas"/>
+        <activity android:name=".CRUD.InserirVacaPrenha"
+            android:label="Inserir Vaca Prenha"/>
         
         <provider
             android:authorities="com.example.gcoole.Listviews"

@@ -46,7 +46,7 @@ public class Grafico_Anual_Producao extends AppCompatActivity {
         List<Producao> producaos = bd.selecionarProducao();
 
 
-        final String[] meses ={"Janeiro","Fevereiro","Março","Abril","Maio","Junho","Julho","Agosto","Sentembro","Outobro","Novenbro","Dezenbro"};
+        final String[] meses ={"Janeiro","Fevereiro","Março","Abril","Maio","Junho","Julho","Agosto","Setembro","Outubro","Novenbro","Dezenbro"};
         int aux1 = 0,aux2 = 0,aux3 = 0,aux4 = 0,aux5 = 0, aux6 = 0, aux7 = 0, aux8 = 0, aux9 = 0,aux10 = 0, aux11 = 0, aux12 = 0;
         Number[] seriaA = {0,0,0,0,0,0,0,0,0,0,0,0};
         for(int i = 0; i < producaos.size(); i++){
