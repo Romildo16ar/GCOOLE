@@ -65,9 +65,11 @@ public class AdapterVacaPrenha extends BaseAdapter {
         TextView textViewNomeVaca = (TextView) vi.findViewById(R.id.idAdapterNomeVacaPrenha);
         TextView textViewNumGestacao = (TextView) vi.findViewById(R.id.idAdapterNumeroGestacao);
         TextView textViewNumIndetificacao = (TextView) vi.findViewById(R.id.idAdapterNumeroVaca);
+        TextView textViewDataInicialGestacao = (TextView) vi.findViewById(R.id.idAdapeterDataInicialGestacao);
         textViewNomeVaca.setText("Nome:"+vacaAux.getNome());
         textViewNumGestacao.setText("Nº da Gestação: " +vaca.getNumeroGestacao());
         textViewNumIndetificacao.setText("Nº de Indetificação da Vaca:"+vacaAux.getNumVaca());
+        textViewDataInicialGestacao.setText("Data Inicial da Gestação: "+vaca.getDataInicialGestacao());
 
 
 

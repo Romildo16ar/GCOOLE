@@ -12,6 +12,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.gcoole.Activity_Produtor;
+import com.example.gcoole.Activity_Vaca_Prenha;
 import com.example.gcoole.Adapters.AdapterProdutor;
 import com.example.gcoole.Adapters.AdapterVacaPrenha;
 import com.example.gcoole.CRUD.CadastroVaca;
@@ -43,7 +44,7 @@ public class ListviewVacaPrenha extends AppCompatActivity {
         List<Vaca> vacaList = bd.selecionarVaca();
         vacaPrenhas.setAdapter(new AdapterVacaPrenha(ListviewVacaPrenha.this, vacaPrenhaList, vacaList));
 
-        /*vacaPrenhas.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        vacaPrenhas.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 vacaPrenha = (VacaPrenha) vacaPrenhas.getItemAtPosition(position);
@@ -53,14 +54,14 @@ public class ListviewVacaPrenha extends AppCompatActivity {
 
         });
 
-         */
+
     }
 
-         /*
+
     private void click(View view) {
-        startActivity(new Intent(this, Activity_Produtor.class));
+        startActivity(new Intent(this, Activity_Vaca_Prenha.class));
     }
-*/
+
 
     public boolean onCreateOptionsMenu(Menu menu){
         getMenuInflater().inflate(R.menu.menu_listview_vaca_prenha, menu);

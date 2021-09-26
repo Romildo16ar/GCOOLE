@@ -10,17 +10,25 @@ import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ListView;
 import android.widget.Toast;
 
+import com.example.gcoole.Adapters.AdapterMain;
 import com.example.gcoole.CRUD.InserirProducao;
+import com.example.gcoole.Dao.Dao;
 import com.example.gcoole.Listviews.ListviewProdutorParaProducao;
 import com.example.gcoole.Listviews.ListviewProdutor;
 import com.example.gcoole.Listviews.ListviewVacaPrenha;
 import com.example.gcoole.Listviews.Listview_Valor_Por_Litro;
 import com.example.gcoole.Listviews.ListviewsVaca;
+import com.example.gcoole.Modelo.Vaca;
+import com.example.gcoole.Modelo.VacaPrenha;
 import com.example.gcoole.Ultil.Util;
 
+import java.util.List;
+
 public class MainActivity extends AppCompatActivity {
+    private ListView vacaPrenhas;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +44,13 @@ public class MainActivity extends AppCompatActivity {
 
             Util.validate(this, 17, permissao);
        // }
+
+        vacaPrenhas = (ListView) findViewById(R.id.idListaMain);
+
+        Dao bd= new Dao(this);
+        List<VacaPrenha> vacaPrenhaList = bd.selecionarVacaPrenha();
+        List<Vaca> vacaList = bd.selecionarVaca();
+        vacaPrenhas.setAdapter(new AdapterMain(MainActivity.this, vacaPrenhaList ,vacaList));
 
 
     }

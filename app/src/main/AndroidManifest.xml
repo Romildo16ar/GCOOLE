@@ -70,6 +70,10 @@
             android:label="Vacas Prenhas"/>
         <activity android:name=".CRUD.InserirVacaPrenha"
             android:label="Inserir Vaca Prenha"/>
+        <activity android:name=".Activity_Vaca_Prenha"
+            android:label="Vaca Prenha"/>
+        <activity android:name=".CRUD.EditarVacaPrenha"
+            android:label="Editar Vaca Prenha"/>
         
         <provider
             android:authorities="com.example.gcoole.Listviews"

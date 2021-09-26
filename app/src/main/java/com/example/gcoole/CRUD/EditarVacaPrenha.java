@@ -17,10 +17,12 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.gcoole.Activity_Vaca;
+import com.example.gcoole.Activity_Vaca_Prenha;
 import com.example.gcoole.Dao.Dao;
 import com.example.gcoole.Listviews.ListviewVacaPrenha;
-import com.example.gcoole.Listviews.Listview_Valor_Por_Litro;
-import com.example.gcoole.Modelo.Producao;
+import com.example.gcoole.Listviews.Listview_Producao_Por_Produtor;
+import com.example.gcoole.Modelo.Produtor;
 import com.example.gcoole.Modelo.Vaca;
 import com.example.gcoole.Modelo.VacaPrenha;
 import com.example.gcoole.R;
@@ -30,7 +32,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
 
-public class InserirVacaPrenha extends AppCompatActivity implements View.OnClickListener {
+public class EditarVacaPrenha extends AppCompatActivity implements View.OnClickListener {
 
     private EditText dataInicioGestacao;
     private EditText numeroGestacao;
@@ -39,14 +41,15 @@ public class InserirVacaPrenha extends AppCompatActivity implements View.OnClick
     private String[]vacaNome;
     private ArrayAdapter<String> arrayAdapterVaca;
 
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.view_inserir_vaca_prenha);
+        setContentView(R.layout.view_editar_vaca_prenha);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
 
-        spinnerVaca = (Spinner) findViewById(R.id.idSpinnerInserirvacaPrenha);
+        spinnerVaca = (Spinner) findViewById(R.id.idSpinnerEditarVaca);
         Dao bd = new Dao(this);
 
         List<Vaca> vacaList = bd.selecionarVaca();
@@ -58,21 +61,27 @@ public class InserirVacaPrenha extends AppCompatActivity implements View.OnClick
             vaca[i] = vacaList.get(i);
             vacaNome[i] = vacaList.get(i).getNome();
         }
-
         arrayAdapterVaca = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, vacaNome);
         spinnerVaca.setAdapter(arrayAdapterVaca);
 
-        dataInicioGestacao = (EditText) findViewById(R.id.idInserirdataInicilGestacao);
-        numeroGestacao = (EditText) findViewById(R.id.idInserirNumerogestacao);
+        String nome = null;
+        for (int i = 0; i < vacaList.size(); i++) {
+            if(ListviewVacaPrenha.vacaPrenha.getIdVaca() == vacaList.get(i).getId()){
+                nome = vacaList.get(i).getNome();
+            }
+        }
+        spinnerVaca.setSelection(arrayAdapterVaca.getPosition(nome));
+
+        dataInicioGestacao = (EditText) findViewById(R.id.idEditarDataGestacao);
+        numeroGestacao = (EditText) findViewById(R.id.idEditarNumeroGestacao);
 
         dataInicioGestacao.addTextChangedListener(MaskEditUtil.mask(dataInicioGestacao, MaskEditUtil.FORMAT_DATE));
 
-        Calendar c = Calendar.getInstance();
-        SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
-        String formatteDate = df.format(c.getTime());
-        dataInicioGestacao.setText(formatteDate);
+        dataInicioGestacao.setText(ListviewVacaPrenha.vacaPrenha.getDataInicialGestacao());
+        numeroGestacao.setText(String.valueOf(ListviewVacaPrenha.vacaPrenha.getNumeroGestacao()));
 
-        Button btInserir = (Button) findViewById(R.id.idInserirVacaPrenha);
+
+        Button btInserir = (Button) findViewById(R.id.idBTEditarVacaPrenha);
         btInserir.setOnClickListener(this);
 
 
@@ -87,7 +96,7 @@ public class InserirVacaPrenha extends AppCompatActivity implements View.OnClick
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
             case android.R.id.home:
-                startActivity(new Intent(InserirVacaPrenha.this, ListviewVacaPrenha.class));
+                startActivity(new Intent(EditarVacaPrenha.this, Activity_Vaca_Prenha.class));
                 break;
             default:
                 break;
@@ -97,6 +106,7 @@ public class InserirVacaPrenha extends AppCompatActivity implements View.OnClick
 
     @Override
     public void onClick(View v) {
+
         Dao bd = new Dao(this);
         VacaPrenha vacaPrenha = new VacaPrenha();
         int p = spinnerVaca.getSelectedItemPosition();
@@ -106,7 +116,7 @@ public class InserirVacaPrenha extends AppCompatActivity implements View.OnClick
             builder.setTitle("Importante");
             builder.setMessage("Por favor selecione a Vaca.\n Caso a lista esteja vazia, faça o cadastro antes de continuar. ");
             builder.setPositiveButton("OK", (dialog, which) -> {
-                Toast.makeText(InserirVacaPrenha.this, "", Toast.LENGTH_SHORT);
+                Toast.makeText(EditarVacaPrenha.this, "", Toast.LENGTH_SHORT);
             });
             builder.show();
             return;
@@ -121,16 +131,17 @@ public class InserirVacaPrenha extends AppCompatActivity implements View.OnClick
         }else if(!dataInicioGestacao.getText().toString().isEmpty() && !validaData(dataInicioGestacao.getText().toString())){
             dataInicioGestacao.setError("Data Inválida!");
             dataInicioGestacao.requestFocus();
-        }else if(varificarVacaPrenha(Integer.parseInt(numeroGestacao.getText().toString()),vac)){
+        }else /*if(varificarVacaPrenha(Integer.parseInt(numeroGestacao.getText().toString()),vac)){
             numeroGestacao.setError("Vaca Já Possui esse número de gestação!");
-        }else{
+        }else*/{
 
+            vacaPrenha.setId(ListviewVacaPrenha.vacaPrenha.getId());
             vacaPrenha.setDataInicialGestacao(dataInicioGestacao.getText().toString());
             vacaPrenha.setNumeroGestacao(Integer.parseInt(numeroGestacao.getText().toString()));
             vacaPrenha.setIdVaca(vac);
 
             try {
-                bd.inserirVacaPrenha(vacaPrenha);
+                bd.updateVacaPrenha(vacaPrenha);
             }catch (Exception e){
                 Log.e("Erro", "Erro ao Cadastrar");
             }
@@ -140,10 +151,8 @@ public class InserirVacaPrenha extends AppCompatActivity implements View.OnClick
             builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    Toast.makeText(InserirVacaPrenha.this,  "", Toast.LENGTH_SHORT);
-                    numeroGestacao.setText("");
-                    numeroGestacao.requestFocus();
-
+                    startActivity(new Intent(EditarVacaPrenha.this, ListviewVacaPrenha.class));
+                    finishAffinity();
                 }
             });
             builder.show();
@@ -154,6 +163,7 @@ public class InserirVacaPrenha extends AppCompatActivity implements View.OnClick
 
 
     }
+
     private boolean validaData(String data){
         String[] vet;
         vet=data.split("/");
@@ -180,5 +190,4 @@ public class InserirVacaPrenha extends AppCompatActivity implements View.OnClick
         }
         return false;
     }
-
 }

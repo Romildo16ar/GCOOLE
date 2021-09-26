@@ -33,4 +33,6 @@
     <string name="vacaPrenha">Vacas Prenhas</string>
     <string name="dataInicilGestacao">Data do inicio da Gestação</string>
     <string name="numeroGestacao">Número da Gestação</string>
+    <string name="dataSecagem">Data da Secagem</string>
+    <string name="dataParto">Data Provalvel do Parto</string>
 </resources>

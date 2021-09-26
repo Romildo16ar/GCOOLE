@@ -348,6 +348,27 @@ public class Dao extends SQLiteOpenHelper {
 
     }
 
+    public void deleteVacaPrenha(int id){
+        String delete = "id ='" + id +"'";
+        SQLiteDatabase bd = getReadableDatabase();
+        bd.delete("vacaPrenha", delete, null);
+        bd.close();
+    }
+
+    public void updateVacaPrenha(VacaPrenha vacaPrenha){
+        SQLiteDatabase db = getReadableDatabase();
+        String where = "id='"+vacaPrenha.getId()+"'";
+        //  Log.e("Erro", "Entrei"+vaca.getId());
+        ContentValues cv = new ContentValues();
+        cv.put("dataInicialGestacao", vacaPrenha.getDataInicialGestacao());
+        cv.put("numeroGestacao", vacaPrenha.getNumeroGestacao());
+        cv.put("idVaca", vacaPrenha.getIdVaca());
+
+        db.update("vacaPrenha",cv,where, null);
+        db.close();
+
+    }
+
 
 
 
