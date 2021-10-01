@@ -5,6 +5,7 @@ import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -57,6 +58,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class Listview_Producao_Por_Produtor extends AppCompatActivity implements View.OnClickListener{
@@ -384,6 +386,7 @@ public class Listview_Producao_Por_Produtor extends AppCompatActivity implements
 
                 builderDinheiro.setPositiveButton("ok", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface arg0, int arg1) {
+                        mesDinheiro = 0;
                         if (inputAno.getText().toString().isEmpty()) {
                             Toast.makeText(Listview_Producao_Por_Produtor.this, "Campo Obrigatório! Opção Cancelada", Toast.LENGTH_SHORT).show();
 
@@ -633,4 +636,7 @@ public class Listview_Producao_Por_Produtor extends AppCompatActivity implements
 
 
     }
+
+
+
 }
