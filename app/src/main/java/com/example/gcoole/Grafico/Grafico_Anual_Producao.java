@@ -75,7 +75,7 @@ public class Grafico_Anual_Producao extends AppCompatActivity {
         List<Producao> producaos = bd.selecionarProducao();
 
 
-        final String[] meses ={"Janeiro","Fevereiro","Março","Abril","Maio","Junho","Julho","Agosto","Setembro","Outubro","Novenbro","Dezenbro"};
+        final String[] meses ={"Janeiro","Fevereiro","Março","Abril","Maio","Junho","Julho","Agosto","Setembro","Outubro","Novembro","Dezembro"};
         int aux1 = 0,aux2 = 0,aux3 = 0,aux4 = 0,aux5 = 0, aux6 = 0, aux7 = 0, aux8 = 0, aux9 = 0,aux10 = 0, aux11 = 0, aux12 = 0;
         Number[] seriaA = {0,0,0,0,0,0,0,0,0,0,0,0};
         for(int i = 0; i < producaos.size(); i++){
@@ -328,43 +328,9 @@ public class Grafico_Anual_Producao extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
-    public Bitmap screenShot(View view) {
-        Bitmap bitmap = Bitmap.createBitmap(view.getWidth(),
-                view.getHeight(), Bitmap.Config.ARGB_8888);
-        Canvas canvas = new Canvas(bitmap);
-        view.draw(canvas);
-        return bitmap;
-    }
 
 
-    private void takeScreenshot() {
-        Date now = new Date();
-       // android.text.format.DateFormat.format("yyyy-MM-dd_hh:mm:ss", now);
 
-        try {
-            // image naming and path  to include sd card  appending name you choose for file
-            String mPath = Environment.getExternalStorageDirectory().toString() + "/" + now + ".jpg";
-
-            // create bitmap screen capture
-            View v1 = getWindow().getDecorView().getRootView();
-            v1.setDrawingCacheEnabled(true);
-            Bitmap bitmap = Bitmap.createBitmap(v1.getDrawingCache());
-            v1.setDrawingCacheEnabled(false);
-
-            File imageFile = new File(mPath);
-
-            FileOutputStream outputStream = new FileOutputStream(imageFile);
-            int quality = 100;
-            bitmap.compress(Bitmap.CompressFormat.JPEG, quality, outputStream);
-            outputStream.flush();
-            outputStream.close();
-
-
-        } catch (Throwable e) {
-            // Several error may come out with file handling or DOM
-            e.printStackTrace();
-        }
-    }
 
     private void visualizarPdfFile(File pdf){
         Intent intent = new Intent(Intent.ACTION_VIEW);

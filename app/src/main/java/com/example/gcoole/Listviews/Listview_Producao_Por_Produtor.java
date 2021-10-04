@@ -107,7 +107,7 @@ public class Listview_Producao_Por_Produtor extends AppCompatActivity implements
         Dao bd = new Dao(this);
 
         List<Producao> producaoList = bd.selecionarProducao();
-        producaoListPorIdComFiltro = bd.selecionarProducao();
+        //producaoListPorIdComFiltro = bd.selecionarProducao();
         arrayAdapterMes = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, mes);
         spinnerMes.setAdapter(arrayAdapterMes);
 
@@ -118,6 +118,7 @@ public class Listview_Producao_Por_Produtor extends AppCompatActivity implements
             if(ListviewProdutorParaProducao.produtor.getId() == producaoList.get(i).getIdProdutor()){
 
                 producaoListPorId.add(producaoList.get(i));
+                producaoListPorIdComFiltro.add(producaoList.get(i));
 
             }
 
@@ -172,7 +173,9 @@ public class Listview_Producao_Por_Produtor extends AppCompatActivity implements
             prencherLista(producaoListPorId);
             mesFiltro =-1;
             Dao bd = new Dao(this);
-            producaoListPorIdComFiltro = bd.selecionarProducao();
+            for(int i = 0; producaoListPorId.size() > i; i++){
+                producaoListPorIdComFiltro.add(producaoListPorId.get(i));
+            }
         }else if(mesFiltro == 13) { //filto por ano
             for(int i = 0; i < producaoListPorId.size(); i ++){
                 anoPdf = ano.getText().toString();
@@ -372,118 +375,404 @@ public class Listview_Producao_Por_Produtor extends AppCompatActivity implements
                 break;
             case R.id.idDinheiro:
 
-                AlertDialog.Builder builderDinheiro = new AlertDialog.Builder(Listview_Producao_Por_Produtor.this);
-                builderDinheiro.setTitle("Digite o ano desejado!");
-                //builder.setMessage("Valor do litro:  Total da Produção");
-                final EditText inputAno = new EditText(Listview_Producao_Por_Produtor.this);
-                inputAno.addTextChangedListener(MaskEditUtil.mask(inputAno, MaskEditUtil.FORMAT_ANO));
-                inputAno.setInputType(InputType.TYPE_CLASS_NUMBER);
-                LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
-                        LinearLayout.LayoutParams.MATCH_PARENT,
-                        LinearLayout.LayoutParams.MATCH_PARENT);
-                inputAno.setLayoutParams(lp);
-                builderDinheiro.setView(inputAno);
-
-                builderDinheiro.setPositiveButton("ok", new DialogInterface.OnClickListener() {
+                AlertDialog.Builder builderInicial = new AlertDialog.Builder(this);
+                builderInicial.setTitle("Calculo Mensal");
+                builderInicial.setMessage("Selecione a opção desejada:");
+                builderInicial.setPositiveButton("Valor a Receber", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface arg0, int arg1) {
-                        mesDinheiro = 0;
-                        if (inputAno.getText().toString().isEmpty()) {
-                            Toast.makeText(Listview_Producao_Por_Produtor.this, "Campo Obrigatório! Opção Cancelada", Toast.LENGTH_SHORT).show();
+                        AlertDialog.Builder builderDinheiro = new AlertDialog.Builder(Listview_Producao_Por_Produtor.this);
+                        builderDinheiro.setTitle("Digite o ano desejado!");
+                        //builder.setMessage("Valor do litro:  Total da Produção");
+                        final EditText inputAno = new EditText(Listview_Producao_Por_Produtor.this);
+                        inputAno.addTextChangedListener(MaskEditUtil.mask(inputAno, MaskEditUtil.FORMAT_ANO));
+                        inputAno.setInputType(InputType.TYPE_CLASS_NUMBER);
+                        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+                                LinearLayout.LayoutParams.MATCH_PARENT,
+                                LinearLayout.LayoutParams.MATCH_PARENT);
+                        inputAno.setLayoutParams(lp);
+                        builderDinheiro.setView(inputAno);
 
-                        } else {
-                            anoDinheiro = Integer.parseInt(inputAno.getText().toString());
-                            AlertDialog.Builder builder = new AlertDialog.Builder(Listview_Producao_Por_Produtor.this);
-                            builder.setTitle("Selecione o Mês");
+                        builderDinheiro.setPositiveButton("ok", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface arg0, int arg1) {
+                                mesDinheiro = 0;
+                                if (inputAno.getText().toString().isEmpty()) {
+                                    Toast.makeText(Listview_Producao_Por_Produtor.this, "Campo Obrigatório! Opção Cancelada", Toast.LENGTH_SHORT).show();
 
-                            String[] animals = {"Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novenbro", "Dezenbro"};
-                            int checkedItem = 0;
-                            builder.setSingleChoiceItems(animals, checkedItem, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    mesDinheiro = which + 1;
-                                }
-                            });
+                                } else {
+                                    anoDinheiro = Integer.parseInt(inputAno.getText().toString());
+                                    AlertDialog.Builder builder = new AlertDialog.Builder(Listview_Producao_Por_Produtor.this);
+                                    builder.setTitle("Selecione o Mês");
+
+                                    String[] animals = {"Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novenbro", "Dezenbro"};
+                                    int checkedItem = 0;
+                                    builder.setSingleChoiceItems(animals, checkedItem, new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            mesDinheiro = which + 1;
+                                        }
+                                    });
 
 
-                            builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    Producao p;
-                                    totalProducao = 0;
-                                    if(mesDinheiro == 0){
-                                        mesDinheiro = 1;
-                                    }
-                                    float auxValor = 0 , total = 0;
-                                    Dao bd = new Dao(Listview_Producao_Por_Produtor.this);
-                                    List<ValorPorLitro> valorPorLitrosMensal = bd.selecionarValorProLitro();
-                                    List<Producao> producaoList = bd.selecionarProducao();
-                                    for(int i = 0; i < producaoList.size(); i++){
-                                        if(producaoList.get(i).getIdProdutor() == ListviewProdutorParaProducao.produtor.getId()){
-                                            if(selecionaAno(producaoList.get(i).getData()) == anoDinheiro){
-                                                if(selecionaMes(producaoList.get(i).getData()) == mesDinheiro){
-                                                    p=producaoList.get(i);
-                                                    totalProducao = totalProducao + p.getQuant();
+                                    builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            Producao p;
+                                            totalProducao = 0;
+                                            if(mesDinheiro == 0){
+                                                mesDinheiro = 1;
+                                            }
+                                            float auxValor = 0 , total = 0;
+                                            Dao bd = new Dao(Listview_Producao_Por_Produtor.this);
+                                            List<ValorPorLitro> valorPorLitrosMensal = bd.selecionarValorProLitro();
+                                            List<Producao> producaoList = bd.selecionarProducao();
+                                            for(int i = 0; i < producaoList.size(); i++){
+                                                if(producaoList.get(i).getIdProdutor() == ListviewProdutorParaProducao.produtor.getId()){
+                                                    if(selecionaAno(producaoList.get(i).getData()) == anoDinheiro){
+                                                        if(selecionaMes(producaoList.get(i).getData()) == mesDinheiro){
+                                                            p=producaoList.get(i);
+                                                            totalProducao = totalProducao + p.getQuant();
+                                                        }
+                                                    }
+
+                                                }
+
+                                            }
+
+                                            for(int i = 0; i < valorPorLitrosMensal.size(); i++){
+                                                if (mesDinheiro == valorPorLitrosMensal.get(i).getMes() && anoDinheiro == valorPorLitrosMensal.get(i).getAno()){
+
+                                                    auxValor = valorPorLitrosMensal.get(i).getValor();
+
+
                                                 }
                                             }
 
-                                        }
+                                            total = auxValor*totalProducao;
 
-                                    }
-
-                                    for(int i = 0; i < valorPorLitrosMensal.size(); i++){
-                                        if (mesDinheiro == valorPorLitrosMensal.get(i).getMes() && anoDinheiro == valorPorLitrosMensal.get(i).getAno()){
-
-                                            auxValor = valorPorLitrosMensal.get(i).getValor();
-
-
-                                        }
-                                    }
-
-                                    total = auxValor*totalProducao;
-
-                                    if(auxValor == 0){
-                                        AlertDialog.Builder builder = new AlertDialog.Builder(Listview_Producao_Por_Produtor.this);
-                                        builder.setTitle("Importante!");
-                                        builder.setMessage("Mês Referente não possui valor do litro Cadastrado! \nRetorne a tela inicial para afetual o cadastro.");
-                                        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                                            @Override
-                                            public void onClick(DialogInterface dialog, int which) {
-                                                Toast.makeText(Listview_Producao_Por_Produtor.this, "", Toast.LENGTH_SHORT);
+                                            if(auxValor == 0){
+                                                AlertDialog.Builder builder = new AlertDialog.Builder(Listview_Producao_Por_Produtor.this);
+                                                builder.setTitle("Importante!");
+                                                builder.setMessage("Mês Referente não possui valor do litro Cadastrado! \nRetorne a tela inicial para afetual o cadastro.");
+                                                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                                    @Override
+                                                    public void onClick(DialogInterface dialog, int which) {
+                                                        Toast.makeText(Listview_Producao_Por_Produtor.this, "", Toast.LENGTH_SHORT);
+                                                    }
+                                                });
+                                                builder.show();
+                                            }else{
+                                                AlertDialog.Builder builder = new AlertDialog.Builder(Listview_Producao_Por_Produtor.this);
+                                                builder.setTitle("Valor Total Do mes: "+mes[mesDinheiro]);
+                                                builder.setMessage("Valor do litro: "+auxValor+" \n Total da Produção:"+totalProducao+"\n Valor a Receber:"+total);
+                                                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                                    @Override
+                                                    public void onClick(DialogInterface dialog, int which) {
+                                                        Toast.makeText(Listview_Producao_Por_Produtor.this, "", Toast.LENGTH_SHORT);
+                                                    }
+                                                });
+                                                builder.show();
                                             }
-                                        });
-                                        builder.show();
-                                    }else{
-                                        AlertDialog.Builder builder = new AlertDialog.Builder(Listview_Producao_Por_Produtor.this);
-                                        builder.setTitle("Valor Total Do mes: "+mes[mesDinheiro]);
-                                        builder.setMessage("Valor do litro: "+auxValor+" \n Total da Produção:"+totalProducao+"\n Valor a Receber:"+total);
-                                        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                                            @Override
-                                            public void onClick(DialogInterface dialog, int which) {
-                                                Toast.makeText(Listview_Producao_Por_Produtor.this, "", Toast.LENGTH_SHORT);
-                                            }
-                                        });
-                                        builder.show();
-                                    }
+
+                                        }
+                                    });
+                                    builder.setNegativeButton("Cancel", null);
+
+                                    AlertDialog dialog = builder.create();
+                                    dialog.show();
 
                                 }
-                            });
-                            builder.setNegativeButton("Cancel", null);
 
-                            AlertDialog dialog = builder.create();
-                            dialog.show();
+                            }
+                        });
+                        builderDinheiro.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface arg0, int arg1) {
+                                Toast.makeText(Listview_Producao_Por_Produtor.this, "Opção Cancelada", Toast.LENGTH_SHORT).show();
+                            }
+                        });
 
-                        }
+
+                        builderDinheiro.show();
+
+
 
                     }
                 });
-                builderDinheiro.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+                //define um botão como negativo.
+                builderInicial.setNegativeButton("Valor a Pagar", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface arg0, int arg1) {
-                        Toast.makeText(Listview_Producao_Por_Produtor.this, "Opção Cancelada", Toast.LENGTH_SHORT).show();
+                        AlertDialog.Builder builderDinheiro = new AlertDialog.Builder(Listview_Producao_Por_Produtor.this);
+                        builderDinheiro.setTitle("Digite o ano desejado!");
+                        //builder.setMessage("Valor do litro:  Total da Produção");
+                        final EditText inputAno = new EditText(Listview_Producao_Por_Produtor.this);
+                        inputAno.addTextChangedListener(MaskEditUtil.mask(inputAno, MaskEditUtil.FORMAT_ANO));
+                        inputAno.setInputType(InputType.TYPE_CLASS_NUMBER);
+                        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+                                LinearLayout.LayoutParams.MATCH_PARENT,
+                                LinearLayout.LayoutParams.MATCH_PARENT);
+                        inputAno.setLayoutParams(lp);
+                        builderDinheiro.setView(inputAno);
+
+                        builderDinheiro.setPositiveButton("ok", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface arg0, int arg1) {
+                                mesDinheiro = 0;
+                                if (inputAno.getText().toString().isEmpty()) {
+                                    Toast.makeText(Listview_Producao_Por_Produtor.this, "Campo Obrigatório! Opção Cancelada", Toast.LENGTH_SHORT).show();
+
+                                } else {
+                                    anoDinheiro = Integer.parseInt(inputAno.getText().toString());
+                                    AlertDialog.Builder builder = new AlertDialog.Builder(Listview_Producao_Por_Produtor.this);
+                                    builder.setTitle("Selecione o Mês");
+
+                                    String[] animals = {"Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novenbro", "Dezenbro"};
+                                    int checkedItem = 0;
+                                    builder.setSingleChoiceItems(animals, checkedItem, new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            mesDinheiro = which + 1;
+                                        }
+                                    });
+
+
+                                    builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            AlertDialog.Builder builder = new AlertDialog.Builder(Listview_Producao_Por_Produtor.this);
+                                            builder.setTitle("Forma de Pagamento");
+                                            builder.setMessage("Selecione a forma de Pagamento:");
+                                            builder.setPositiveButton("Porcentagem", new DialogInterface.OnClickListener() {
+                                                public void onClick(DialogInterface arg0, int arg1) {
+                                                    AlertDialog.Builder builderDinheiro = new AlertDialog.Builder(Listview_Producao_Por_Produtor.this);
+                                                    builderDinheiro.setTitle("Digite o valor da Porcentagem!");
+                                                    //builder.setMessage("Valor do litro:  Total da Produção");
+                                                    final EditText inputPorcentagem = new EditText(Listview_Producao_Por_Produtor.this);
+                                                    inputPorcentagem.setInputType(InputType.TYPE_CLASS_NUMBER);
+                                                    LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+                                                            LinearLayout.LayoutParams.MATCH_PARENT,
+                                                            LinearLayout.LayoutParams.MATCH_PARENT);
+                                                    inputPorcentagem.setLayoutParams(lp);
+                                                    builderDinheiro.setView(inputPorcentagem);
+
+                                                    builderDinheiro.setPositiveButton("ok", new DialogInterface.OnClickListener() {
+                                                        public void onClick(DialogInterface arg0, int arg1) {
+
+                                                            if (inputPorcentagem.getText().toString().isEmpty()) {
+                                                                Toast.makeText(Listview_Producao_Por_Produtor.this, "Campo Obrigatório! Opção Cancelada", Toast.LENGTH_SHORT).show();
+
+                                                            } else {
+                                                                int valorPorcentagem = Integer.parseInt(inputPorcentagem.getText().toString());
+
+                                                                        Producao p;
+                                                                        totalProducao = 0;
+                                                                        if(mesDinheiro == 0){
+                                                                            mesDinheiro = 1;
+                                                                        }
+                                                                        float auxValor = 0 , total = 0;
+                                                                        Dao bd = new Dao(Listview_Producao_Por_Produtor.this);
+                                                                        List<ValorPorLitro> valorPorLitrosMensal = bd.selecionarValorProLitro();
+                                                                        List<Producao> producaoList = bd.selecionarProducao();
+                                                                        for(int i = 0; i < producaoList.size(); i++){
+                                                                            if(producaoList.get(i).getIdProdutor() == ListviewProdutorParaProducao.produtor.getId()){
+                                                                                if(selecionaAno(producaoList.get(i).getData()) == anoDinheiro){
+                                                                                    if(selecionaMes(producaoList.get(i).getData()) == mesDinheiro){
+                                                                                        p=producaoList.get(i);
+                                                                                        totalProducao = totalProducao + p.getQuant();
+                                                                                    }
+                                                                                }
+
+                                                                            }
+
+                                                                        }
+
+                                                                        for(int i = 0; i < valorPorLitrosMensal.size(); i++){
+                                                                            if (mesDinheiro == valorPorLitrosMensal.get(i).getMes() && anoDinheiro == valorPorLitrosMensal.get(i).getAno()){
+
+                                                                                auxValor = valorPorLitrosMensal.get(i).getValor();
+
+
+                                                                            }
+                                                                        }
+
+                                                                        total = auxValor*totalProducao;
+                                                                        float totalPagar = 0;
+                                                                        totalPagar = ((total*valorPorcentagem)/100);
+
+                                                                        if(auxValor == 0){
+                                                                            AlertDialog.Builder builder = new AlertDialog.Builder(Listview_Producao_Por_Produtor.this);
+                                                                            builder.setTitle("Importante!");
+                                                                            builder.setMessage("Mês Referente não possui valor do litro Cadastrado! \nRetorne a tela inicial para afetual o cadastro.");
+                                                                            builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                                                                @Override
+                                                                                public void onClick(DialogInterface dialog, int which) {
+                                                                                    Toast.makeText(Listview_Producao_Por_Produtor.this, "", Toast.LENGTH_SHORT);
+                                                                                }
+                                                                            });
+                                                                            builder.show();
+                                                                        }else{
+                                                                            AlertDialog.Builder builder = new AlertDialog.Builder(Listview_Producao_Por_Produtor.this);
+                                                                            builder.setTitle("Valor Total Do mes: "+mes[mesDinheiro]);
+                                                                            builder.setMessage("Valor do litro: "+auxValor+" \n Total da Produção:"+totalProducao+"\n Valor a Receber:"+total+"\n Total a Pagar: "+totalPagar);
+                                                                            builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                                                                @Override
+                                                                                public void onClick(DialogInterface dialog, int which) {
+                                                                                    Toast.makeText(Listview_Producao_Por_Produtor.this, "", Toast.LENGTH_SHORT);
+                                                                                }
+                                                                            });
+                                                                            builder.show();
+                                                                        }
+
+                                                                    }
+
+
+
+
+                                                        }
+                                                    });
+                                                    builderDinheiro.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+                                                        public void onClick(DialogInterface arg0, int arg1) {
+                                                            Toast.makeText(Listview_Producao_Por_Produtor.this, "Opção Cancelada", Toast.LENGTH_SHORT).show();
+                                                        }
+                                                    });
+
+
+                                                    builderDinheiro.show();
+
+
+                                                }
+                                            });
+                                            //define um botão como negativo.
+                                            builder.setNegativeButton("Valor por litro", new DialogInterface.OnClickListener() {
+                                                public void onClick(DialogInterface arg0, int arg1) {
+                                                    AlertDialog.Builder builderDinheiro = new AlertDialog.Builder(Listview_Producao_Por_Produtor.this);
+                                                    builderDinheiro.setTitle("Digite o valor por litro!");
+                                                    //builder.setMessage("Valor do litro:  Total da Produção");
+                                                    final EditText inputValor = new EditText(Listview_Producao_Por_Produtor.this);
+                                                    inputValor.addTextChangedListener(MaskEditUtil.mask(inputValor, MaskEditUtil.FORMAT_VALOR));
+                                                    inputValor.setInputType(InputType.TYPE_CLASS_NUMBER);
+                                                    LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+                                                            LinearLayout.LayoutParams.MATCH_PARENT,
+                                                            LinearLayout.LayoutParams.MATCH_PARENT);
+                                                    inputValor.setLayoutParams(lp);
+                                                    builderDinheiro.setView(inputValor);
+
+                                                    builderDinheiro.setPositiveButton("ok", new DialogInterface.OnClickListener() {
+                                                        public void onClick(DialogInterface arg0, int arg1) {
+
+                                                            if (inputValor.getText().toString().isEmpty()) {
+                                                                Toast.makeText(Listview_Producao_Por_Produtor.this, "Campo Obrigatório! Opção Cancelada", Toast.LENGTH_SHORT).show();
+
+                                                            } else {
+                                                                float valorPorLitro = Float.parseFloat(inputValor.getText().toString());
+
+                                                                Producao p;
+                                                                totalProducao = 0;
+                                                                if(mesDinheiro == 0){
+                                                                    mesDinheiro = 1;
+                                                                }
+                                                                float auxValor = 0 , total = 0;
+                                                                Dao bd = new Dao(Listview_Producao_Por_Produtor.this);
+                                                                List<ValorPorLitro> valorPorLitrosMensal = bd.selecionarValorProLitro();
+                                                                List<Producao> producaoList = bd.selecionarProducao();
+                                                                for(int i = 0; i < producaoList.size(); i++){
+                                                                    if(producaoList.get(i).getIdProdutor() == ListviewProdutorParaProducao.produtor.getId()){
+                                                                        if(selecionaAno(producaoList.get(i).getData()) == anoDinheiro){
+                                                                            if(selecionaMes(producaoList.get(i).getData()) == mesDinheiro){
+                                                                                p=producaoList.get(i);
+                                                                                totalProducao = totalProducao + p.getQuant();
+                                                                            }
+                                                                        }
+
+                                                                    }
+
+                                                                }
+
+                                                                for(int i = 0; i < valorPorLitrosMensal.size(); i++){
+                                                                    if (mesDinheiro == valorPorLitrosMensal.get(i).getMes() && anoDinheiro == valorPorLitrosMensal.get(i).getAno()){
+
+                                                                        auxValor = valorPorLitrosMensal.get(i).getValor();
+
+                                                                    }
+                                                                }
+
+                                                                total = auxValor*totalProducao;
+                                                                float totalPagar = 0;
+                                                                totalPagar = ((totalProducao*valorPorLitro));
+
+                                                                if(auxValor == 0){
+                                                                    AlertDialog.Builder builder = new AlertDialog.Builder(Listview_Producao_Por_Produtor.this);
+                                                                    builder.setTitle("Importante!");
+                                                                    builder.setMessage("Mês Referente não possui valor do litro Cadastrado! \nRetorne a tela inicial para afetual o cadastro.");
+                                                                    builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                                                        @Override
+                                                                        public void onClick(DialogInterface dialog, int which) {
+                                                                            Toast.makeText(Listview_Producao_Por_Produtor.this, "", Toast.LENGTH_SHORT);
+                                                                        }
+                                                                    });
+                                                                    builder.show();
+                                                                }else{
+                                                                    AlertDialog.Builder builder = new AlertDialog.Builder(Listview_Producao_Por_Produtor.this);
+                                                                    builder.setTitle("Valor Total Do mes: "+mes[mesDinheiro]);
+                                                                    builder.setMessage("Valor do litro: "+auxValor+" \n Total da Produção:"+totalProducao+"\n Valor a Receber:"+total+"\n Total a Pagar: "+totalPagar);
+                                                                    builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                                                        @Override
+                                                                        public void onClick(DialogInterface dialog, int which) {
+                                                                            Toast.makeText(Listview_Producao_Por_Produtor.this, "", Toast.LENGTH_SHORT);
+                                                                        }
+                                                                    });
+                                                                    builder.show();
+                                                                }
+
+                                                            }
+
+
+
+
+                                                        }
+                                                    });
+                                                    builderDinheiro.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+                                                        public void onClick(DialogInterface arg0, int arg1) {
+                                                            Toast.makeText(Listview_Producao_Por_Produtor.this, "Opção Cancelada", Toast.LENGTH_SHORT).show();
+                                                        }
+                                                    });
+
+
+                                                    builderDinheiro.show();
+
+
+                                                }
+                                            });
+                                            builder.show();
+
+
+
+                                        }
+                                    });
+                                    builder.setNegativeButton("Cancel", null);
+
+                                    AlertDialog dialog = builder.create();
+                                    dialog.show();
+
+                                }
+
+                            }
+                        });
+                        builderDinheiro.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface arg0, int arg1) {
+                                Toast.makeText(Listview_Producao_Por_Produtor.this, "Opção Cancelada", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+
+
+                        builderDinheiro.show();
+
+
+
+
                     }
                 });
 
 
-                builderDinheiro.show();
+                builderInicial.show();
+
 
 
                 break;

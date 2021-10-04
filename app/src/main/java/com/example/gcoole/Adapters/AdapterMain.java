@@ -71,6 +71,7 @@ public class AdapterMain extends BaseAdapter {
         TextView textViewNumIndetificacao = (TextView) vi.findViewById(R.id.idAdapterNumeroVaca);
         TextView textViewDataSecagem = (TextView) vi.findViewById(R.id.idAdapterDataDaSecagem);
         TextView textViewDataParto = (TextView) vi.findViewById(R.id.idAdapeterDataParto);
+        TextView textViewDataInicialGestacao = (TextView) vi.findViewById(R.id.idAdptarMainDataInicialGestacao);
 
         vaca.getDataInicialGestacao();
 
@@ -79,6 +80,7 @@ public class AdapterMain extends BaseAdapter {
         textViewNomeVaca.setText("Nome da Vaca:"+vacaAux.getNome());
         textViewNumGestacao.setText("Nº da Gestação: " +vaca.getNumeroGestacao());
         textViewNumIndetificacao.setText("Nº de Indetificação da Vaca: "+vacaAux.getNumVaca());
+        textViewDataInicialGestacao.setText("Data Inicial da Gestação: "+vaca.getDataInicialGestacao());
         textViewDataSecagem.setText("Data Aproximado do Parto: "+dataAproximadoParto(vaca.getDataInicialGestacao()));
         textViewDataParto.setText("Data da Secagem: "+dataSecagem(vaca.getDataInicialGestacao()));
 

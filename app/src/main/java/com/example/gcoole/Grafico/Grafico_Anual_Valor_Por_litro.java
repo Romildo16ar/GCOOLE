@@ -46,7 +46,7 @@ public class Grafico_Anual_Valor_Por_litro extends AppCompatActivity {
         List<ValorPorLitro> valorPorLitrosMensal = bd.selecionarValorProLitro();
 
 
-        final String[] meses ={"Janeiro","Fevereiro","Março","Abril","Maio","Junho","Julho","Agosto","Setembro","Outubro","Novenbro","Dezenbro"};
+        final String[] meses ={"Janeiro","Fevereiro","Março","Abril","Maio","Junho","Julho","Agosto","Setembro","Outubro","Novembro","Dezembro"};
 
 
         Number[] seriaA = {0,0,0,0,0,0,0,0,0,0,0,0};
