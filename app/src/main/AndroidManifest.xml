@@ -76,7 +76,7 @@
             android:label="Editar Vaca Prenha"/>
         
         <provider
-            android:authorities="com.example.gcoole.Listviews"
+            android:authorities="com.example.gcoole"
             android:name="androidx.core.content.FileProvider"
             android:exported="false"
             android:grantUriPermissions="true">

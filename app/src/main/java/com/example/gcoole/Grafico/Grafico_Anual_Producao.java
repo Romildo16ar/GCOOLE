@@ -1,13 +1,18 @@
 package com.example.gcoole.Grafico;
 
+import android.Manifest;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.graphics.pdf.PdfDocument;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -20,6 +25,7 @@ import android.view.View;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.core.content.FileProvider;
 
 import com.androidplot.xy.CatmullRomInterpolator;
@@ -34,21 +40,27 @@ import com.example.gcoole.Listviews.Listview_Producao_Por_Produtor;
 import com.example.gcoole.Modelo.Producao;
 import com.example.gcoole.R;
 import com.example.gcoole.Ultil.PdfCreator;
+import com.google.firebase.inappmessaging.model.ImageData;
+import com.itextpdf.text.BadElementException;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Element;
 import com.itextpdf.text.Font;
+import com.itextpdf.text.Image;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.Rectangle;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.text.FieldPosition;
 import java.text.Format;
 import java.text.ParsePosition;
@@ -58,16 +70,31 @@ import java.util.List;
 
 public class Grafico_Anual_Producao extends AppCompatActivity {
     private XYPlot plot;
+    private static final int REQUEST_EXTERNAL_STORAGe = 1;
+
+    private static String[] permissionstorage = {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE};
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.view_grafico_anual_producao);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
+        verifystoragepermissions(this);
+
+
 
         plot = findViewById(R.id.idPlotAnualProducao);
 
         prencherGrafico();
+    }
+
+    private void verifystoragepermissions(Grafico_Anual_Producao grafico_anual_producao) {
+        int permissions = ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+
+        // If storage permission is not given then request for External Storage Permission
+        if (permissions != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, permissionstorage, REQUEST_EXTERNAL_STORAGe);
+        }
     }
 
     private void prencherGrafico() {
@@ -168,7 +195,6 @@ public class Grafico_Anual_Producao extends AppCompatActivity {
 
 
 
-
     }
     public int selecionaMes(String data){
         String []vet;
@@ -201,6 +227,39 @@ public class Grafico_Anual_Producao extends AppCompatActivity {
                 startActivity(new Intent(Grafico_Anual_Producao.this, Listview_Producao_Por_Produtor.class));
                 break;
             case R.id.idPdfGraficoAnualProducao:
+                //File imagem = screenshot(getWindow().getDecorView().getRootView(), "result");
+                View view = getWindow().getDecorView().getRootView();
+                Date date = new Date();
+
+                // Here we are initialising the format of our image name
+                CharSequence format = android.text.format.DateFormat.format("yyyy-MM-dd_hh:mm:ss", date);
+                try {
+
+                    File diretorioRaiz = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+                    File diretorio = new File(diretorioRaiz.getPath() + "/Imagens/");
+
+                    if (!diretorio.exists()) {
+                        diretorio.mkdir();
+                    }
+                    String nomeArquivo = diretorio.getPath() + "/graficoAnual.jpeg";
+
+                    view.setDrawingCacheEnabled(true);
+                    Bitmap bitmap = Bitmap.createBitmap(view.getDrawingCache());
+                    view.setDrawingCacheEnabled(false);
+                    File imageurl = new File(nomeArquivo);
+                    FileOutputStream outputStream = new FileOutputStream(imageurl);
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 70, outputStream);
+                    outputStream.flush();
+                    outputStream.close();
+
+
+                } catch (FileNotFoundException io) {
+                    io.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+
                 OutputStream outputStream = null;
                 File pdf = null;
                 Uri uri = null;
@@ -251,8 +310,9 @@ public class Grafico_Anual_Producao extends AppCompatActivity {
                 } catch (DocumentException e) {
                     e.printStackTrace();
                 }
-                
-                
+
+
+
 
                 document.open();
 
@@ -265,37 +325,40 @@ public class Grafico_Anual_Producao extends AppCompatActivity {
                     paragraphTitulo.setAlignment(Element.ALIGN_CENTER);
                     document.add(paragraphTitulo);
 
-                    Date now = new Date();
-                    android.text.format.DateFormat.format("yyyy-MM-dd_hh:mm:ss", now);
+                    File diretorioRaiz = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+                    File diretorio = new File(diretorioRaiz.getPath() + "/Imagens/");
 
-                    try {
-                        // image naming and path  to include sd card  appending name you choose for file
-                        String mPath = Environment.getExternalStorageDirectory().toString() + "/" + now + ".jpg";
+                    String nomeArquivo = diretorio.getPath() + "/graficoAnual.jpeg";
 
+                    File imgFile = new  File(nomeArquivo);
 
-                        // create bitmap screen capture
-                        View v1 = getWindow().getDecorView().getRootView();
-                        v1.setDrawingCacheEnabled(true);
-                        Bitmap bitmap = Bitmap.createBitmap(v1.getDrawingCache());
-                        v1.setDrawingCacheEnabled(false);
+                    if(imgFile.exists()) {
 
-                        File imageFile = new File(mPath);
-
-                        FileOutputStream Stream = new FileOutputStream(imageFile);
-                        int quality = 100;
-                        bitmap.compress(Bitmap.CompressFormat.JPEG, quality, Stream);
-                        Stream.flush();
-                        Stream.close();
-
-                        Intent intent = new Intent();
-                        intent.setAction(Intent.ACTION_VIEW);
-                        Uri ur = Uri.fromFile(imageFile);
+                        Bitmap bm = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
 
 
-                    } catch (Throwable e) {
-                        // Several error may come out with file handling or DOM
-                        e.printStackTrace();
+                        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                        bm.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+                        Image img = null;
+
+
+                        byte[] byteArray = stream.toByteArray();
+                        try {
+                            img = Image.getInstance(byteArray);
+
+                            img.scaleToFit(750, 750);
+
+                            document.add(img);
+                        } catch (BadElementException e) {
+                            e.printStackTrace();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
                     }
+
+
+
+
 
                     document.close();
 
@@ -360,5 +423,39 @@ public class Grafico_Anual_Producao extends AppCompatActivity {
 
 
     }
+
+    protected static File screenshot(View view, String filename) {
+        Date date = new Date();
+
+        // Here we are initialising the format of our image name
+        CharSequence format = android.text.format.DateFormat.format("yyyy-MM-dd_hh:mm:ss", date);
+        try {
+
+            File diretorioRaiz = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+            File diretorio = new File(diretorioRaiz.getPath() + "/Imagens/");
+
+            if (!diretorio.exists()) {
+                diretorio.mkdir();
+            }
+            String nomeArquivo = diretorio.getPath() + "/graficoAnual.jpeg";
+
+            view.setDrawingCacheEnabled(true);
+            Bitmap bitmap = Bitmap.createBitmap(view.getDrawingCache());
+            view.setDrawingCacheEnabled(false);
+            File imageurl = new File(nomeArquivo);
+            FileOutputStream outputStream = new FileOutputStream(imageurl);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 50, outputStream);
+            outputStream.flush();
+            outputStream.close();
+            return imageurl;
+
+        } catch (FileNotFoundException io) {
+            io.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
 
 }
