@@ -28,18 +28,35 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.FileProvider;
 
+import com.androidplot.util.PixelUtils;
+import com.androidplot.xy.BarFormatter;
+import com.androidplot.xy.BarRenderer;
 import com.androidplot.xy.CatmullRomInterpolator;
 import com.androidplot.xy.LineAndPointFormatter;
 import com.androidplot.xy.SimpleXYSeries;
 import com.androidplot.xy.XYGraphWidget;
 import com.androidplot.xy.XYPlot;
 import com.androidplot.xy.XYSeries;
+import com.androidplot.xy.XYStepCalculator;
 import com.example.gcoole.Dao.Dao;
 import com.example.gcoole.Listviews.ListviewProdutorParaProducao;
 import com.example.gcoole.Listviews.Listview_Producao_Por_Produtor;
 import com.example.gcoole.Modelo.Producao;
 import com.example.gcoole.R;
 import com.example.gcoole.Ultil.PdfCreator;
+import com.github.mikephil.charting.charts.BarChart;
+import com.github.mikephil.charting.charts.HorizontalBarChart;
+import com.github.mikephil.charting.components.AxisBase;
+import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.components.YAxis;
+import com.github.mikephil.charting.data.BarData;
+import com.github.mikephil.charting.data.BarDataSet;
+import com.github.mikephil.charting.data.BarEntry;
+import com.github.mikephil.charting.formatter.IAxisValueFormatter;
+import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
+import com.github.mikephil.charting.formatter.ValueFormatter;
+import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
+import com.github.mikephil.charting.utils.ColorTemplate;
 import com.google.firebase.inappmessaging.model.ImageData;
 import com.itextpdf.text.BadElementException;
 import com.itextpdf.text.Document;
@@ -64,6 +81,7 @@ import java.net.URL;
 import java.text.FieldPosition;
 import java.text.Format;
 import java.text.ParsePosition;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -71,19 +89,20 @@ import java.util.List;
 public class Grafico_Anual_Producao extends AppCompatActivity {
     private XYPlot plot;
     private static final int REQUEST_EXTERNAL_STORAGe = 1;
+    protected BarChart mChart;
 
     private static String[] permissionstorage = {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE};
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.view_grafico_anual_producao);
+        setContentView(R.layout.view_grafico_anual_producao_barra);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
         verifystoragepermissions(this);
 
 
-
-        plot = findViewById(R.id.idPlotAnualProducao);
+        //plot = findViewById(R.id.idPlotAnualProducao);
 
         prencherGrafico();
     }
@@ -102,59 +121,57 @@ public class Grafico_Anual_Producao extends AppCompatActivity {
         List<Producao> producaos = bd.selecionarProducao();
 
 
-        final String[] meses ={"Janeiro","Fevereiro","Março","Abril","Maio","Junho","Julho","Agosto","Setembro","Outubro","Novembro","Dezembro"};
-        int aux1 = 0,aux2 = 0,aux3 = 0,aux4 = 0,aux5 = 0, aux6 = 0, aux7 = 0, aux8 = 0, aux9 = 0,aux10 = 0, aux11 = 0, aux12 = 0;
-        Number[] seriaA = {0,0,0,0,0,0,0,0,0,0,0,0};
-        for(int i = 0; i < producaos.size(); i++){
-            if(ListviewProdutorParaProducao.produtor.getId() == producaos.get(i).getIdProdutor()){
-                if(Listview_Producao_Por_Produtor.anoGrafico == selecionaAno(producaos.get(i).getData())) {
-                    if(selecionaMes(producaos.get(i).getData()) == 1){
+        final String[] meses = {"Jan", "Fev", "Mar", "Abr", "Maio", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"};
+        int aux1 = 0, aux2 = 0, aux3 = 0, aux4 = 0, aux5 = 0, aux6 = 0, aux7 = 0, aux8 = 0, aux9 = 0, aux10 = 0, aux11 = 0, aux12 = 0;
+        final int[] seriaA = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+        for (int i = 0; i < producaos.size(); i++) {
+            if (ListviewProdutorParaProducao.produtor.getId() == producaos.get(i).getIdProdutor()) {
+                if (Listview_Producao_Por_Produtor.anoGrafico == selecionaAno(producaos.get(i).getData())) {
+                    if (selecionaMes(producaos.get(i).getData()) == 1) {
 
                         aux1 = aux1 + producaos.get(i).getQuant();
                         seriaA[0] = aux1;
-                    }else if(selecionaMes(producaos.get(i).getData()) == 2){
+                    } else if (selecionaMes(producaos.get(i).getData()) == 2) {
 
                         aux2 = aux2 + producaos.get(i).getQuant();
                         seriaA[1] = aux2;
-                    }
-                    else if(selecionaMes(producaos.get(i).getData()) == 3){
+                    } else if (selecionaMes(producaos.get(i).getData()) == 3) {
 
                         aux3 = aux3 + producaos.get(i).getQuant();
                         seriaA[2] = aux3;
-                    }
-                    else if(selecionaMes(producaos.get(i).getData()) == 4){
+                    } else if (selecionaMes(producaos.get(i).getData()) == 4) {
 
                         aux4 = aux4 + producaos.get(i).getQuant();
                         seriaA[3] = aux4;
-                    }else if(selecionaMes(producaos.get(i).getData()) == 5){
+                    } else if (selecionaMes(producaos.get(i).getData()) == 5) {
 
                         aux5 = aux5 + producaos.get(i).getQuant();
                         seriaA[4] = aux5;
-                    }else if(selecionaMes(producaos.get(i).getData()) == 6){
+                    } else if (selecionaMes(producaos.get(i).getData()) == 6) {
 
                         aux6 = aux6 + producaos.get(i).getQuant();
                         seriaA[5] = aux6;
-                    }else if(selecionaMes(producaos.get(i).getData()) == 7){
+                    } else if (selecionaMes(producaos.get(i).getData()) == 7) {
 
                         aux7 = aux7 + producaos.get(i).getQuant();
                         seriaA[6] = aux7;
-                    }else if(selecionaMes(producaos.get(i).getData()) == 8){
+                    } else if (selecionaMes(producaos.get(i).getData()) == 8) {
 
                         aux8 = aux8 + producaos.get(i).getQuant();
                         seriaA[7] = aux8;
-                    }else if(selecionaMes(producaos.get(i).getData()) == 9){
+                    } else if (selecionaMes(producaos.get(i).getData()) == 9) {
 
                         aux9 = aux9 + producaos.get(i).getQuant();
                         seriaA[8] = aux9;
-                    }else if(selecionaMes(producaos.get(i).getData()) == 10){
+                    } else if (selecionaMes(producaos.get(i).getData()) == 10) {
 
                         aux10 = aux10 + producaos.get(i).getQuant();
                         seriaA[9] = aux10;
-                    }else if(selecionaMes(producaos.get(i).getData()) == 11){
+                    } else if (selecionaMes(producaos.get(i).getData()) == 11) {
 
                         aux11 = aux11 + producaos.get(i).getQuant();
                         seriaA[10] = aux11;
-                    }else if(selecionaMes(producaos.get(i).getData()) == 12){
+                    } else if (selecionaMes(producaos.get(i).getData()) == 12) {
 
                         aux12 = aux12 + producaos.get(i).getQuant();
                         seriaA[11] = aux12;
@@ -166,13 +183,73 @@ public class Grafico_Anual_Producao extends AppCompatActivity {
 
         }
 
+        mChart = (BarChart) findViewById(R.id.graficoHorizontalBarraAnualProducao);
+        mChart.setDrawBarShadow(false);
+        mChart.setDrawValueAboveBar(true);
+        mChart.getDescription().setEnabled(false);
+        mChart.setPinchZoom(false);
+        mChart.setDrawGridBackground(false);
+
+        XAxis xAxis = mChart.getXAxis();
+        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+        xAxis.setDrawGridLines(false);
+        xAxis.setDrawAxisLine(true);
+        xAxis.setGranularity(0);
+        xAxis.setGranularityEnabled(true);
+        xAxis.setLabelCount(12);
+
+
+        xAxis.setValueFormatter(new IndexAxisValueFormatter(meses));
+
+        YAxis yl = mChart.getAxisLeft();
+        yl.setPosition(YAxis.YAxisLabelPosition.INSIDE_CHART);
+        yl.setDrawGridLines(false);
+        yl.setEnabled(false);
+        yl.setAxisMinimum(0f);
+
+        YAxis yr = mChart.getAxisRight();
+        yr.setPosition(YAxis.YAxisLabelPosition.INSIDE_CHART);
+        yr.setDrawGridLines(false);
+        yr.setAxisMinimum(0f);
+
+
+
+
+        ArrayList<BarEntry> yVals1 = new ArrayList<BarEntry>();
+        for (int i = 0; i < 12; i++) {
+            yVals1.add(new BarEntry(i, seriaA[i]));
+        }
+
+
+        BarDataSet set1;
+
+        set1 = new BarDataSet(yVals1, "Produção Mensal");
+        ArrayList<IBarDataSet> dataSets = new ArrayList<IBarDataSet>();
+        set1.setColor(Color.DKGRAY);
+        dataSets.add(set1);
+        BarData data = new BarData(dataSets);
+        data.setValueTextSize(10f);
+        data.setBarWidth(.9f);
+
+        mChart.setGridBackgroundColor(R.color.black);
+
+        mChart.setData(data);
+        mChart.setFitBars(true);
+        mChart.getLegend().setEnabled(true);
+
+
+
+/*
 
         XYSeries series1 = new SimpleXYSeries(Arrays.asList(seriaA), SimpleXYSeries.ArrayFormat.Y_VALS_ONLY,"Quant em litro de Leite por mês");
 
-        LineAndPointFormatter series1Format = new LineAndPointFormatter(Color.RED, Color.BLACK, null , null);
+        BarFormatter series1Format = new BarFormatter (Color.BLUE, Color.BLACK);
 
         series1Format.setInterpolationParams(new CatmullRomInterpolator.Params(10, CatmullRomInterpolator.Type.Centripetal));
-
+        //BarRenderer renderer = plot.getRenderer(BarRenderer.class);
+        //renderer.setBarGroupWidth(BarRenderer.BarGroupWidthMode.FIXED_GAP,10);
+        //series1Format.setMarginLeft(PixelUtils.dpToPix(1));
+        //series1Format.setMarginRight(PixelUtils.dpToPix(1));
 
         plot.addSeries(series1,series1Format);
         plot.setDomainStepValue(12);
@@ -191,11 +268,11 @@ public class Grafico_Anual_Producao extends AppCompatActivity {
                 return null;
             }
         });
-
-
-
+*/
 
     }
+
+
     public int selecionaMes(String data){
         String []vet;
         vet= data.split("/");
@@ -219,6 +296,32 @@ public class Grafico_Anual_Producao extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.menu_grafico_anual_producao, menu);
         return true;
     }
+
+    public class CategoryBarChartXaxisFormatter implements IAxisValueFormatter {
+
+        ArrayList<String> mValues;
+
+        public CategoryBarChartXaxisFormatter(ArrayList<String> values) {
+            this.mValues = values;
+        }
+
+        @Override
+        public String getFormattedValue(float value, AxisBase axis) {
+
+            int val = (int) value;
+            String label = "";
+            if (val >= 0 && val < mValues.size()) {
+                label = mValues.get(val);
+            } else {
+                label = "";
+            }
+            return label;
+        }
+    }
+
+
+
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -321,9 +424,9 @@ public class Grafico_Anual_Producao extends AppCompatActivity {
 
                 Font fontNegritaTitulo = new Font(Font.FontFamily.HELVETICA, 12, Font.BOLD);
                 try {
-                    Paragraph paragraphTitulo = new Paragraph("Grafico Anual ", fontNegritaTitulo);
-                    paragraphTitulo.setAlignment(Element.ALIGN_CENTER);
-                    document.add(paragraphTitulo);
+                   // Paragraph paragraphTitulo = new Paragraph("Grafico Anual ", fontNegritaTitulo);
+                   // paragraphTitulo.setAlignment(Element.ALIGN_CENTER);
+                    //document.add(paragraphTitulo);
 
                     File diretorioRaiz = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
                     File diretorio = new File(diretorioRaiz.getPath() + "/Imagens/");
@@ -346,7 +449,7 @@ public class Grafico_Anual_Producao extends AppCompatActivity {
                         try {
                             img = Image.getInstance(byteArray);
 
-                            img.scaleToFit(750, 750);
+                            img.scaleToFit(800, 800);
 
                             document.add(img);
                         } catch (BadElementException e) {
