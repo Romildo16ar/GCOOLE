@@ -53,11 +53,27 @@ public class AdapterProdutor extends BaseAdapter{
             vi = view;
         }
 
-        Log.e("Erro", "Entrei");
-        TextView textViewNome = (TextView) vi.findViewById(R.id.idAdapterNome);
-        TextView textViewNumProp = (TextView) vi.findViewById(R.id.idAdapterNumeroProd);
-        textViewNome.setText(""+produtores.getNome());
-        textViewNumProp.setText("Nº:"+produtores.getNumProd());
+        if(produtores.getTipo() == -1){
+            TextView textViewNome = (TextView) vi.findViewById(R.id.idAdapterNome);
+            TextView textViewNumProp = (TextView) vi.findViewById(R.id.idAdapterNumeroProd);
+            TextView textViewGestor = (TextView) vi.findViewById(R.id.idAdapterGestorProdutor);
+            textViewGestor.setText("");
+            textViewNome.setText(""+produtores.getNome());
+            textViewNumProp.setText("Nº:"+produtores.getNumProd());
+
+
+        }else{
+            TextView textViewNome = (TextView) vi.findViewById(R.id.idAdapterNome);
+            TextView textViewNumProp = (TextView) vi.findViewById(R.id.idAdapterNumeroProd);
+            TextView textViewGestor = (TextView) vi.findViewById(R.id.idAdapterGestorProdutor);
+            textViewGestor.setText("Gestor");
+            textViewNome.setText(""+produtores.getNome());
+            textViewNumProp.setText("Nº:"+produtores.getNumProd());
+
+        }
+
+
+
 
 
 

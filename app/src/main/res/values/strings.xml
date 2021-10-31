@@ -35,4 +35,11 @@
     <string name="numeroGestacao">Número da Gestação</string>
     <string name="dataSecagem">Data da Secagem</string>
     <string name="dataParto">Data Provalvel do Parto</string>
+    <string name="gestor">Gestor</string>
+    <string name="gestorNome">Nome do Gestor</string>
+    <string name="telaInical">Selecione o Tipo de Acesso:</string>
+    <string name="bemVindo">Bem vindo</string>
+    <string name="cooperativa">Cooperativa de Leite</string>
+    <string name="de">de</string>
+    <string name="codigo">Código de Sicronização</string>
 </resources>

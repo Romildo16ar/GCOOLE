@@ -23,6 +23,9 @@ import com.example.gcoole.MainActivity;
 import com.example.gcoole.Modelo.ValorPorLitro;
 import com.example.gcoole.R;
 import com.example.gcoole.Ultil.MaskEditUtil;
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.List;
 
@@ -34,6 +37,9 @@ public class InserirValorPorLitro extends AppCompatActivity implements View.OnCl
     private ArrayAdapter<String> arrayAdapterMes;
 
     private EditText editTextvalorPorLitro;
+
+    FirebaseDatabase firebaseDatabase;
+    DatabaseReference databaseReference;
     private EditText editTextano;
 
     @Override
@@ -53,6 +59,7 @@ public class InserirValorPorLitro extends AppCompatActivity implements View.OnCl
 
         arrayAdapterMes = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, mes);
         spinnerMes.setAdapter(arrayAdapterMes);
+        inicializarFireBase();
 
         Button btInserir = findViewById(R.id.idBtInserirValorPorLitro);
         btInserir.setOnClickListener(this);
@@ -121,10 +128,12 @@ public class InserirValorPorLitro extends AppCompatActivity implements View.OnCl
             try {
 
                 bd.inserirValorPorLitro(valorPorLitro);
+                //databaseReference.child("valor_por_litro").child("1").setValue(valorPorLitro);
 
             }catch (Exception e){
                 Log.e("Erro", "Erro ao Cadastrar");
             }
+
 
             androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(this);
             builder.setTitle("Valor salvo com Sucesso!");
@@ -146,6 +155,12 @@ public class InserirValorPorLitro extends AppCompatActivity implements View.OnCl
         }
 
 
+    }
+
+    private void inicializarFireBase(){
+        FirebaseApp.initializeApp(InserirValorPorLitro.this);
+        firebaseDatabase = FirebaseDatabase.getInstance();
+        databaseReference = firebaseDatabase.getReference();
     }
     public boolean verificarCadastro(int mes , int ano){
         Dao bd = new Dao(this);

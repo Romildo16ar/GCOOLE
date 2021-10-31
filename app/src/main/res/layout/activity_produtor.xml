@@ -36,8 +36,19 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="15dp"
         android:layout_marginLeft="15dp"
+        android:layout_marginBottom="5dp"
+        android:text="@string/gestor"
+        android:textColor="#615C5C"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/idCodigoSicronizacao"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="15dp"
+        android:layout_marginLeft="15dp"
         android:layout_marginBottom="15dp"
-        android:text="@string/PropDoTaque"
+        android:text="@string/codigo"
         android:textColor="#615C5C"
         android:textSize="16sp" />
 

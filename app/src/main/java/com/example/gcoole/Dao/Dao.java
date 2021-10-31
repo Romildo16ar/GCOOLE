@@ -5,29 +5,14 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.os.Environment;
-import android.util.Log;
 
 import com.example.gcoole.Modelo.Producao;
 import com.example.gcoole.Modelo.Produtor;
 import com.example.gcoole.Modelo.Vaca;
 import com.example.gcoole.Modelo.VacaPrenha;
 import com.example.gcoole.Modelo.ValorPorLitro;
-import com.itextpdf.text.Document;
-import com.itextpdf.text.DocumentException;
-import com.itextpdf.text.Font;
-import com.itextpdf.text.Paragraph;
-import com.itextpdf.text.pdf.PdfPCell;
-import com.itextpdf.text.pdf.PdfPTable;
-import com.itextpdf.text.pdf.PdfWriter;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class Dao extends SQLiteOpenHelper {
@@ -41,7 +26,7 @@ public class Dao extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         String tbProdutor = "CREATE TABLE produtor(id INTEGER PRIMARY KEY AUTOINCREMENT, nome VARCHAR(50), tipo INTEGER, "+
-                "numProd INTEGER)";
+                "numProd INTEGER, codigoSicronizacao VARCHAR(50))";
         String tbVaca = "CREATE TABLE vaca(id INTEGER PRIMARY KEY AUTOINCREMENT, nome VARCHAR(50), numVaca INTEGER)";
 
         String tbProducao = "CREATE TABLE producao(id INTEGER PRIMARY KEY AUTOINCREMENT, quant INTEGER, data VARCHAR(20), idProdutor INTEGER)";
@@ -50,11 +35,14 @@ public class Dao extends SQLiteOpenHelper {
 
         String tbInserirVacaPrenha = "CREATE TABLE vacaPrenha(id INTEGER PRIMARY KEY AUTOINCREMENT, dataInicialGestacao VARCHAR(20), numeroGestacao INTEGER, idVaca INTEGER)";
 
+
+
         db.execSQL(tbProducao);
         db.execSQL(tbProdutor);
         db.execSQL(tbVaca);
         db.execSQL(tbValorPorLitro);
         db.execSQL(tbInserirVacaPrenha);
+
     }
 
     @Override
@@ -64,6 +52,7 @@ public class Dao extends SQLiteOpenHelper {
         String dropTbProducao = "DROP TABLE IF EXISTS producao";
         String dropTbValorPorLitro = "DROP TABLE IF EXISTS valorporlitro";
         String dropTbInserirVacaPrenha = "DROP TABLE IF EXISTS vacaPrenha";
+
 
 
 
@@ -84,6 +73,7 @@ public class Dao extends SQLiteOpenHelper {
         prod.put("nome", produtor.getNome());
         prod.put("tipo", produtor.getTipo());
         prod.put("numProd", produtor.getNumProd());
+        prod.put("codigoSicronizacao", produtor.getCodigoSocronizacao());
 
 
         db.insert("produtor", null, prod);
@@ -98,6 +88,7 @@ public class Dao extends SQLiteOpenHelper {
         prod.put("nome", produtor.getNome());
         prod.put("tipo", produtor.getTipo());
         prod.put("numProd", produtor.getNumProd());
+        prod.put("codigoSicronizacao", produtor.getCodigoSocronizacao());
 
         db.update("produtor",prod,where,null);
         db.close();
@@ -124,6 +115,7 @@ public class Dao extends SQLiteOpenHelper {
                 prod.setNome(cur.getString(1));
                 prod.setTipo(cur.getInt(2));
                 prod.setNumProd(cur.getInt(3));
+                prod.setCodigoSocronizacao(cur.getString(4));
 
                 listaProd.add(prod);
 
@@ -138,6 +130,7 @@ public class Dao extends SQLiteOpenHelper {
 
 
 //Fim Crud Produtor--------------------------------------------------------------------------------------------------------------------------
+
 // Incio Crud Vaca ------------------------------------------------------------------------------------------------------------------
     public void insertVaca(Vaca vaca){
         SQLiteDatabase db = getWritableDatabase();

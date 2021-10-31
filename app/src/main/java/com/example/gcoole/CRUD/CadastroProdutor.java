@@ -17,27 +17,37 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.gcoole.Dao.Dao;
 import com.example.gcoole.Listviews.ListviewProdutor;
+import com.example.gcoole.MainActivity;
 import com.example.gcoole.Modelo.Produtor;
 import com.example.gcoole.R;
 
 import java.util.List;
+import java.util.UUID;
 
 public class CadastroProdutor extends AppCompatActivity implements View.OnClickListener {
 
     private EditText nomeProp;
     private CheckBox checkBoxPropTaque;
     private EditText numProd;
+    List<Produtor> list = null;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.view_cadastro_produtor);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
+        Dao bd = new Dao(this);
+        list = bd.selecionarProdutor();
 
         nomeProp = findViewById(R.id.idnomeProd);
         checkBoxPropTaque = findViewById(R.id.idradioBTdonoTaque);
         numProd = findViewById(R.id.idNumProd);
 
+        if(list.size()== 0){
+            checkBoxPropTaque.setChecked(true);
+            checkBoxPropTaque.setEnabled(false);
+            this.setTitle("Cadastro do Gestor");
+        }
         Button btSalvar = findViewById(R.id.idBtsalvar);
         btSalvar.setOnClickListener(this);
 
@@ -90,6 +100,7 @@ public class CadastroProdutor extends AppCompatActivity implements View.OnClickL
 
             prod.setNome(nomeProp.getText().toString());
             prod.setNumProd(Integer.parseInt(numProd.getText().toString()));
+            prod.setCodigoSocronizacao(UUID.randomUUID().toString());
             if(checkBoxPropTaque.isChecked()){
                 prod.setTipo(1);
             }else{
@@ -112,6 +123,10 @@ public class CadastroProdutor extends AppCompatActivity implements View.OnClickL
                     nomeProp.requestFocus();
                     numProd.setText("");
                     checkBoxPropTaque.setChecked(false);
+                    if(list.size()== 0){
+                        finish();
+                        startActivity(new Intent(CadastroProdutor.this, MainActivity.class));
+                    }
 
                 }
             });

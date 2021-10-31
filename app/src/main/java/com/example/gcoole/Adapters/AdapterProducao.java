@@ -55,12 +55,23 @@ public class AdapterProducao extends BaseAdapter {
 
 
 
-        Log.e("Erro", "Entrei");
+        if(produ.getTipo() == -1){
+            TextView textViewNome = (TextView) vi.findViewById(R.id.idAdapeterNomeProdutorProducao);
+            TextView textViewNumProp = (TextView) vi.findViewById(R.id.idAdapeterNumeroProdutorProducao);
+            TextView textViewGestor = (TextView) vi.findViewById(R.id.idAdapterGestorProdutor);
+            textViewGestor.setText("");
+            textViewNome.setText(""+produ.getNome());
+            textViewNumProp.setText("Nº: " +produ.getNumProd());
 
-        TextView textViewNome = (TextView) vi.findViewById(R.id.idAdapeterNomeProdutorProducao);
-        TextView textViewNumProp = (TextView) vi.findViewById(R.id.idAdapeterNumeroProdutorProducao);
-        textViewNome.setText(""+produ.getNome());
-        textViewNumProp.setText("Nº: " +produ.getNumProd());
+        }else{
+            TextView textViewNome = (TextView) vi.findViewById(R.id.idAdapeterNomeProdutorProducao);
+            TextView textViewNumProp = (TextView) vi.findViewById(R.id.idAdapeterNumeroProdutorProducao);
+            TextView textViewGestor = (TextView) vi.findViewById(R.id.idAdapterGestorProdutor);
+            textViewGestor.setText("Gestor");
+            textViewNome.setText(""+produ.getNome());
+            textViewNumProp.setText("Nº: " +produ.getNumProd());
+
+        }
 
 
 

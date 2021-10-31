@@ -88,6 +88,8 @@ public class EditarProdutor extends AppCompatActivity implements View.OnClickLis
             prod.setId(ListviewProdutor.produtor.getId());
             prod.setNome(edtNome.getText().toString());
             prod.setNumProd(Integer.parseInt(edtNumero.getText().toString()));
+            prod.setCodigoSocronizacao(ListviewProdutor.produtor.getCodigoSocronizacao());
+
             if(edtTipo.isChecked()){
                 prod.setTipo(1);
             }else{

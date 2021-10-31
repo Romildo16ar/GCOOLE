@@ -7,17 +7,41 @@
     android:orientation="vertical"
     tools:context="com.example.gcoole.Adapters.AdapterProdutor">
 
-
-    <TextView
-        android:id="@+id/idAdapterNome"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="15dp"
-        android:layout_marginLeft="15dp"
-        android:layout_marginTop="15dp"
-        android:text="@string/nome"
-        android:textColor="#000000"
-        android:textSize="24sp" />
+        android:background="#EEEEEE"
+        android:orientation="horizontal"
+        android:layout_marginRight="15dp"
+        >
+
+        <TextView
+            android:id="@+id/idAdapterNome"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="15dp"
+            android:text="@string/nome"
+            android:textColor="#000000"
+            android:textSize="24sp" />
+
+        <TextView
+            android:id="@+id/idAdapterGestorProdutor"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="15dp"
+            android:text="@string/gestor"
+            android:textColor="#000000"
+            android:textSize="24sp"
+            android:gravity="right"
+
+            />
+
+
+    </LinearLayout>
 
     <TextView
         android:id="@+id/idAdapterNumeroProd"
@@ -29,8 +53,6 @@
         android:text="@string/numProp"
         android:textColor="#615C5C"
         android:textSize="16sp" />
-
-   
 
 
 </LinearLayout>

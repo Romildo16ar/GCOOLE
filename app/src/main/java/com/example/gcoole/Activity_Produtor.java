@@ -19,6 +19,7 @@ public class Activity_Produtor extends AppCompatActivity {
     private TextView textViewNome;
     private TextView textViewNumProd;
     private TextView textViewPropreitarioTague;
+    private TextView textViewCodigoSicronização;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,13 +31,15 @@ public class Activity_Produtor extends AppCompatActivity {
         textViewNome = findViewById(R.id.idAdapterNome);
         textViewNumProd = findViewById(R.id.idActivityNumeroProd);
         textViewPropreitarioTague = findViewById(R.id.idActivityDonoDoTaque);
+        textViewCodigoSicronização = findViewById(R.id.idCodigoSicronizacao);
 
         textViewNome.setText("Nome: "+ ListviewProdutor.produtor.getNome());
         textViewNumProd.setText("Nº: "+ ListviewProdutor.produtor.getNumProd());
+        textViewCodigoSicronização.setText("Código de Sicronização: "+ListviewProdutor.produtor.getCodigoSocronizacao());
         if(ListviewProdutor.produtor.getTipo() == 1){
-            textViewPropreitarioTague.setText("Propeietario do Tangue: Sim");
+            textViewPropreitarioTague.setText("Gestor: Sim");
         }else {
-            textViewPropreitarioTague.setText("Propeietario do Tangue: Não");
+            textViewPropreitarioTague.setText("Gestor: Não");
         }
 
     }

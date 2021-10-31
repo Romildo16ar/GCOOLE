@@ -37,6 +37,8 @@ public class ListviewProdutor extends AppCompatActivity {
 
         Dao bd = new Dao(this);
         List<Produtor> listaProd = bd.selecionarProdutor();
+
+
         produtores.setAdapter(new AdapterProdutor(ListviewProdutor.this, listaProd));
 
         produtores.setOnItemClickListener(new AdapterView.OnItemClickListener() {

@@ -15,7 +15,7 @@
         android:roundIcon="@mipmap/vaca"
         android:supportsRtl="true"
         android:theme="@style/Theme.Gcoole">
-        <activity android:name=".MainActivity">
+        <activity android:name=".Activity_Splash">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -30,6 +30,10 @@
             android:name=".Activity_Produtor"
             android:label="Produtor Cadastrado"
             />
+        <activity android:name=".MainActivity"
+            android:label="Gcoole"/>
+        <activity android:name=".TelaInicial"
+            android:label="Gcoole"/>
         <activity android:name=".Listviews.ListviewProdutor"
             android:label="Produtores Cadastrados"/>
         <activity android:name=".CRUD.EditarProdutor"
