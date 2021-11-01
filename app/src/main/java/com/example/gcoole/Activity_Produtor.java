@@ -1,7 +1,10 @@
 package com.example.gcoole;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -14,12 +17,17 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.gcoole.CRUD.EditarProdutor;
 import com.example.gcoole.Dao.Dao;
 import com.example.gcoole.Listviews.ListviewProdutor;
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class Activity_Produtor extends AppCompatActivity {
     private TextView textViewNome;
     private TextView textViewNumProd;
     private TextView textViewPropreitarioTague;
     private TextView textViewCodigoSicronização;
+    FirebaseDatabase firebaseDatabase;
+    DatabaseReference databaseReference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,6 +35,7 @@ public class Activity_Produtor extends AppCompatActivity {
         setContentView(R.layout.activity_produtor);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
+        inicializarFireBase();
 
         textViewNome = findViewById(R.id.idAdapterNome);
         textViewNumProd = findViewById(R.id.idActivityNumeroProd);
@@ -60,20 +69,37 @@ public class Activity_Produtor extends AppCompatActivity {
                 finishAffinity();
                 break;
             case R.id.idBTDeletarProd:
-                Dao bd = new Dao(this);
-                bd.deleteProdutor(ListviewProdutor.produtor.getId());
-                AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                builder.setTitle("Produtor Excluido com Sucesso!");
-                builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        Toast.makeText(Activity_Produtor.this,  "", Toast.LENGTH_SHORT);
-                        startActivity(new Intent(Activity_Produtor.this, ListviewProdutor.class));
-                        finishAffinity();
+                if(isOnline()){
+                    Dao bd = new Dao(this);
+                    bd.deleteProdutor(ListviewProdutor.produtor.getId());
+                    databaseReference.child(ListviewProdutor.produtor.getCodigoSocronizacao()).child("produtor").removeValue();
+                    AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                    builder.setTitle("Produtor Excluido com Sucesso!");
+                    builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Toast.makeText(Activity_Produtor.this,  "", Toast.LENGTH_SHORT);
+                            startActivity(new Intent(Activity_Produtor.this, ListviewProdutor.class));
+                            finishAffinity();
 
-                    }
-                });
-                builder.show();
+                        }
+                    });
+                    builder.show();
+                }else{
+                    AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                    builder.setTitle("Produtor não Excluido. Sem Conexão com a internet!");
+                    builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Toast.makeText(Activity_Produtor.this,  "", Toast.LENGTH_SHORT);
+                            startActivity(new Intent(Activity_Produtor.this, ListviewProdutor.class));
+                            finishAffinity();
+
+                        }
+                    });
+                    builder.show();
+                }
+
 
 
 
@@ -84,5 +110,20 @@ public class Activity_Produtor extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+    public boolean isOnline(){
+        try {
+            ConnectivityManager cm =(ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+            NetworkInfo networkInfo = cm.getActiveNetworkInfo();
+            return networkInfo != null && networkInfo.isConnectedOrConnecting();
+        }catch (Exception ex){
+            Toast.makeText(getApplicationContext(), "Erro ao verificar se estava online", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+    }
+    private void inicializarFireBase(){
+        FirebaseApp.initializeApp(Activity_Produtor.this);
+        firebaseDatabase = FirebaseDatabase.getInstance();
+        databaseReference = firebaseDatabase.getReference();
     }
 }
