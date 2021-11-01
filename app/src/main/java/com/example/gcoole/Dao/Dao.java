@@ -31,7 +31,7 @@ public class Dao extends SQLiteOpenHelper {
 
         String tbProducao = "CREATE TABLE producao(id INTEGER PRIMARY KEY AUTOINCREMENT, quant INTEGER, data VARCHAR(20), idProdutor INTEGER)";
 
-        String tbValorPorLitro = "CREATE TABLE valorporlitro(id INTEGER PRIMARY KEY AUTOINCREMENT, valor FLOAT, mes INTEGER , ano INTEGER)";
+        String tbValorPorLitro = "CREATE TABLE valorporlitro(id INTEGER PRIMARY KEY AUTOINCREMENT, valor FLOAT, mes INTEGER , ano INTEGER, idOnline VARCHAR(40))";
 
         String tbInserirVacaPrenha = "CREATE TABLE vacaPrenha(id INTEGER PRIMARY KEY AUTOINCREMENT, dataInicialGestacao VARCHAR(20), numeroGestacao INTEGER, idVaca INTEGER)";
 
@@ -252,6 +252,7 @@ public class Dao extends SQLiteOpenHelper {
         vc.put("valor",valorPorLitro.getValor() );
         vc.put("mes", valorPorLitro.getMes());
         vc.put("ano", valorPorLitro.getAno());
+        vc.put("idOnline", valorPorLitro.getIdOnline());
 
         db.insert("valorporlitro", null, vc);
         db.close();
@@ -278,6 +279,7 @@ public class Dao extends SQLiteOpenHelper {
                 valorPorLitro.setValor(cur.getFloat(1));
                 valorPorLitro.setMes(cur.getInt(2));
                 valorPorLitro.setAno(cur.getInt(3));
+                valorPorLitro.setIdOnline(cur.getString(4));
 
                 listavalorPorLitro.add(valorPorLitro);
             }while (cur.moveToNext());

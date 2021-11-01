@@ -109,7 +109,9 @@ public class EditarProdutor extends AppCompatActivity implements View.OnClickLis
             try {
                 if(isOnline()){
                     bd.updateProdutor(prod);
-                    databaseReference.child(ListviewProdutor.produtor.getCodigoSocronizacao()).child("produtor").setValue(prod);
+                    if(prod.getTipo() == -1) {
+                        databaseReference.child(ListviewProdutor.produtor.getCodigoSocronizacao()).child("produtor").setValue(prod);
+                    }
                     AlertDialog.Builder builder = new AlertDialog.Builder(this);
                     builder.setTitle("Produtor Atualizado com Sucesso!");
                     builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {

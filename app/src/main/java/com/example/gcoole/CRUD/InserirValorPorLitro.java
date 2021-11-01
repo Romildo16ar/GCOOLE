@@ -1,7 +1,10 @@
 package com.example.gcoole.CRUD;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -20,6 +23,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.gcoole.Dao.Dao;
 import com.example.gcoole.Listviews.Listview_Valor_Por_Litro;
 import com.example.gcoole.MainActivity;
+import com.example.gcoole.Modelo.Produtor;
 import com.example.gcoole.Modelo.ValorPorLitro;
 import com.example.gcoole.R;
 import com.example.gcoole.Ultil.MaskEditUtil;
@@ -28,6 +32,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.List;
+import java.util.UUID;
 
 public class InserirValorPorLitro extends AppCompatActivity implements View.OnClickListener {
 
@@ -41,6 +46,9 @@ public class InserirValorPorLitro extends AppCompatActivity implements View.OnCl
     FirebaseDatabase firebaseDatabase;
     DatabaseReference databaseReference;
     private EditText editTextano;
+
+
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -121,33 +129,59 @@ public class InserirValorPorLitro extends AppCompatActivity implements View.OnCl
             });
             builder.show();
         }else {
+            String idOnline = UUID.randomUUID().toString();
             valorPorLitro.setValor(Float.parseFloat(editTextvalorPorLitro.getText().toString()));
             valorPorLitro.setAno(Integer.parseInt(editTextano.getText().toString()));
             valorPorLitro.setMes(p);
+            valorPorLitro.setIdOnline(idOnline);
 
             try {
 
-                bd.inserirValorPorLitro(valorPorLitro);
-                //databaseReference.child("valor_por_litro").child("1").setValue(valorPorLitro);
+                if(isOnline()){
+                    List<Produtor> listPodutor = bd.selecionarProdutor();
+                    bd.inserirValorPorLitro(valorPorLitro);
+                    for(int i = 0; i < listPodutor.size(); i++){
+                        if(listPodutor.get(i).getTipo() == -1) {
+                            databaseReference.child(listPodutor.get(i).getCodigoSocronizacao()).child("Valor_por_litro").child(valorPorLitro.getIdOnline()).setValue(valorPorLitro);
+                        }
+                    }
+                    androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(this);
+                    builder.setTitle("Valor salvo com Sucesso!");
+                    builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Toast.makeText(InserirValorPorLitro.this,  "", Toast.LENGTH_SHORT);
+                            editTextvalorPorLitro.setText("");
+                            editTextvalorPorLitro.requestFocus();
+                            editTextano.setText("");
+
+                        }
+                    });
+                    builder.show();
+                }else {
+                    androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(this);
+                    builder.setTitle("Valor não foi salvo. Sem Conexão com a internet!");
+                    builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Toast.makeText(InserirValorPorLitro.this,  "", Toast.LENGTH_SHORT);
+                            editTextvalorPorLitro.setText("");
+                            editTextvalorPorLitro.requestFocus();
+                            editTextano.setText("");
+
+                        }
+                    });
+                    builder.show();
+                }
+
+
 
             }catch (Exception e){
                 Log.e("Erro", "Erro ao Cadastrar");
             }
 
 
-            androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(this);
-            builder.setTitle("Valor salvo com Sucesso!");
-            builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    Toast.makeText(InserirValorPorLitro.this,  "", Toast.LENGTH_SHORT);
-                    editTextvalorPorLitro.setText("");
-                    editTextvalorPorLitro.requestFocus();
-                    editTextano.setText("");
 
-                }
-            });
-            builder.show();
             return;
 
 
@@ -172,5 +206,15 @@ public class InserirValorPorLitro extends AppCompatActivity implements View.OnCl
         }
         return false;
 
+    }
+    public boolean isOnline(){
+        try {
+            ConnectivityManager cm =(ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+            NetworkInfo networkInfo = cm.getActiveNetworkInfo();
+            return networkInfo != null && networkInfo.isConnectedOrConnecting();
+        }catch (Exception ex){
+            Toast.makeText(getApplicationContext(), "Erro ao verificar se estava online", Toast.LENGTH_SHORT).show();
+            return false;
+        }
     }
 }

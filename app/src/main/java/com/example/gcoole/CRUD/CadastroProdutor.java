@@ -23,6 +23,7 @@ import com.example.gcoole.Dao.Dao;
 import com.example.gcoole.Listviews.ListviewProdutor;
 import com.example.gcoole.MainActivity;
 import com.example.gcoole.Modelo.Produtor;
+import com.example.gcoole.Modelo.ValorPorLitro;
 import com.example.gcoole.R;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.database.DatabaseReference;
@@ -124,8 +125,24 @@ public class CadastroProdutor extends AppCompatActivity implements View.OnClickL
 
             try {
                 if(isOnline()){
-                    bd.insertProdutor(prod);
-                    databaseReference.child(codigoDeSicronizacao).child("produtor").setValue(prod);
+                    List<ValorPorLitro> listValorPorlitro =bd.selecionarValorProLitro();
+                    if(listValorPorlitro.size() == 0){
+                        bd.insertProdutor(prod);
+                        if(prod.getTipo() == -1){
+                            databaseReference.child(codigoDeSicronizacao).child("produtor").setValue(prod);
+                        }
+                    }else{
+                        bd.insertProdutor(prod);
+                        if(prod.getTipo() == -1){
+                            databaseReference.child(codigoDeSicronizacao).child("produtor").setValue(prod);
+                            for(int i = 0; i< listValorPorlitro.size(); i++){
+                                databaseReference.child(codigoDeSicronizacao).child("Valor_por_litro").child(listValorPorlitro.get(i).getIdOnline()).setValue(listValorPorlitro.get(i));
+
+                            }
+
+                        }
+
+                    }
                     AlertDialog.Builder builder = new AlertDialog.Builder(this);
                     builder.setTitle("Produtor Cadastardo com Sucesso!");
                     builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {

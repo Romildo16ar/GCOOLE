@@ -44,11 +44,14 @@ public class Activity_Produtor extends AppCompatActivity {
 
         textViewNome.setText("Nome: "+ ListviewProdutor.produtor.getNome());
         textViewNumProd.setText("Nº: "+ ListviewProdutor.produtor.getNumProd());
-        textViewCodigoSicronização.setText("Código de Sicronização: "+ListviewProdutor.produtor.getCodigoSocronizacao());
+
         if(ListviewProdutor.produtor.getTipo() == 1){
             textViewPropreitarioTague.setText("Gestor: Sim");
+            textViewCodigoSicronização.setText("");
         }else {
             textViewPropreitarioTague.setText("Gestor: Não");
+            textViewCodigoSicronização.setText("Código de Sicronização: "+ListviewProdutor.produtor.getCodigoSocronizacao());
+
         }
 
     }
@@ -71,8 +74,10 @@ public class Activity_Produtor extends AppCompatActivity {
             case R.id.idBTDeletarProd:
                 if(isOnline()){
                     Dao bd = new Dao(this);
+                    if(ListviewProdutor.produtor.getTipo() == -1) {
+                        databaseReference.child(ListviewProdutor.produtor.getCodigoSocronizacao()).removeValue();
+                    }
                     bd.deleteProdutor(ListviewProdutor.produtor.getId());
-                    databaseReference.child(ListviewProdutor.produtor.getCodigoSocronizacao()).child("produtor").removeValue();
                     AlertDialog.Builder builder = new AlertDialog.Builder(this);
                     builder.setTitle("Produtor Excluido com Sucesso!");
                     builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {

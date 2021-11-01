@@ -5,19 +5,22 @@ public class ValorPorLitro {
     private float valor;
     private int mes;
     private int ano;
+    private String idOnline;
 
     public ValorPorLitro(){
         this.setId(0);
         this.setValor(0);
         this.setMes(0);
         this.setAno(0);
+        this.setIdOnline("");
     }
 
-    public ValorPorLitro(int id , float valor, int mes , int ano){
+    public ValorPorLitro(int id , float valor, int mes , int ano, String idOnline){
         this.setId(id);
         this.setValor(valor);
         this.setMes(mes);
         this.setAno(ano);
+        this.setIdOnline(idOnline);
 
     }
 
@@ -61,5 +64,13 @@ public class ValorPorLitro {
 
     public void setAno(int ano) {
         this.ano = ano;
+    }
+
+    public String getIdOnline() {
+        return idOnline;
+    }
+
+    public void setIdOnline(String idOnline) {
+        this.idOnline = idOnline;
     }
 }
