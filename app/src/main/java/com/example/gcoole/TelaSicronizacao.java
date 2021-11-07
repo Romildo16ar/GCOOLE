@@ -19,7 +19,10 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.gcoole.CRUD.InserirProducao;
 import com.example.gcoole.Dao.Dao;
+import com.example.gcoole.Modelo.Producao;
+import com.example.gcoole.Modelo.Produtor;
 import com.example.gcoole.Modelo.Sicronizacao;
+import com.example.gcoole.Modelo.ValorPorLitro;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -90,6 +93,61 @@ public class TelaSicronizacao extends AppCompatActivity implements View.OnClickL
                         sicronizacao.setFlag(1);
                         try {
                             bd.insertSicronizacao(sicronizacao);
+                            databaseReference.child(sicronizacao.getCodigo()).child("Valor_por_litro").addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                                    for(DataSnapshot keyNote:snapshot.getChildren()){
+                                        Dao bd = new Dao(TelaSicronizacao.this);
+                                        ValorPorLitro valorPorLitro = keyNote.getValue(ValorPorLitro.class);
+                                        assert valorPorLitro != null;
+                                        bd.inserirValorPorLitro(valorPorLitro);
+
+                                    }
+                                }
+
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError error) {
+
+                                }
+                            });
+
+                            databaseReference.child(sicronizacao.getCodigo()).child("producao").addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                    for(DataSnapshot keyNote:snapshot.getChildren()){
+                                        Dao bd = new Dao(TelaSicronizacao.this);
+                                        Producao producao = keyNote.getValue(Producao.class);
+                                        assert producao != null;
+                                        bd.inserirProducao(producao);
+                                    }
+                                }
+
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError error) {
+
+                                }
+                            });
+
+                            databaseReference.child(sicronizacao.getCodigo()).child("produtor").addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                    for(DataSnapshot keyNote:snapshot.getChildren()){
+                                        Dao bd = new Dao(TelaSicronizacao.this);
+                                        Produtor produtor = keyNote.getValue(Produtor.class);
+                                        assert produtor != null;
+                                        bd.insertProdutor(produtor);
+                                    }
+                                }
+
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError error) {
+
+                                }
+                            });
+
+
+
                         }catch (Exception e){
                             Log.e("Erro", "Erro ao Sicroniza");
                         }

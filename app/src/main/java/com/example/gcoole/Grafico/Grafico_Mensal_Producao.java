@@ -30,6 +30,7 @@ import com.example.gcoole.Dao.Dao;
 import com.example.gcoole.Listviews.ListviewProdutorParaProducao;
 import com.example.gcoole.Listviews.Listview_Producao_Por_Produtor;
 import com.example.gcoole.Modelo.Producao;
+import com.example.gcoole.Modelo.Sicronizacao;
 import com.example.gcoole.R;
 import com.example.gcoole.Ultil.PdfCreator;
 import com.github.mikephil.charting.charts.BarChart;
@@ -84,26 +85,40 @@ public class Grafico_Mensal_Producao extends AppCompatActivity {
     private void prencherGrafico() {
         Dao bd = new Dao(this);
         List<Producao> producaos = bd.selecionarProducao();
-
+        List<Sicronizacao> sicronizacaoList = bd.selecionarSicronizacao();
 
         final String[] dias ={"1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24","25","26","27","28","29","30","31","32"};
 
 
         final int[] seriaA = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
 
-        for(int i = 0; i < producaos.size(); i++){
-            if(ListviewProdutorParaProducao.produtor.getId() == producaos.get(i).getIdProdutor()){
-                if(Listview_Producao_Por_Produtor.mesGrafico == selecionaMes(producaos.get(i).getData())){
-                    if(Listview_Producao_Por_Produtor.anoGrafico == selecionaAno(producaos.get(i).getData())) {
+        if(sicronizacaoList.size() != 0){
+            for(int i = 0; i < producaos.size(); i++){
 
-                        seriaA[selecionaDia(producaos.get(i).getData())-1] = producaos.get(i).getQuant();
+                    if(Listview_Producao_Por_Produtor.mesGrafico == selecionaMes(producaos.get(i).getData())){
+                        if(Listview_Producao_Por_Produtor.anoGrafico == selecionaAno(producaos.get(i).getData())) {
+
+                            seriaA[selecionaDia(producaos.get(i).getData())-1] = producaos.get(i).getQuant();
+                        }
+
                     }
-
-                }
             }
+        }else{
+            for(int i = 0; i < producaos.size(); i++){
+                if(ListviewProdutorParaProducao.produtor.getId() == producaos.get(i).getIdProdutor()){
+                    if(Listview_Producao_Por_Produtor.mesGrafico == selecionaMes(producaos.get(i).getData())){
+                        if(Listview_Producao_Por_Produtor.anoGrafico == selecionaAno(producaos.get(i).getData())) {
+
+                            seriaA[selecionaDia(producaos.get(i).getData())-1] = producaos.get(i).getQuant();
+                        }
+
+                    }
+                }
 
 
+            }
         }
+
 
 /*
         XYSeries series1 = new SimpleXYSeries(Arrays.asList(seriaA), SimpleXYSeries.ArrayFormat.Y_VALS_ONLY,"Quant em litro de Leite");

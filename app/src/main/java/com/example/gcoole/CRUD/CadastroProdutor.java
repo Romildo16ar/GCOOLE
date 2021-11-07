@@ -129,12 +129,12 @@ public class CadastroProdutor extends AppCompatActivity implements View.OnClickL
                     if(listValorPorlitro.size() == 0){
                         bd.insertProdutor(prod);
                         if(prod.getTipo() == -1){
-                            databaseReference.child(codigoDeSicronizacao).child("produtor").setValue(prod);
+                            databaseReference.child(codigoDeSicronizacao).child("produtor").child(codigoDeSicronizacao).setValue(prod);
                         }
                     }else{
                         bd.insertProdutor(prod);
                         if(prod.getTipo() == -1){
-                            databaseReference.child(codigoDeSicronizacao).child("produtor").setValue(prod);
+                            databaseReference.child(codigoDeSicronizacao).child("produtor").child(codigoDeSicronizacao).setValue(prod);
                             for(int i = 0; i< listValorPorlitro.size(); i++){
                                 databaseReference.child(codigoDeSicronizacao).child("Valor_por_litro").child(listValorPorlitro.get(i).getIdOnline()).setValue(listValorPorlitro.get(i));
 

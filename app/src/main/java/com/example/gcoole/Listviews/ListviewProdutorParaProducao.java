@@ -40,21 +40,8 @@ public class ListviewProdutorParaProducao extends AppCompatActivity {
 
 
         Dao bd = new Dao(this);
-        List<Sicronizacao> sicronizacaoList = bd.selecionarSicronizacao();
-        ArrayList<Produtor> listaProdutor =  new ArrayList<Produtor>();
 
-        if(sicronizacaoList.size() != 0){
-            List<Produtor> produtorList = bd.selecionarProdutor();
-            for(int i = 0; i < produtorList.size(); i++){
-                if(produtorList.get(i).getCodigoSocronizacao() == sicronizacaoList.get(1).getCodigo()){
-                    listaProdutor.add(produtorList.get(i));
-                }
-            }
-        }else{
-             listaProdutor = (ArrayList<Produtor>) bd.selecionarProdutor();
-        }
-
-
+        List<Produtor> listaProdutor =  bd.selecionarProdutor();
 
 
         produtores.setAdapter(new AdapterProducao(ListviewProdutorParaProducao.this, listaProdutor));

@@ -28,6 +28,7 @@ import com.example.gcoole.Dao.Dao;
 import com.example.gcoole.Listviews.ListviewProdutorParaProducao;
 import com.example.gcoole.Listviews.Listview_Producao_Por_Produtor;
 import com.example.gcoole.Modelo.Producao;
+import com.example.gcoole.Modelo.Sicronizacao;
 import com.example.gcoole.R;
 import com.example.gcoole.Ultil.PdfCreator;
 import com.github.mikephil.charting.charts.BarChart;
@@ -91,67 +92,127 @@ public class Grafico_Anual_Producao extends AppCompatActivity {
     private void prencherGrafico() {
         Dao bd = new Dao(this);
         List<Producao> producaos = bd.selecionarProducao();
+        List<Sicronizacao> sicronizacaoList = bd.selecionarSicronizacao();
 
 
         final String[] meses = {"Jan", "Fev", "Mar", "Abr", "Maio", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"};
         int aux1 = 0, aux2 = 0, aux3 = 0, aux4 = 0, aux5 = 0, aux6 = 0, aux7 = 0, aux8 = 0, aux9 = 0, aux10 = 0, aux11 = 0, aux12 = 0;
         final int[] seriaA = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-        for (int i = 0; i < producaos.size(); i++) {
-            if (ListviewProdutorParaProducao.produtor.getId() == producaos.get(i).getIdProdutor()) {
-                if (Listview_Producao_Por_Produtor.anoGrafico == selecionaAno(producaos.get(i).getData())) {
-                    if (selecionaMes(producaos.get(i).getData()) == 1) {
+        if(sicronizacaoList.size() != 0){
+            for (int i = 0; i < producaos.size(); i++) {
+                    if (Listview_Producao_Por_Produtor.anoGrafico == selecionaAno(producaos.get(i).getData())) {
+                        if (selecionaMes(producaos.get(i).getData()) == 1) {
 
-                        aux1 = aux1 + producaos.get(i).getQuant();
-                        seriaA[0] = aux1;
-                    } else if (selecionaMes(producaos.get(i).getData()) == 2) {
+                            aux1 = aux1 + producaos.get(i).getQuant();
+                            seriaA[0] = aux1;
+                        } else if (selecionaMes(producaos.get(i).getData()) == 2) {
 
-                        aux2 = aux2 + producaos.get(i).getQuant();
-                        seriaA[1] = aux2;
-                    } else if (selecionaMes(producaos.get(i).getData()) == 3) {
+                            aux2 = aux2 + producaos.get(i).getQuant();
+                            seriaA[1] = aux2;
+                        } else if (selecionaMes(producaos.get(i).getData()) == 3) {
 
-                        aux3 = aux3 + producaos.get(i).getQuant();
-                        seriaA[2] = aux3;
-                    } else if (selecionaMes(producaos.get(i).getData()) == 4) {
+                            aux3 = aux3 + producaos.get(i).getQuant();
+                            seriaA[2] = aux3;
+                        } else if (selecionaMes(producaos.get(i).getData()) == 4) {
 
-                        aux4 = aux4 + producaos.get(i).getQuant();
-                        seriaA[3] = aux4;
-                    } else if (selecionaMes(producaos.get(i).getData()) == 5) {
+                            aux4 = aux4 + producaos.get(i).getQuant();
+                            seriaA[3] = aux4;
+                        } else if (selecionaMes(producaos.get(i).getData()) == 5) {
 
-                        aux5 = aux5 + producaos.get(i).getQuant();
-                        seriaA[4] = aux5;
-                    } else if (selecionaMes(producaos.get(i).getData()) == 6) {
+                            aux5 = aux5 + producaos.get(i).getQuant();
+                            seriaA[4] = aux5;
+                        } else if (selecionaMes(producaos.get(i).getData()) == 6) {
 
-                        aux6 = aux6 + producaos.get(i).getQuant();
-                        seriaA[5] = aux6;
-                    } else if (selecionaMes(producaos.get(i).getData()) == 7) {
+                            aux6 = aux6 + producaos.get(i).getQuant();
+                            seriaA[5] = aux6;
+                        } else if (selecionaMes(producaos.get(i).getData()) == 7) {
 
-                        aux7 = aux7 + producaos.get(i).getQuant();
-                        seriaA[6] = aux7;
-                    } else if (selecionaMes(producaos.get(i).getData()) == 8) {
+                            aux7 = aux7 + producaos.get(i).getQuant();
+                            seriaA[6] = aux7;
+                        } else if (selecionaMes(producaos.get(i).getData()) == 8) {
 
-                        aux8 = aux8 + producaos.get(i).getQuant();
-                        seriaA[7] = aux8;
-                    } else if (selecionaMes(producaos.get(i).getData()) == 9) {
+                            aux8 = aux8 + producaos.get(i).getQuant();
+                            seriaA[7] = aux8;
+                        } else if (selecionaMes(producaos.get(i).getData()) == 9) {
 
-                        aux9 = aux9 + producaos.get(i).getQuant();
-                        seriaA[8] = aux9;
-                    } else if (selecionaMes(producaos.get(i).getData()) == 10) {
+                            aux9 = aux9 + producaos.get(i).getQuant();
+                            seriaA[8] = aux9;
+                        } else if (selecionaMes(producaos.get(i).getData()) == 10) {
 
-                        aux10 = aux10 + producaos.get(i).getQuant();
-                        seriaA[9] = aux10;
-                    } else if (selecionaMes(producaos.get(i).getData()) == 11) {
+                            aux10 = aux10 + producaos.get(i).getQuant();
+                            seriaA[9] = aux10;
+                        } else if (selecionaMes(producaos.get(i).getData()) == 11) {
 
-                        aux11 = aux11 + producaos.get(i).getQuant();
-                        seriaA[10] = aux11;
-                    } else if (selecionaMes(producaos.get(i).getData()) == 12) {
+                            aux11 = aux11 + producaos.get(i).getQuant();
+                            seriaA[10] = aux11;
+                        } else if (selecionaMes(producaos.get(i).getData()) == 12) {
 
-                        aux12 = aux12 + producaos.get(i).getQuant();
-                        seriaA[11] = aux12;
+                            aux12 = aux12 + producaos.get(i).getQuant();
+                            seriaA[11] = aux12;
+                        }
+
                     }
-
-                }
             }
 
+        }else{
+            for (int i = 0; i < producaos.size(); i++) {
+                if (ListviewProdutorParaProducao.produtor.getId() == producaos.get(i).getIdProdutor()) {
+                    if (Listview_Producao_Por_Produtor.anoGrafico == selecionaAno(producaos.get(i).getData())) {
+                        if (selecionaMes(producaos.get(i).getData()) == 1) {
+
+                            aux1 = aux1 + producaos.get(i).getQuant();
+                            seriaA[0] = aux1;
+                        } else if (selecionaMes(producaos.get(i).getData()) == 2) {
+
+                            aux2 = aux2 + producaos.get(i).getQuant();
+                            seriaA[1] = aux2;
+                        } else if (selecionaMes(producaos.get(i).getData()) == 3) {
+
+                            aux3 = aux3 + producaos.get(i).getQuant();
+                            seriaA[2] = aux3;
+                        } else if (selecionaMes(producaos.get(i).getData()) == 4) {
+
+                            aux4 = aux4 + producaos.get(i).getQuant();
+                            seriaA[3] = aux4;
+                        } else if (selecionaMes(producaos.get(i).getData()) == 5) {
+
+                            aux5 = aux5 + producaos.get(i).getQuant();
+                            seriaA[4] = aux5;
+                        } else if (selecionaMes(producaos.get(i).getData()) == 6) {
+
+                            aux6 = aux6 + producaos.get(i).getQuant();
+                            seriaA[5] = aux6;
+                        } else if (selecionaMes(producaos.get(i).getData()) == 7) {
+
+                            aux7 = aux7 + producaos.get(i).getQuant();
+                            seriaA[6] = aux7;
+                        } else if (selecionaMes(producaos.get(i).getData()) == 8) {
+
+                            aux8 = aux8 + producaos.get(i).getQuant();
+                            seriaA[7] = aux8;
+                        } else if (selecionaMes(producaos.get(i).getData()) == 9) {
+
+                            aux9 = aux9 + producaos.get(i).getQuant();
+                            seriaA[8] = aux9;
+                        } else if (selecionaMes(producaos.get(i).getData()) == 10) {
+
+                            aux10 = aux10 + producaos.get(i).getQuant();
+                            seriaA[9] = aux10;
+                        } else if (selecionaMes(producaos.get(i).getData()) == 11) {
+
+                            aux11 = aux11 + producaos.get(i).getQuant();
+                            seriaA[10] = aux11;
+                        } else if (selecionaMes(producaos.get(i).getData()) == 12) {
+
+                            aux12 = aux12 + producaos.get(i).getQuant();
+                            seriaA[11] = aux12;
+                        }
+
+                    }
+                }
+
+
+            }
 
         }
 

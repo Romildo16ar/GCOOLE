@@ -47,18 +47,24 @@ public class Listview_Valor_Por_Litro extends AppCompatActivity {
         listViewvalorProLitro= (ListView) findViewById(R.id.idListViewValorPorLitro);
         Dao bd = new Dao(this);
         List<ValorPorLitro> listValorPorLitro = bd.selecionarValorProLitro();
+        List<Sicronizacao> sicronizacaoList = bd.selecionarSicronizacao();
 
         listViewvalorProLitro.setAdapter(new AdapterValorPorLitro(Listview_Valor_Por_Litro.this, listValorPorLitro));
 
-        listViewvalorProLitro.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                valorPorLitro = (ValorPorLitro) listViewvalorProLitro.getItemAtPosition(position);
-                click(view);
-            }
+        if(sicronizacaoList.size() != 0) {
+
+        }else{
+            listViewvalorProLitro.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    valorPorLitro = (ValorPorLitro) listViewvalorProLitro.getItemAtPosition(position);
+                    click(view);
+                }
 
 
-        });
+            });
+        }
+
 
     }
 

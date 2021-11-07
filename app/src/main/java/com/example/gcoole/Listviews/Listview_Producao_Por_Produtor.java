@@ -37,6 +37,7 @@ import com.example.gcoole.Dao.Dao;
 import com.example.gcoole.Grafico.Grafico_Anual_Producao;
 import com.example.gcoole.Grafico.Grafico_Mensal_Producao;
 import com.example.gcoole.Modelo.Producao;
+import com.example.gcoole.Modelo.Sicronizacao;
 import com.example.gcoole.Modelo.ValorPorLitro;
 import com.example.gcoole.R;
 import com.example.gcoole.Ultil.MaskEditUtil;
@@ -107,6 +108,7 @@ public class Listview_Producao_Por_Produtor extends AppCompatActivity implements
         Dao bd = new Dao(this);
 
         List<Producao> producaoList = bd.selecionarProducao();
+        List<Sicronizacao> sicronizacaoList = bd.selecionarSicronizacao();
         //producaoListPorIdComFiltro = bd.selecionarProducao();
         arrayAdapterMes = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, mes);
         spinnerMes.setAdapter(arrayAdapterMes);
@@ -114,15 +116,23 @@ public class Listview_Producao_Por_Produtor extends AppCompatActivity implements
         nomeProdutor = ListviewProdutorParaProducao.produtor.getNome();
         numeroProdutor = ListviewProdutorParaProducao.produtor.getNumProd();
 
-        for(int i = 0; i < producaoList.size(); i++){
-            if(ListviewProdutorParaProducao.produtor.getId() == producaoList.get(i).getIdProdutor()){
-
+        if(sicronizacaoList.size() != 0){
+            for(int i = 0; i < producaoList.size(); i++){
                 producaoListPorId.add(producaoList.get(i));
                 producaoListPorIdComFiltro.add(producaoList.get(i));
+            }
+        }else{
+            for(int i = 0; i < producaoList.size(); i++){
+                if(ListviewProdutorParaProducao.produtor.getId() == producaoList.get(i).getIdProdutor()){
+
+                    producaoListPorId.add(producaoList.get(i));
+                    producaoListPorIdComFiltro.add(producaoList.get(i));
+
+                }
 
             }
-
         }
+
 
 
         prencherLista(producaoListPorId);
@@ -217,19 +227,26 @@ public class Listview_Producao_Por_Produtor extends AppCompatActivity implements
 
     public void prencherLista(List<Producao> producaoListPreecherProducao){
         TextView textViewnome = (TextView) findViewById(R.id.idTextViewProdutor);
+        Dao bd = new Dao(Listview_Producao_Por_Produtor.this);
+        List<Sicronizacao> sicronizacaoList = bd.selecionarSicronizacao();
 
         textViewnome.setText("Produtor: "+nomeProdutor);
 
         producoes.setAdapter(new AdapterProducaoPorProdutor(Listview_Producao_Por_Produtor.this, producaoListPreecherProducao));
-        producoes.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                producao = (Producao) producoes.getItemAtPosition(position);
-                click(view);
-            }
 
+        if(sicronizacaoList.size() != 0){
 
-        });
+        }else {
+            producoes.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    producao = (Producao) producoes.getItemAtPosition(position);
+                    click(view);
+                }
+
+            });
+        }
+
 
     }
 
@@ -421,12 +438,14 @@ public class Listview_Producao_Por_Produtor extends AppCompatActivity implements
                                             if(mesDinheiro == 0){
                                                 mesDinheiro = 1;
                                             }
-                                            float auxValor = 0 , total = 0;
+                                            float auxValor = 0;
+                                            float total = 0;
                                             Dao bd = new Dao(Listview_Producao_Por_Produtor.this);
                                             List<ValorPorLitro> valorPorLitrosMensal = bd.selecionarValorProLitro();
                                             List<Producao> producaoList = bd.selecionarProducao();
-                                            for(int i = 0; i < producaoList.size(); i++){
-                                                if(producaoList.get(i).getIdProdutor() == ListviewProdutorParaProducao.produtor.getId()){
+                                            List<Sicronizacao> sicronizacaoList = bd.selecionarSicronizacao();
+                                            if(sicronizacaoList.size() != 0){
+                                                for(int i = 0; i < producaoList.size(); i++){
                                                     if(selecionaAno(producaoList.get(i).getData()) == anoDinheiro){
                                                         if(selecionaMes(producaoList.get(i).getData()) == mesDinheiro){
                                                             p=producaoList.get(i);
@@ -436,7 +455,21 @@ public class Listview_Producao_Por_Produtor extends AppCompatActivity implements
 
                                                 }
 
+                                            }else{
+                                                for(int i = 0; i < producaoList.size(); i++){
+                                                    if(producaoList.get(i).getIdProdutor() == ListviewProdutorParaProducao.produtor.getId()){
+                                                        if(selecionaAno(producaoList.get(i).getData()) == anoDinheiro){
+                                                            if(selecionaMes(producaoList.get(i).getData()) == mesDinheiro){
+                                                                p=producaoList.get(i);
+                                                                totalProducao = totalProducao + p.getQuant();
+                                                            }
+                                                        }
+
+                                                    }
+
+                                                }
                                             }
+
 
                                             for(int i = 0; i < valorPorLitrosMensal.size(); i++){
                                                 if (mesDinheiro == valorPorLitrosMensal.get(i).getMes() && anoDinheiro == valorPorLitrosMensal.get(i).getAno()){
@@ -570,8 +603,9 @@ public class Listview_Producao_Por_Produtor extends AppCompatActivity implements
                                                                         Dao bd = new Dao(Listview_Producao_Por_Produtor.this);
                                                                         List<ValorPorLitro> valorPorLitrosMensal = bd.selecionarValorProLitro();
                                                                         List<Producao> producaoList = bd.selecionarProducao();
-                                                                        for(int i = 0; i < producaoList.size(); i++){
-                                                                            if(producaoList.get(i).getIdProdutor() == ListviewProdutorParaProducao.produtor.getId()){
+                                                                        List<Sicronizacao> sicronizacaoList = bd.selecionarSicronizacao();
+                                                                        if(sicronizacaoList.size() != 0){
+                                                                            for(int i = 0; i < producaoList.size(); i++){
                                                                                 if(selecionaAno(producaoList.get(i).getData()) == anoDinheiro){
                                                                                     if(selecionaMes(producaoList.get(i).getData()) == mesDinheiro){
                                                                                         p=producaoList.get(i);
@@ -580,8 +614,21 @@ public class Listview_Producao_Por_Produtor extends AppCompatActivity implements
                                                                                 }
 
                                                                             }
+                                                                        }else{
+                                                                            for(int i = 0; i < producaoList.size(); i++){
+                                                                                if(producaoList.get(i).getIdProdutor() == ListviewProdutorParaProducao.produtor.getId()){
+                                                                                    if(selecionaAno(producaoList.get(i).getData()) == anoDinheiro){
+                                                                                        if(selecionaMes(producaoList.get(i).getData()) == mesDinheiro){
+                                                                                            p=producaoList.get(i);
+                                                                                            totalProducao = totalProducao + p.getQuant();
+                                                                                        }
+                                                                                    }
 
+                                                                                }
+
+                                                                            }
                                                                         }
+
 
                                                                         for(int i = 0; i < valorPorLitrosMensal.size(); i++){
                                                                             if (mesDinheiro == valorPorLitrosMensal.get(i).getMes() && anoDinheiro == valorPorLitrosMensal.get(i).getAno()){
@@ -672,8 +719,9 @@ public class Listview_Producao_Por_Produtor extends AppCompatActivity implements
                                                                 Dao bd = new Dao(Listview_Producao_Por_Produtor.this);
                                                                 List<ValorPorLitro> valorPorLitrosMensal = bd.selecionarValorProLitro();
                                                                 List<Producao> producaoList = bd.selecionarProducao();
-                                                                for(int i = 0; i < producaoList.size(); i++){
-                                                                    if(producaoList.get(i).getIdProdutor() == ListviewProdutorParaProducao.produtor.getId()){
+                                                                List<Sicronizacao> sicronizacaoList = bd.selecionarSicronizacao();
+                                                                if(sicronizacaoList.size() != 0){
+                                                                    for(int i = 0; i < producaoList.size(); i++){
                                                                         if(selecionaAno(producaoList.get(i).getData()) == anoDinheiro){
                                                                             if(selecionaMes(producaoList.get(i).getData()) == mesDinheiro){
                                                                                 p=producaoList.get(i);
@@ -682,8 +730,21 @@ public class Listview_Producao_Por_Produtor extends AppCompatActivity implements
                                                                         }
 
                                                                     }
+                                                                }else{
+                                                                    for(int i = 0; i < producaoList.size(); i++){
+                                                                        if(producaoList.get(i).getIdProdutor() == ListviewProdutorParaProducao.produtor.getId()){
+                                                                            if(selecionaAno(producaoList.get(i).getData()) == anoDinheiro){
+                                                                                if(selecionaMes(producaoList.get(i).getData()) == mesDinheiro){
+                                                                                    p=producaoList.get(i);
+                                                                                    totalProducao = totalProducao + p.getQuant();
+                                                                                }
+                                                                            }
 
+                                                                        }
+
+                                                                    }
                                                                 }
+
 
                                                                 for(int i = 0; i < valorPorLitrosMensal.size(); i++){
                                                                     if (mesDinheiro == valorPorLitrosMensal.get(i).getMes() && anoDinheiro == valorPorLitrosMensal.get(i).getAno()){
