@@ -9,7 +9,6 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.gcoole.CRUD.CadastroProdutor;
-import com.example.gcoole.Listviews.ListviewProdutor;
 
 public class TelaInicial extends AppCompatActivity {
     @Override
@@ -17,6 +16,7 @@ public class TelaInicial extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         getSupportActionBar().hide();
         setContentView(R.layout.tela_inicial);
+
 
         Button buttonGestor = (Button) findViewById(R.id.idBotaoGestor);
         buttonGestor.setOnClickListener(new View.OnClickListener() {
@@ -28,7 +28,7 @@ public class TelaInicial extends AppCompatActivity {
         Button buttonProdutor = (Button) findViewById(R.id.idBotaoProdutor);
         buttonProdutor.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-
+                startActivity(new Intent(TelaInicial.this, TelaSicronizacao.class));
             }
         });
 

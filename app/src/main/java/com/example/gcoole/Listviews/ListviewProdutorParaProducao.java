@@ -15,8 +15,10 @@ import com.example.gcoole.Adapters.AdapterProducao;
 import com.example.gcoole.Dao.Dao;
 import com.example.gcoole.MainActivity;
 import com.example.gcoole.Modelo.Produtor;
+import com.example.gcoole.Modelo.Sicronizacao;
 import com.example.gcoole.R;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ListviewProdutorParaProducao extends AppCompatActivity {
@@ -38,9 +40,22 @@ public class ListviewProdutorParaProducao extends AppCompatActivity {
 
 
         Dao bd = new Dao(this);
-       // List<Producao> listaProducao = bd.selecionarProducao();
-        List<Produtor> listaProdutor = bd.selecionarProdutor();
-        //Log.e("Erro", "Entrei"+listaProducao.get(0).getQuant());
+        List<Sicronizacao> sicronizacaoList = bd.selecionarSicronizacao();
+        ArrayList<Produtor> listaProdutor =  new ArrayList<Produtor>();
+
+        if(sicronizacaoList.size() != 0){
+            List<Produtor> produtorList = bd.selecionarProdutor();
+            for(int i = 0; i < produtorList.size(); i++){
+                if(produtorList.get(i).getCodigoSocronizacao() == sicronizacaoList.get(1).getCodigo()){
+                    listaProdutor.add(produtorList.get(i));
+                }
+            }
+        }else{
+             listaProdutor = (ArrayList<Produtor>) bd.selecionarProdutor();
+        }
+
+
+
 
         produtores.setAdapter(new AdapterProducao(ListviewProdutorParaProducao.this, listaProdutor));
 

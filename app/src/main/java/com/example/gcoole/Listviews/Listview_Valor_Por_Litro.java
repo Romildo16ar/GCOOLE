@@ -23,8 +23,10 @@ import com.example.gcoole.CRUD.InserirValorPorLitro;
 import com.example.gcoole.Dao.Dao;
 import com.example.gcoole.Grafico.Grafico_Anual_Valor_Por_litro;
 import com.example.gcoole.MainActivity;
+import com.example.gcoole.Modelo.Sicronizacao;
 import com.example.gcoole.Modelo.ValorPorLitro;
 import com.example.gcoole.R;
+import com.example.gcoole.TelaInicial;
 import com.example.gcoole.Ultil.MaskEditUtil;
 
 import java.util.List;
@@ -68,6 +70,13 @@ public class Listview_Valor_Por_Litro extends AppCompatActivity {
 
     public boolean onCreateOptionsMenu(Menu menu){
         getMenuInflater().inflate(R.menu.menu_listview_valor_por_litro, menu);
+        Dao dao = new Dao(this);
+        List<Sicronizacao> sicronizacaoList = dao.selecionarSicronizacao();
+
+        if(sicronizacaoList.size() != 0) {
+            MenuItem itemADD = menu.findItem(R.id.idaddValor);
+            itemADD.setVisible(false);
+        }
         return true;
     }
 

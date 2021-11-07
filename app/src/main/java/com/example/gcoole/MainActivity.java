@@ -20,6 +20,7 @@ import com.example.gcoole.Listviews.ListviewProdutor;
 import com.example.gcoole.Listviews.ListviewVacaPrenha;
 import com.example.gcoole.Listviews.Listview_Valor_Por_Litro;
 import com.example.gcoole.Listviews.ListviewsVaca;
+import com.example.gcoole.Modelo.Sicronizacao;
 import com.example.gcoole.Modelo.Vaca;
 import com.example.gcoole.Modelo.VacaPrenha;
 import com.example.gcoole.Ultil.Util;
@@ -58,6 +59,15 @@ public class MainActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         //ativando as opções do menu
         getMenuInflater().inflate(R.menu.main, menu);
+        Dao dao = new Dao(this);
+        List<Sicronizacao> sicronizacaoList = dao.selecionarSicronizacao();
+
+        if(sicronizacaoList.size() != 0) {
+            MenuItem itemListaProdutor = menu.findItem(R.id.listProd);
+            MenuItem itemInserirProdução = menu.findItem(R.id.idInserirProducao);
+            itemListaProdutor.setVisible(false);
+            itemInserirProdução.setVisible(false);
+        }
         return true;
     }
 

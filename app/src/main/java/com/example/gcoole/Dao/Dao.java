@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import com.example.gcoole.Modelo.Producao;
 import com.example.gcoole.Modelo.Produtor;
+import com.example.gcoole.Modelo.Sicronizacao;
 import com.example.gcoole.Modelo.Vaca;
 import com.example.gcoole.Modelo.VacaPrenha;
 import com.example.gcoole.Modelo.ValorPorLitro;
@@ -29,12 +30,13 @@ public class Dao extends SQLiteOpenHelper {
                 "numProd INTEGER, codigoSicronizacao VARCHAR(50))";
         String tbVaca = "CREATE TABLE vaca(id INTEGER PRIMARY KEY AUTOINCREMENT, nome VARCHAR(50), numVaca INTEGER)";
 
-        String tbProducao = "CREATE TABLE producao(id INTEGER PRIMARY KEY AUTOINCREMENT, quant INTEGER, data VARCHAR(20), idProdutor INTEGER)";
+        String tbProducao = "CREATE TABLE producao(id INTEGER PRIMARY KEY AUTOINCREMENT, quant INTEGER, data VARCHAR(20), idProdutor INTEGER, idOnline VARCHAR(40))";
 
         String tbValorPorLitro = "CREATE TABLE valorporlitro(id INTEGER PRIMARY KEY AUTOINCREMENT, valor FLOAT, mes INTEGER , ano INTEGER, idOnline VARCHAR(40))";
 
         String tbInserirVacaPrenha = "CREATE TABLE vacaPrenha(id INTEGER PRIMARY KEY AUTOINCREMENT, dataInicialGestacao VARCHAR(20), numeroGestacao INTEGER, idVaca INTEGER)";
 
+        String tbSicronizacao = "CREATE TABLE sicronizacao(id INTEGER PRIMARY KEY AUTOINCREMENT, codigo VARCHAR(40), flag INTEGER)";
 
 
         db.execSQL(tbProducao);
@@ -42,6 +44,7 @@ public class Dao extends SQLiteOpenHelper {
         db.execSQL(tbVaca);
         db.execSQL(tbValorPorLitro);
         db.execSQL(tbInserirVacaPrenha);
+        db.execSQL(tbSicronizacao);
 
     }
 
@@ -52,8 +55,7 @@ public class Dao extends SQLiteOpenHelper {
         String dropTbProducao = "DROP TABLE IF EXISTS producao";
         String dropTbValorPorLitro = "DROP TABLE IF EXISTS valorporlitro";
         String dropTbInserirVacaPrenha = "DROP TABLE IF EXISTS vacaPrenha";
-
-
+        String dropTbSicronizacao = "DROP TABLE IF EXISTS sicronizacao";
 
 
         db.execSQL(dropTbProdutor);
@@ -61,10 +63,46 @@ public class Dao extends SQLiteOpenHelper {
         db.execSQL(dropTbProducao);
         db.execSQL(dropTbValorPorLitro);
         db.execSQL(dropTbInserirVacaPrenha);
+        db.execSQL(dropTbSicronizacao);
         onCreate(db);
 
 
     }
+// Insert e Select Sicronização ------------------------------------------------------------------------------------------------------------
+    public void insertSicronizacao(Sicronizacao sicronizacao){
+        SQLiteDatabase db = getWritableDatabase();
+        ContentValues sicro = new ContentValues();
+        sicro.put("codigo", sicronizacao.getCodigo());
+        sicro.put("flag", sicronizacao.getFlag());
+
+        db.insert("sicronizacao", null, sicro);
+        db.close();
+
+    }
+
+    public List<Sicronizacao> selecionarSicronizacao(){
+        List<Sicronizacao> listaSicro = new ArrayList<>();
+        SQLiteDatabase db = getReadableDatabase();
+        String sql = "SELECT * FROM sicronizacao";
+        Cursor cur = db.rawQuery(sql, null);
+        if (cur.moveToFirst()){
+            do{
+                Sicronizacao sicro = new Sicronizacao();
+                sicro.setId(cur.getInt(0));
+                sicro.setCodigo(cur.getString(1));
+                sicro.setFlag(cur.getInt(2));
+
+                listaSicro.add(sicro);
+
+            }while (cur.moveToNext());
+
+        }
+        db.close();
+        return listaSicro;
+
+    }
+
+// Fim Sicronização------------------------------------------------------------------------------------------------------------------------------
 
 // Crud Produtor----------------------------------------------------------------------------------------------------------------------------------
     public void insertProdutor(Produtor produtor){
@@ -193,6 +231,7 @@ public class Dao extends SQLiteOpenHelper {
         vc.put("quant", producao.getQuant());
         vc.put("data", producao.getData());
         vc.put("idProdutor", producao.getIdProdutor());
+        vc.put("idOnline", producao.getIdOnline());
 
         db.insert("producao", null, vc);
         db.close();
@@ -210,6 +249,7 @@ public class Dao extends SQLiteOpenHelper {
                 producao.setQuant(cur.getInt(1));
                 producao.setData(cur.getString(2));
                 producao.setIdProdutor(cur.getInt(3));
+                producao.setIdOnline(cur.getString(4));
 
                 listaProducao.add(producao);
             }while (cur.moveToNext());
@@ -235,6 +275,7 @@ public class Dao extends SQLiteOpenHelper {
         cv.put("quant", producao.getQuant());
         cv.put("data", producao.getData());
         cv.put("idProdutor", producao.getIdProdutor());
+        cv.put("idOnline", producao.getIdOnline());
 
         db.update("producao",cv,where, null);
         db.close();

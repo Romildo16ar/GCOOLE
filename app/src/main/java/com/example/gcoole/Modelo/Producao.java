@@ -5,12 +5,15 @@ public class Producao {
     private int quant;
     private String data;
     private int idProdutor;
+    private String idOnline;
 
     public Producao(){
         this.setId(0);
         this.setQuant(0);
         this.setData("");
         this.setIdProdutor(0);
+        this.setIdOnline("");
+
     }
 
     public int getIdProdutor() {
@@ -43,5 +46,13 @@ public class Producao {
 
     public void setData(String data) {
         this.data = data;
+    }
+
+    public String getIdOnline() {
+        return idOnline;
+    }
+
+    public void setIdOnline(String idOnline) {
+        this.idOnline = idOnline;
     }
 }

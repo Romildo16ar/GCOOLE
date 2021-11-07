@@ -34,6 +34,8 @@
             android:label="Gcoole"/>
         <activity android:name=".TelaInicial"
             android:label="Gcoole"/>
+        <activity android:name=".TelaSicronizacao"
+            android:label="Gcoole"/>
         <activity android:name=".Listviews.ListviewProdutor"
             android:label="Produtores Cadastrados"/>
         <activity android:name=".CRUD.EditarProdutor"

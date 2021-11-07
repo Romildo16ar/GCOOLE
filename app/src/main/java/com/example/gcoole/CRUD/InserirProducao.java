@@ -1,8 +1,11 @@
 package com.example.gcoole.CRUD;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -23,12 +26,16 @@ import com.example.gcoole.Ultil.MaskEditUtil;
 import com.example.gcoole.Modelo.Producao;
 import com.example.gcoole.Modelo.Produtor;
 import com.example.gcoole.R;
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.UUID;
 
 public class InserirProducao extends AppCompatActivity implements View.OnClickListener {
 
@@ -38,7 +45,8 @@ public class InserirProducao extends AppCompatActivity implements View.OnClickLi
     private ArrayAdapter<String> arrayAdapterProdutor;
     private Produtor []produtor;
     private String[]produtorNome;
-
+    FirebaseDatabase firebaseDatabase;
+    DatabaseReference databaseReference;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -46,6 +54,7 @@ public class InserirProducao extends AppCompatActivity implements View.OnClickLi
         setContentView(R.layout.view_inserir_producao);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
+        inicializarFireBase();
 
 
         spinnerProdutor = (Spinner) findViewById(R.id.idSpinnerProdutor);
@@ -128,29 +137,57 @@ public class InserirProducao extends AppCompatActivity implements View.OnClickLi
         }else if(validarProducao(dataProducao.getText().toString(), pro)){
             dataProducao.setError("Data Já Possui Produção!");
         }else{
+            String idOnline = UUID.randomUUID().toString();
             producao.setQuant(Integer.parseInt(quant.getText().toString()));
             producao.setData(dataProducao.getText().toString());
             Log.e("Erro", "Id Produtor " +pro);
             producao.setIdProdutor(pro);
+            producao.setIdOnline(idOnline);
 
             try {
-                bd.inserirProducao(producao);
+                if(isOnline()){
+                    List<Produtor> listPodutor = bd.selecionarProdutor();
+                    for(int i = 0; i < listPodutor.size(); i++) {
+                        if (listPodutor.get(i).getTipo() == -1) {
+                            if(listPodutor.get(i).getId() == producao.getIdProdutor()){
+                                databaseReference.child(listPodutor.get(i).getCodigoSocronizacao()).child("producao").child(producao.getIdOnline()).setValue(producao);
+                            }
+                        }
+                    }
+                    bd.inserirProducao(producao);
+                    androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(this);
+                    builder.setTitle("Produção salva com Sucesso!");
+                    builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Toast.makeText(InserirProducao.this,  "", Toast.LENGTH_SHORT);
+                            quant.setText("");
+                            quant.requestFocus();
+
+                        }
+                    });
+                    builder.show();
+
+                }else{
+                    androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(this);
+                    builder.setTitle("Produção não foi salva. Sem conexão com a internet!");
+                    builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Toast.makeText(InserirProducao.this,  "", Toast.LENGTH_SHORT);
+                            quant.setText("");
+                            quant.requestFocus();
+
+                        }
+                    });
+                    builder.show();
+                }
+
             }catch (Exception e){
                 Log.e("Erro", "Erro ao Cadastrar");
             }
 
-            androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(this);
-            builder.setTitle("Produção salva com Sucesso!");
-            builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    Toast.makeText(InserirProducao.this,  "", Toast.LENGTH_SHORT);
-                    quant.setText("");
-                    quant.requestFocus();
 
-                }
-            });
-            builder.show();
             return;
         }
 
@@ -199,5 +236,20 @@ public class InserirProducao extends AppCompatActivity implements View.OnClickLi
         }
 
         return false;
+    }
+    public boolean isOnline(){
+        try {
+            ConnectivityManager cm =(ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+            NetworkInfo networkInfo = cm.getActiveNetworkInfo();
+            return networkInfo != null && networkInfo.isConnectedOrConnecting();
+        }catch (Exception ex){
+            Toast.makeText(getApplicationContext(), "Erro ao verificar se estava online", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+    }
+    private void inicializarFireBase(){
+        FirebaseApp.initializeApp(InserirProducao.this);
+        firebaseDatabase = FirebaseDatabase.getInstance();
+        databaseReference = firebaseDatabase.getReference();
     }
 }

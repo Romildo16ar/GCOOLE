@@ -1,7 +1,10 @@
 package com.example.gcoole.CRUD;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -24,6 +27,9 @@ import com.example.gcoole.Ultil.MaskEditUtil;
 import com.example.gcoole.Modelo.Producao;
 import com.example.gcoole.Modelo.Produtor;
 import com.example.gcoole.R;
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.List;
 
@@ -35,6 +41,9 @@ public class EditarProducao extends AppCompatActivity implements View.OnClickLis
     private ArrayAdapter<String> arrayAdapterProdutor;
     private Produtor[]produtor;
     private String[]produtorNome;
+    FirebaseDatabase firebaseDatabase;
+    DatabaseReference databaseReference;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -42,6 +51,7 @@ public class EditarProducao extends AppCompatActivity implements View.OnClickLis
         setContentView(R.layout.view_editar_producao);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
+        inicializarFireBase();
 
         spinnerProdutor = (Spinner) findViewById(R.id.idEditarSpinnerProdutor);
         editTextQuant = (EditText) findViewById(R.id.idEditarQuant);
@@ -116,25 +126,52 @@ public class EditarProducao extends AppCompatActivity implements View.OnClickLis
             producao.setQuant(Integer.parseInt(editTextQuant.getText().toString()));
             producao.setData(editTextData.getText().toString());
             producao.setIdProdutor(produtor[idprodutor].getId());
+            producao.setIdOnline(Listview_Producao_Por_Produtor.producao.getIdOnline());
+            Log.e("Erro", "Erro ao Cadastrar"+Listview_Producao_Por_Produtor.producao.getIdOnline());
 
             try {
-                bd.updateProducao(producao);
+                if(isOnline()){
+                    List<Produtor> listPodutor = bd.selecionarProdutor();
+                    for(int i = 0; i < listPodutor.size(); i++) {
+                        if (listPodutor.get(i).getTipo() == -1) {
+                            if(listPodutor.get(i).getId() == producao.getIdProdutor()){
+                                databaseReference.child(listPodutor.get(i).getCodigoSocronizacao()).child("producao").child(producao.getIdOnline()).setValue(producao);
+                            }
+                        }
+                    }
+                    bd.updateProducao(producao);
+                    AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                    builder.setTitle("Produção Atualizada com Sucesso!");
+                    builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Toast.makeText(EditarProducao.this, "", Toast.LENGTH_SHORT);
+                            startActivity(new Intent(EditarProducao.this, Listview_Producao_Por_Produtor.class));
+                            finishAffinity();
+
+                        }
+                    });
+                    builder.show();
+                }else{
+                    AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                    builder.setTitle("Produção não Atualizada. Sem conexão com a internet!");
+                    builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Toast.makeText(EditarProducao.this, "", Toast.LENGTH_SHORT);
+                            startActivity(new Intent(EditarProducao.this, Listview_Producao_Por_Produtor.class));
+                            finishAffinity();
+
+                        }
+                    });
+                    builder.show();
+                }
+
             } catch (Exception e) {
                 Log.e("Erro", "Erro ao Cadastrar");
             }
 
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setTitle("Produção Atualizada com Sucesso!");
-            builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    Toast.makeText(EditarProducao.this, "", Toast.LENGTH_SHORT);
-                    startActivity(new Intent(EditarProducao.this, Listview_Producao_Por_Produtor.class));
-                    finishAffinity();
 
-                }
-            });
-            builder.show();
             return;
 
 
@@ -186,4 +223,19 @@ public class EditarProducao extends AppCompatActivity implements View.OnClickLis
         return false;
     }
 
+    public boolean isOnline(){
+        try {
+            ConnectivityManager cm =(ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+            NetworkInfo networkInfo = cm.getActiveNetworkInfo();
+            return networkInfo != null && networkInfo.isConnectedOrConnecting();
+        }catch (Exception ex){
+            Toast.makeText(getApplicationContext(), "Erro ao verificar se estava online", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+    }
+    private void inicializarFireBase(){
+        FirebaseApp.initializeApp(EditarProducao.this);
+        firebaseDatabase = FirebaseDatabase.getInstance();
+        databaseReference = firebaseDatabase.getReference();
+    }
 }

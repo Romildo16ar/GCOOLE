@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.gcoole.Dao.Dao;
 import com.example.gcoole.Modelo.Produtor;
+import com.example.gcoole.Modelo.Sicronizacao;
 
 import java.util.List;
 
@@ -25,7 +26,8 @@ public class Activity_Splash extends AppCompatActivity {
             public void run() {
                 Dao dao = new Dao(Activity_Splash.this);
                 List<Produtor> produtorList = dao.selecionarProdutor();
-                if(produtorList.size() == 0){
+                List<Sicronizacao> sicronizacaoList = dao.selecionarSicronizacao();
+                if(produtorList.size() == 0 && sicronizacaoList.size() == 0){
                     Intent intent = new Intent(Activity_Splash.this, TelaInicial.class);
                     startActivity(intent);
                     finish();
@@ -34,7 +36,6 @@ public class Activity_Splash extends AppCompatActivity {
                     startActivity(intent);
                     finish();
                 }
-
 
 
             }

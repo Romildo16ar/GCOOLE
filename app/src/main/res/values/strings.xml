@@ -42,4 +42,7 @@
     <string name="cooperativa">Cooperativa de Leite</string>
     <string name="de">de</string>
     <string name="codigo">Código de Sicronização</string>
+    <string name="entre">Entre com seu</string>
+    <string name="para">Para Sicronizar seus dados</string>
+    <string name="sicro">Sincronizar</string>
 </resources>
