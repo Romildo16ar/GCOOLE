@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.ParcelFileDescriptor;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -91,8 +92,16 @@ public class Grafico_Mensal_Producao extends AppCompatActivity {
 
 
         final int[] seriaA = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+        Log.e("Erro", "Ano D: "+Listview_Producao_Por_Produtor.anoGrafico);
+        Log.e("Erro", "Mes D: "+Listview_Producao_Por_Produtor.mesGrafico);
+        Log.e("Erro", "Entrei"+producaos.size());
+        if(Listview_Producao_Por_Produtor.mesGrafico == 0){
+            Listview_Producao_Por_Produtor.mesGrafico =+ 1;
+        }
+
 
         if(sicronizacaoList.size() != 0){
+            Log.e("Erro", "Entrei if");
             for(int i = 0; i < producaos.size(); i++){
 
                     if(Listview_Producao_Por_Produtor.mesGrafico == selecionaMes(producaos.get(i).getData())){
@@ -104,11 +113,16 @@ public class Grafico_Mensal_Producao extends AppCompatActivity {
                     }
             }
         }else{
+            Log.e("Erro", "Entrei else");
+
             for(int i = 0; i < producaos.size(); i++){
                 if(ListviewProdutorParaProducao.produtor.getId() == producaos.get(i).getIdProdutor()){
-                    if(Listview_Producao_Por_Produtor.mesGrafico == selecionaMes(producaos.get(i).getData())){
-                        if(Listview_Producao_Por_Produtor.anoGrafico == selecionaAno(producaos.get(i).getData())) {
+                    Log.e("Erro", "Entrei 1");
 
+                    if(Listview_Producao_Por_Produtor.mesGrafico == selecionaMes(producaos.get(i).getData())){
+                        Log.e("Erro", "Entrei 2");
+                        if(Listview_Producao_Por_Produtor.anoGrafico == selecionaAno(producaos.get(i).getData())) {
+                            Log.e("Erro", "Entrei 3");
                             seriaA[selecionaDia(producaos.get(i).getData())-1] = producaos.get(i).getQuant();
                         }
 

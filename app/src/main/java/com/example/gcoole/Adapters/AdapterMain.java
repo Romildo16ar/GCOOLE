@@ -77,7 +77,7 @@ public class AdapterMain extends BaseAdapter {
 
 
 
-        textViewNomeVaca.setText("Nome da Vaca:"+vacaAux.getNome());
+        textViewNomeVaca.setText("Nome da Vaca: "+vacaAux.getNome());
         textViewNumGestacao.setText("Nº da Gestação: " +vaca.getNumeroGestacao());
         textViewNumIndetificacao.setText("Nº de Indetificação da Vaca: "+vacaAux.getNumVaca());
         textViewDataInicialGestacao.setText("Data Inicial da Gestação: "+vaca.getDataInicialGestacao());

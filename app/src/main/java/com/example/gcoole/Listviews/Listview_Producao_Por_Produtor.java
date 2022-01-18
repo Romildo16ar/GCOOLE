@@ -912,7 +912,7 @@ public class Listview_Producao_Por_Produtor extends AppCompatActivity implements
                                     builder.setSingleChoiceItems(animals, checkedItem, new DialogInterface.OnClickListener() {
                                         @Override
                                         public void onClick(DialogInterface dialog, int which) {
-                                            mesGrafico = which + 1;
+                                            mesGrafico = which +1;
                                         }
                                     });
 
