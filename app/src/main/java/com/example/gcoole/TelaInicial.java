@@ -32,6 +32,13 @@ public class TelaInicial extends AppCompatActivity {
             }
         });
 
+        Button buttonAjuda = (Button) findViewById(R.id.idBotaoAjuda);
+        buttonAjuda.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                startActivity(new Intent(TelaInicial.this, Ajuda.class));
+            }
+        });
+
     }
 
 

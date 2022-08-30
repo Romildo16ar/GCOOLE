@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import com.example.gcoole.Modelo.Producao;
+import com.example.gcoole.Modelo.ProducaoPorVaca;
 import com.example.gcoole.Modelo.Produtor;
 import com.example.gcoole.Modelo.Sicronizacao;
 import com.example.gcoole.Modelo.Vaca;
@@ -38,6 +39,7 @@ public class Dao extends SQLiteOpenHelper {
 
         String tbSicronizacao = "CREATE TABLE sicronizacao(id INTEGER PRIMARY KEY AUTOINCREMENT, codigo VARCHAR(40), flag INTEGER)";
 
+        String tbProducaoPorVaca = "CREATE TABLE producaoporvaca(id INTEGER PRIMARY KEY AUTOINCREMENT, quant INTEGER, data VARCHAR(20), idVaca INTEGER)";
 
         db.execSQL(tbProducao);
         db.execSQL(tbProdutor);
@@ -45,6 +47,7 @@ public class Dao extends SQLiteOpenHelper {
         db.execSQL(tbValorPorLitro);
         db.execSQL(tbInserirVacaPrenha);
         db.execSQL(tbSicronizacao);
+        db.execSQL(tbProducaoPorVaca);
 
     }
 
@@ -56,6 +59,7 @@ public class Dao extends SQLiteOpenHelper {
         String dropTbValorPorLitro = "DROP TABLE IF EXISTS valorporlitro";
         String dropTbInserirVacaPrenha = "DROP TABLE IF EXISTS vacaPrenha";
         String dropTbSicronizacao = "DROP TABLE IF EXISTS sicronizacao";
+        String dropTbProducaoPorVaca = "DROP TABLE IF EXISTS producaoporvaca";
 
 
         db.execSQL(dropTbProdutor);
@@ -64,6 +68,7 @@ public class Dao extends SQLiteOpenHelper {
         db.execSQL(dropTbValorPorLitro);
         db.execSQL(dropTbInserirVacaPrenha);
         db.execSQL(dropTbSicronizacao);
+        db.execSQL(dropTbProducaoPorVaca);
         onCreate(db);
 
 
@@ -278,6 +283,66 @@ public class Dao extends SQLiteOpenHelper {
         cv.put("idOnline", producao.getIdOnline());
 
         db.update("producao",cv,where, null);
+        db.close();
+
+    }
+
+
+
+// Fim Inserir Produção ----------------------------------------------------------------------------------------------------
+    // Incio Crud Inserir ProduçãoPorVaca ---------------------------------------------------------------------------------------------------
+
+    public void inserirProducaoPorVaca(ProducaoPorVaca producao){
+        SQLiteDatabase db = getWritableDatabase();
+        ContentValues vc = new ContentValues();
+        vc.put("quant", producao.getQuant());
+        vc.put("data", producao.getData());
+        vc.put("idVaca", producao.getIdVaca());
+
+
+        db.insert("producaoporvaca", null, vc);
+        db.close();
+    }
+
+    public List<ProducaoPorVaca> selecionarProducaoPorvaca(){
+        List<ProducaoPorVaca> listaProducaoPorVaca = new ArrayList<>();
+        SQLiteDatabase db = getReadableDatabase();
+        String sql = "SELECT * FROM producaoporvaca";
+        Cursor cur = db.rawQuery(sql, null);
+        if (cur.moveToFirst()){
+            do{
+                ProducaoPorVaca producaoPorVaca = new ProducaoPorVaca();
+                producaoPorVaca.setId(cur.getInt(0));
+                producaoPorVaca.setQuant(cur.getInt(1));
+                producaoPorVaca.setData(cur.getString(2));
+                producaoPorVaca.setIdVaca(cur.getInt(3));
+
+
+                listaProducaoPorVaca.add(producaoPorVaca);
+            }while (cur.moveToNext());
+        }
+        db.close();
+        return listaProducaoPorVaca;
+
+    }
+
+    public void deleteProducaoPorvava(int id){
+        String delete = "id ='" + id +"'";
+        SQLiteDatabase bd = getReadableDatabase();
+        bd.delete("producaoporvaca", delete, null);
+        bd.close();
+    }
+
+
+    public void updateProducaoPorVaca(ProducaoPorVaca producaoPorvaca){
+        SQLiteDatabase db = getReadableDatabase();
+        String where = "id='"+producaoPorvaca.getId()+"'";
+        ContentValues cv = new ContentValues();
+        cv.put("quant", producaoPorvaca.getQuant());
+        cv.put("data", producaoPorvaca.getData());
+        cv.put("idVaca", producaoPorvaca.getIdVaca());
+
+        db.update("producaoporvaca",cv,where, null);
         db.close();
 
     }

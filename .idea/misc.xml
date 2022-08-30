@@ -3,6 +3,24 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/Romildo Rezende/Documents/GCOOLE/app/src/main/res/layout/activity_ajuda.xml" value="0.33" />
+        <entry key="..\:/Users/Romildo Rezende/Documents/GCOOLE/app/src/main/res/layout/activity_main.xml" value="0.19746376811594202" />
+        <entry key="..\:/Users/Romildo Rezende/Documents/GCOOLE/app/src/main/res/layout/activity_produtor.xml" value="0.19746376811594202" />
+        <entry key="..\:/Users/Romildo Rezende/Documents/GCOOLE/app/src/main/res/layout/activity_splash.xml" value="0.3625" />
+        <entry key="..\:/Users/Romildo Rezende/Documents/GCOOLE/app/src/main/res/layout/listview_vaca.xml" value="0.19746376811594202" />
+        <entry key="..\:/Users/Romildo Rezende/Documents/GCOOLE/app/src/main/res/layout/listview_vaca_prenha.xml" value="0.19746376811594202" />
+        <entry key="..\:/Users/Romildo Rezende/Documents/GCOOLE/app/src/main/res/layout/tela_inicial.xml" value="0.33" />
+        <entry key="..\:/Users/Romildo Rezende/Documents/GCOOLE/app/src/main/res/layout/view_inserir_producao.xml" value="0.19746376811594202" />
+        <entry key="..\:/Users/Romildo Rezende/Documents/GCOOLE/app/src/main/res/layout/view_inserir_producao_por_vaca.xml" value="0.19746376811594202" />
+        <entry key="..\:/Users/Romildo Rezende/Documents/GCOOLE/app/src/main/res/menu/main.xml" value="0.3625" />
+        <entry key="..\:/Users/Romildo Rezende/Documents/GCOOLE/app/src/main/res/menu/menu.xml" value="0.3625" />
+        <entry key="..\:/Users/Romildo Rezende/Documents/GCOOLE/app/src/main/res/menu/menu_activity_producao.xml" value="0.3625" />
+        <entry key="..\:/Users/Romildo Rezende/Documents/GCOOLE/app/src/main/res/menu/menu_grafico.xml" value="0.3625" />
+        <entry key="..\:/Users/Romildo Rezende/Documents/GCOOLE/app/src/main/res/menu/menu_listview_prod.xml" value="0.3625" />
+        <entry key="..\:/Users/Romildo Rezende/Documents/GCOOLE/app/src/main/res/menu/menu_listview_producao_por_producao.xml" value="0.3625" />
+        <entry key="..\:/Users/Romildo Rezende/Documents/GCOOLE/app/src/main/res/menu/menu_listview_vaca.xml" value="0.3625" />
+        <entry key="..\:/Users/Romildo Rezende/Documents/GCOOLE/app/src/main/res/menu/menu_listview_vaca_prenha.xml" value="0.3625" />
+        <entry key="..\:/Users/Romildo Rezende/Documents/GCOOLE/app/src/main/res/menu/menu_listview_valor_por_litro.xml" value="0.3625" />
         <entry key="..\:/Users/romil/AndroidStudioProjects/GCOOLE/app/src/main/res/drawable/bordas_arrendodadas.xml" value="0.3828125" />
         <entry key="..\:/Users/romil/AndroidStudioProjects/GCOOLE/app/src/main/res/drawable/grafico_background.xml" value="0.3828125" />
         <entry key="..\:/Users/romil/AndroidStudioProjects/GCOOLE/app/src/main/res/drawable/grafico_foreground.xml" value="0.3828125" />

@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import com.example.gcoole.Adapters.AdapterMain;
 import com.example.gcoole.CRUD.InserirProducao;
+import com.example.gcoole.CRUD.InserirProducaoPorVaca;
 import com.example.gcoole.Dao.Dao;
 import com.example.gcoole.Listviews.ListviewProdutorParaProducao;
 import com.example.gcoole.Listviews.ListviewProdutor;
@@ -97,6 +98,12 @@ public class MainActivity extends AppCompatActivity {
 
                 startActivity(new Intent(this, ListviewVacaPrenha.class));
                 return true;
+
+            case R.id.idMenuInserirProducaoPorVaca:
+
+                startActivity(new Intent(this, InserirProducaoPorVaca.class));
+                return true;
+
 
 
             default:

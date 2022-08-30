@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
         android:id="@+id/listProd"
@@ -15,8 +16,14 @@
         android:id="@+id/idInserirProducao"
         android:title="@string/inserirProducao" />
     <item
+        android:id="@+id/idMenuInserirProducaoPorVaca"
+        android:title="@string/InserirProduçãoPorVaca" />
+    <item
         android:id="@+id/idListProducao"
         android:title="@string/producao" />
+    <item
+        android:id="@+id/idListProducaoPorVaca"
+        android:title="@string/producaoPorVaca" />
     <item
         android:id="@+id/idValorPorLitroMain"
         android:title="@string/valorPorLitro" />
