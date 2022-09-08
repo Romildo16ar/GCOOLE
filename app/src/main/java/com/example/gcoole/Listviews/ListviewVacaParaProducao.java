@@ -1,6 +1,5 @@
 package com.example.gcoole.Listviews;
 
-import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -9,49 +8,46 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.gcoole.Adapters.AdapterProducao;
+import com.example.gcoole.Adapters.AdapterVacaParaProducao;
 import com.example.gcoole.Dao.Dao;
 import com.example.gcoole.MainActivity;
 import com.example.gcoole.Modelo.Produtor;
-import com.example.gcoole.Modelo.Sicronizacao;
+import com.example.gcoole.Modelo.Vaca;
 import com.example.gcoole.R;
 
-import java.util.ArrayList;
 import java.util.List;
 
-public class ListviewProdutorParaProducao extends AppCompatActivity {
-   // public static Producao producao;
-   // private ListView producoes;
-   public static Produtor produtor;
-   private ListView produtores;
-//    private Dialog myDialog;
+public class ListviewVacaParaProducao extends AppCompatActivity {
+    public static Vaca vaca;
+    private ListView vacas;
 
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.listview_producao);
+        setContentView(R.layout.listview_vaca_para_producao);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
 
-        produtores= (ListView)findViewById(R.id.idlistviewProducao);
-
+        vacas= (ListView) findViewById(R.id.idlistVacaParaProducao);
 
         Dao bd = new Dao(this);
 
-        List<Produtor> listaProdutor =  bd.selecionarProdutor();
+        List<Vaca> listaVacas =  bd.selecionarVaca();
 
 
-        produtores.setAdapter(new AdapterProducao(ListviewProdutorParaProducao.this, listaProdutor));
+        vacas.setAdapter(new AdapterVacaParaProducao(ListviewVacaParaProducao.this, listaVacas));
 
-        produtores.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        vacas.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                produtor = (Produtor) produtores.getItemAtPosition(position);
+                vaca = (Vaca) vacas.getItemAtPosition(position);
                 click(view);
             }
 
@@ -59,9 +55,9 @@ public class ListviewProdutorParaProducao extends AppCompatActivity {
         });
     }
 
-    private void click(View view) {
+    private void click(View view){
+        startActivity(new Intent(this, ListviewProducaoPorVaca.class));
 
-        startActivity(new Intent(this, Listview_Producao_Por_Produtor.class));
     }
 
     public boolean onCreateOptionsMenu(Menu menu){
@@ -90,8 +86,7 @@ public class ListviewProdutorParaProducao extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         Dao bd = new Dao(this);
-        List<Produtor> listaProdutor = bd.selecionarProdutor();
-        produtores.setAdapter(new AdapterProducao(ListviewProdutorParaProducao.this, listaProdutor));
+        List<Vaca> listaVaca = bd.selecionarVaca();
+        vacas.setAdapter(new AdapterVacaParaProducao(ListviewVacaParaProducao.this, listaVaca));
     }
-
 }

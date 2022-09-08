@@ -84,6 +84,14 @@
             android:label="Ajuda"/>
         <activity android:name=".CRUD.InserirProducaoPorVaca"
             android:label="Inserir Produção por Vaca"/>
+        <activity android:name=".Listviews.ListviewVacaParaProducao"
+            android:label="Selecione uma Vaca"/>
+        <activity android:name=".Listviews.ListviewProducaoPorVaca"
+            android:label="Produção"/>
+        <activity android:name=".Activity_ProducaoPorVaca"
+            android:label="Produção"/>
+        <activity android:name=".CRUD.EditarProducaoPorVaca"
+            android:label="Editar"/>
         
         <provider
             android:authorities="com.example.gcoole"

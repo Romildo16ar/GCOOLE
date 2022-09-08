@@ -6,14 +6,13 @@ public class ProducaoPorVaca {
     private int quant;
     private String data;
     private int idVaca;
-    private int numGetação;
 
     public ProducaoPorVaca(){
         this.setId(0);
         this.setQuant(0);
         this.setData("");
         this.setIdVaca(0);
-        this.setNumGetação(0);
+
 
     }
 
@@ -49,11 +48,5 @@ public class ProducaoPorVaca {
         this.idVaca = idVaca;
     }
 
-    public int getNumGetação() {
-        return numGetação;
-    }
 
-    public void setNumGetação(int numGetação) {
-        this.numGetação = numGetação;
-    }
 }

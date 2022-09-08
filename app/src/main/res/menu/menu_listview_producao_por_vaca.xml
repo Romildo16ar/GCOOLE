@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/idGraficoVaca"
+        android:icon="@drawable/grafico_foreground"
+        android:title="Item"
+        app:showAsAction="always" />
+
+    <item
+
+        android:id="@+id/idPdfVaca"
+        android:icon="@drawable/pdf8_foreground"
+        android:title="Item"
+        app:showAsAction="always" />
+
+
+
+</menu>

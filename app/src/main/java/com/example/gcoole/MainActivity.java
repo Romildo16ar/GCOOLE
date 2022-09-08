@@ -18,6 +18,7 @@ import com.example.gcoole.CRUD.InserirProducaoPorVaca;
 import com.example.gcoole.Dao.Dao;
 import com.example.gcoole.Listviews.ListviewProdutorParaProducao;
 import com.example.gcoole.Listviews.ListviewProdutor;
+import com.example.gcoole.Listviews.ListviewVacaParaProducao;
 import com.example.gcoole.Listviews.ListviewVacaPrenha;
 import com.example.gcoole.Listviews.Listview_Valor_Por_Litro;
 import com.example.gcoole.Listviews.ListviewsVaca;
@@ -104,7 +105,10 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(new Intent(this, InserirProducaoPorVaca.class));
                 return true;
 
+            case R.id.idListProducaoPorVaca:
 
+                startActivity(new Intent(this, ListviewVacaParaProducao.class));
+                return true;
 
             default:
                 return super.onOptionsItemSelected(item);

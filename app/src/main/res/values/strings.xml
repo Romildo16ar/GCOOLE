@@ -18,7 +18,7 @@
     <string name="inserir">Inserir</string>
     <string name="inserirProducao">Inserir Produção</string>
     <string name="quantLeite">Quantidade de Leite</string>
-    <string name="quantLeiteNoDia">Quantidade de Leite no Dia</string>
+    <string name="quantLeiteNoDia">Quantidade de Leite total no Dia</string>
     <string name="DataProducao">Data da Produção</string>
     <string name="NomeProdutor">Nome do Produtor:</string>
     <string name="quant">Quantidade:</string>
@@ -57,5 +57,7 @@
     <string name="modoGestro5">Caso seja membro de uma cooperativa ou utiliza tangue de outra propriedade solicite o código de acesso para o gestor e utilize o modo produtor para ter acesso a suas informações.</string>
     <string name="InserirProduçãoPorVaca">Inserir Produção por Vaca</string>
     <string name="producaoPorVaca">Produção por Vaca</string>
+    <string name="DataInicial">Data Inicial</string>
+    <string name="DataFinal">Data Final</string>
 
 </resources>
