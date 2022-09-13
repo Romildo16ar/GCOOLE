@@ -3,6 +3,9 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
+        android:id="@+id/atualizardados"
+        android:title="@string/Atualizar" />
+    <item
         android:id="@+id/listProd"
         android:icon="@drawable/add_foreground"
         android:title="@string/Prod" />

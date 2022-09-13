@@ -27,6 +27,8 @@ import com.example.gcoole.Activity_ProducaoPorVaca;
 import com.example.gcoole.Adapters.AdapterProducaoPorProdutor;
 import com.example.gcoole.Adapters.AdapterProducaoPorVaca;
 import com.example.gcoole.Dao.Dao;
+import com.example.gcoole.Grafico.Grafico_Anual_Producao;
+import com.example.gcoole.Grafico.Grafico_producao_por_vaca;
 import com.example.gcoole.MainActivity;
 import com.example.gcoole.Modelo.Producao;
 import com.example.gcoole.Modelo.ProducaoPorVaca;
@@ -67,7 +69,7 @@ public class ListviewProducaoPorVaca extends AppCompatActivity implements View.O
     private Date dateFinal;
     private List<ProducaoPorVaca> producaoPorVacaList = new ArrayList<>();
     private  List<ProducaoPorVaca> producaoListPorId = new ArrayList<>();
-    private  List<ProducaoPorVaca> producaoListPorIdComFiltro = new ArrayList<>();
+    public   static List<ProducaoPorVaca> producaoListPorIdComFiltro = new ArrayList<>();
     SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
     private int totalProducao = 0;
 
@@ -254,7 +256,7 @@ public class ListviewProducaoPorVaca extends AppCompatActivity implements View.O
 
                 Font fontNegritaTitulo = new Font(Font.FontFamily.HELVETICA, 12, Font.BOLD);
                 try {
-                    Paragraph paragraphTitulo = new Paragraph(" Produção de " + nomeVaca + " N°: " + numeroVaca + " \n\n", fontNegritaTitulo);
+                    Paragraph paragraphTitulo = new Paragraph(" Produção da vaca: " + nomeVaca + " N°: " + numeroVaca + " \n\n", fontNegritaTitulo);
                     paragraphTitulo.setAlignment(Element.ALIGN_CENTER);
                     document.add(paragraphTitulo);
 
@@ -318,6 +320,11 @@ public class ListviewProducaoPorVaca extends AppCompatActivity implements View.O
                     visualizarPdfFile(pdf);
                 }
 
+
+                break;
+
+            case R.id.idGraficoVaca:
+                startActivity(new Intent(ListviewProducaoPorVaca.this, Grafico_producao_por_vaca.class));
 
                 break;
 

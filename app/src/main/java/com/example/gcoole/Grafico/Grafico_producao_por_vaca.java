@@ -16,22 +16,16 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ListView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
 
-import com.androidplot.xy.CatmullRomInterpolator;
-import com.androidplot.xy.LineAndPointFormatter;
-import com.androidplot.xy.SimpleXYSeries;
-import com.androidplot.xy.XYGraphWidget;
 import com.androidplot.xy.XYPlot;
-import com.androidplot.xy.XYSeries;
-import com.example.gcoole.Dao.Dao;
-import com.example.gcoole.Listviews.ListviewProdutorParaProducao;
+import com.example.gcoole.Listviews.ListviewProducaoPorVaca;
 import com.example.gcoole.Listviews.Listview_Producao_Por_Produtor;
-import com.example.gcoole.Modelo.Producao;
-import com.example.gcoole.Modelo.Sicronizacao;
+import com.example.gcoole.Modelo.ProducaoPorVaca;
 import com.example.gcoole.R;
 import com.example.gcoole.Ultil.PdfCreator;
 import com.github.mikephil.charting.charts.BarChart;
@@ -56,136 +50,38 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.text.FieldPosition;
-import java.text.Format;
-import java.text.ParsePosition;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
-public class Grafico_Mensal_Producao extends AppCompatActivity {
+public class Grafico_producao_por_vaca extends AppCompatActivity {
+
     private XYPlot plot;
     protected BarChart mChart;
-    private String mesNome = "";
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.view_grafico_mensal_producao_barra);
+        setContentView(R.layout.view_grafico_producao_por_vaca);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
 
-        //plot = findViewById(R.id.idPlotMensal);
-
-        prencherGrafico();
-
+        prencherGrafico(ListviewProducaoPorVaca.producaoListPorIdComFiltro);
     }
 
-    private void prencherGrafico() {
-        Dao bd = new Dao(this);
-        List<Producao> producaos = bd.selecionarProducao();
-        List<Sicronizacao> sicronizacaoList = bd.selecionarSicronizacao();
 
-        final String[] dias ={"1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24","25","26","27","28","29","30","31","32"};
+    private void prencherGrafico(List<ProducaoPorVaca> producaoPorVacaList){
 
 
-        final int[] seriaA = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+        final String[] dias = new String[producaoPorVacaList.size()];
 
-        if(Listview_Producao_Por_Produtor.mesGrafico == 0){
-            Listview_Producao_Por_Produtor.mesGrafico =+ 1;
+        final int[] seriaA = new int[producaoPorVacaList.size()];
+        for(int i = 0; i < producaoPorVacaList.size(); i++){
+            dias[i] = producaoPorVacaList.get(i).getData();
+            seriaA[i]= producaoPorVacaList.get(i).getQuant();
+
         }
 
-
-        if(sicronizacaoList.size() != 0){
-            Log.e("Erro", "Entrei if");
-            for(int i = 0; i < producaos.size(); i++){
-
-                    if(Listview_Producao_Por_Produtor.mesGrafico == selecionaMes(producaos.get(i).getData())){
-                        if(Listview_Producao_Por_Produtor.anoGrafico == selecionaAno(producaos.get(i).getData())) {
-
-                            seriaA[selecionaDia(producaos.get(i).getData())-1] = producaos.get(i).getQuant();
-                        }
-
-                    }
-            }
-        }else{
-            Log.e("Erro", "Entrei else");
-
-            for(int i = 0; i < producaos.size(); i++){
-                if(ListviewProdutorParaProducao.produtor.getId() == producaos.get(i).getIdProdutor()){
-                    Log.e("Erro", "Entrei 1");
-
-                    if(Listview_Producao_Por_Produtor.mesGrafico == selecionaMes(producaos.get(i).getData())){
-                        Log.e("Erro", "Entrei 2");
-                        if(Listview_Producao_Por_Produtor.anoGrafico == selecionaAno(producaos.get(i).getData())) {
-                            Log.e("Erro", "Entrei 3");
-                            seriaA[selecionaDia(producaos.get(i).getData())-1] = producaos.get(i).getQuant();
-                        }
-
-                    }
-                }
-
-
-            }
-        }
-
-
-/*
-        XYSeries series1 = new SimpleXYSeries(Arrays.asList(seriaA), SimpleXYSeries.ArrayFormat.Y_VALS_ONLY,"Quant em litro de Leite");
-
-        LineAndPointFormatter series1Format = new LineAndPointFormatter(Color.RED, Color.BLACK, null , null);
-
-        series1Format.setInterpolationParams(new CatmullRomInterpolator.Params(10, CatmullRomInterpolator.Type.Centripetal));
-
-
-        plot.addSeries(series1,series1Format);
-        plot.setDomainStepValue(31);*/
-
-        if (Listview_Producao_Por_Produtor.mesGrafico == 1){
-            mesNome = "Janeiro";
-        }else if(Listview_Producao_Por_Produtor.mesGrafico == 2){
-           mesNome = "Fevereiro";
-        }else if(Listview_Producao_Por_Produtor.mesGrafico == 3){
-            mesNome = "Março";
-        }else if(Listview_Producao_Por_Produtor.mesGrafico == 4){
-            mesNome = "Abril";
-        }else if(Listview_Producao_Por_Produtor.mesGrafico == 5){
-            mesNome = "Maio";
-        }else if(Listview_Producao_Por_Produtor.mesGrafico == 6){
-            mesNome = "Junho";
-        }else if(Listview_Producao_Por_Produtor.mesGrafico == 7){
-            mesNome = "Julho";
-        }else if(Listview_Producao_Por_Produtor.mesGrafico == 8){
-            mesNome = "Agosto";
-        }else if(Listview_Producao_Por_Produtor.mesGrafico == 9){
-            mesNome = "Setembro";
-        }else if(Listview_Producao_Por_Produtor.mesGrafico == 10){
-            mesNome = "Outubro";
-        }else if(Listview_Producao_Por_Produtor.mesGrafico == 11){
-            mesNome = "Novembro";
-        }else if(Listview_Producao_Por_Produtor.mesGrafico == 12){
-            mesNome = "Dezembro";
-        }
-
-      /*  plot.setTitle("Quant em litro de leite: "+mesNome+"/"+Listview_Producao_Por_Produtor.anoGrafico);
-
-        plot.getGraph().getLineLabelStyle(XYGraphWidget.Edge.BOTTOM).setFormat(new Format() {
-            @Override
-            public StringBuffer format(Object obj, StringBuffer toAppendTo, FieldPosition pos) {
-                int i = Math.round(((Number)obj).floatValue());
-                return toAppendTo.append(dias[i]);
-            }
-
-            @Override
-            public Object parseObject(String source, ParsePosition pos) {
-                return null;
-            }
-        });*/
-
-
-        mChart = (BarChart) findViewById(R.id.graficomensalproducaoBarra);
+        mChart = (BarChart) findViewById(R.id.idGraficoVaca);
         mChart.setDrawBarShadow(false);
         mChart.setDrawValueAboveBar(true);
         mChart.getDescription().setEnabled(false);
@@ -198,7 +94,7 @@ public class Grafico_Mensal_Producao extends AppCompatActivity {
         xAxis.setDrawAxisLine(true);
         xAxis.setGranularity(0);
         xAxis.setGranularityEnabled(true);
-        xAxis.setLabelCount(32);
+        xAxis.setLabelCount(ListviewProducaoPorVaca.producaoListPorIdComFiltro.size());
 
 
         xAxis.setValueFormatter(new IndexAxisValueFormatter(dias));
@@ -218,14 +114,14 @@ public class Grafico_Mensal_Producao extends AppCompatActivity {
 
 
         ArrayList<BarEntry> yVals1 = new ArrayList<BarEntry>();
-        for (int i = 0; i < 31; i++) {
+        for (int i = 0; i < producaoPorVacaList.size(); i++) {
             yVals1.add(new BarEntry(i, seriaA[i]));
         }
 
 
         BarDataSet set1;
 
-        set1 = new BarDataSet(yVals1, "Produção Mensal");
+        set1 = new BarDataSet(yVals1, "");
         ArrayList<IBarDataSet> dataSets = new ArrayList<IBarDataSet>();
         set1.setColor(Color.DKGRAY);
         dataSets.add(set1);
@@ -240,45 +136,29 @@ public class Grafico_Mensal_Producao extends AppCompatActivity {
         mChart.getLegend().setEnabled(true);
 
 
+        producaoPorVacaList.clear();
 
     }
 
-    public int selecionaMes(String data){
-        String []vet;
-        vet= data.split("/");
-        int mes = Integer.parseInt(vet[1]);
-        return mes;
-    }
-    public int selecionaAno(String data){
-        String []vet;
-        vet= data.split("/");
-        int ano = Integer.parseInt(vet[2]);
-        return ano;
-    }
-    public int selecionaDia(String data){
-        String []vet;
-        vet= data.split("/");
-        int ano = Integer.parseInt(vet[0]);
-        return ano;
-    }
-
-
-
-    public boolean onCreateOptionsMenu(Menu menu){
+    public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_grafico, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case android.R.id.home:
-                startActivity(new Intent(Grafico_Mensal_Producao.this, Listview_Producao_Por_Produtor.class));
+                startActivity(new Intent(Grafico_producao_por_vaca.this, ListviewProducaoPorVaca.class));
                 break;
+
             case R.id.idPdfGraficoAnualProducao:
                 //File imagem = screenshot(getWindow().getDecorView().getRootView(), "result");
                 View view = getWindow().getDecorView().getRootView();
+                //Date date = new Date();
 
+                // Here we are initialising the format of our image name
+                //CharSequence format = android.text.format.DateFormat.format("yyyy-MM-dd_hh:mm:ss", date);
                 try {
 
                     File diretorioRaiz = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
@@ -287,7 +167,7 @@ public class Grafico_Mensal_Producao extends AppCompatActivity {
                     if (!diretorio.exists()) {
                         diretorio.mkdir();
                     }
-                    String nomeArquivo = diretorio.getPath() + "/graficoMensalProducao.jpeg";
+                    String nomeArquivo = diretorio.getPath() + "/graficoProducaoPorVaca.jpeg";
 
                     view.setDrawingCacheEnabled(true);
                     Bitmap bitmap = Bitmap.createBitmap(view.getDrawingCache());
@@ -314,7 +194,7 @@ public class Grafico_Mensal_Producao extends AppCompatActivity {
                     ContentValues contentValues = new ContentValues();
 
                     contentValues.put(MediaStore.MediaColumns.MIME_TYPE, "application/pdf");
-                    contentValues.put(MediaStore.MediaColumns.DISPLAY_NAME, "Grafico Mensal Produção");
+                    contentValues.put(MediaStore.MediaColumns.DISPLAY_NAME, "Grafico Produção or Vaca");
                     contentValues.put(MediaStore.MediaColumns.RELATIVE_PATH, Environment.DIRECTORY_DOWNLOADS + "/Graficos/");
 
                     ContentResolver resolver = getContentResolver();
@@ -335,7 +215,7 @@ public class Grafico_Mensal_Producao extends AppCompatActivity {
                     if (!diretorio.exists()) {
                         diretorio.mkdir();
                     }
-                    String nomeArquivo = diretorio.getPath() + "/Grafico Mensal Produção "+mesNome+".pdf";
+                    String nomeArquivo = diretorio.getPath() + "/Grafico Por Vaca.pdf";
                     pdf = new File(nomeArquivo);
                     try {
                         outputStream = new FileOutputStream(pdf);
@@ -374,7 +254,7 @@ public class Grafico_Mensal_Producao extends AppCompatActivity {
                     File diretorioRaiz = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
                     File diretorio = new File(diretorioRaiz.getPath() + "/Imagens/");
 
-                    String nomeArquivo = diretorio.getPath() + "/graficoMensalProducao.jpeg";
+                    String nomeArquivo = diretorio.getPath() + "/graficoProducaoPorVaca.jpeg";
 
                     File imgFile = new  File(nomeArquivo);
 
@@ -432,6 +312,8 @@ public class Grafico_Mensal_Producao extends AppCompatActivity {
                 }
 
                 break;
+
+
             default:
                 break;
         }
@@ -465,5 +347,5 @@ public class Grafico_Mensal_Producao extends AppCompatActivity {
 
 
     }
-
 }
+

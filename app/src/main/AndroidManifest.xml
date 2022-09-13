@@ -92,6 +92,8 @@
             android:label="Produção"/>
         <activity android:name=".CRUD.EditarProducaoPorVaca"
             android:label="Editar"/>
+        <activity android:name=".Grafico.Grafico_producao_por_vaca"
+            android:label="Grafico Produção"/>
         
         <provider
             android:authorities="com.example.gcoole"
