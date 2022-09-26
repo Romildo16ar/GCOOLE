@@ -102,6 +102,7 @@ public class MainActivity extends AppCompatActivity {
             case R.id.idInserirProducao:
                 startActivity(new Intent(this, InserirProducao.class));
 
+
                 return true;
             case R.id.idListProducao:
                 startActivity(new Intent(this, ListviewProdutorParaProducao.class));

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/idBtSalvar"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
@@ -58,4 +59,40 @@
         android:layout_margin="15dp"
         android:text="@string/Salvar" />
 
-</LinearLayout>
+
+    <TextView
+        android:id="@+id/formardelogin"
+        android:layout_width="wrap_content"
+        android:layout_height="32dp"
+        android:layout_gravity="center"
+        android:layout_margin="20dp"
+        android:text="@string/outraforma"
+        android:textColor="#000000"
+        android:textSize="20sp" />
+
+    <LinearLayout
+        android:id="@+id/idBtAutetificaçãoLinear"
+        android:layout_width="351dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:background="#1c1c1c1c"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/idBtAutetificação"
+            android:layout_width="90dp"
+            android:layout_height="60dp"
+            android:layout_gravity="center"
+            app:srcCompat="@drawable/fui_ic_googleg_color_24dp" />
+
+        <TextView
+            android:id="@+id/textview200"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="20dp"
+            android:text="@string/logarGoogle"
+            android:textColor="#000000"
+            android:textSize="20sp" />
+
+    </LinearLayout>
+    </LinearLayout>

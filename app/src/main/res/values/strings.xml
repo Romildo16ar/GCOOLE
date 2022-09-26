@@ -60,5 +60,7 @@
     <string name="DataInicial">Data Inicial</string>
     <string name="DataFinal">Data Final</string>
     <string name="Atualizar">Atualizar Dados</string>
+    <string name="outraforma">Outra Forma de Cadastro</string>
+    <string name="logarGoogle">Cadastrar com Google</string>
 
 </resources>

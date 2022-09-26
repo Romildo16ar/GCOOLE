@@ -14,21 +14,45 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.gcoole.AutentificacaoFireBase;
 import com.example.gcoole.Dao.Dao;
 import com.example.gcoole.Listviews.ListviewProdutor;
 import com.example.gcoole.MainActivity;
 import com.example.gcoole.Modelo.Produtor;
 import com.example.gcoole.Modelo.ValorPorLitro;
 import com.example.gcoole.R;
+import com.example.gcoole.TelaInicial;
+import com.example.gcoole.TelaSicronizacao;
+import com.firebase.ui.auth.AuthUI;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseApp;
+import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
@@ -38,9 +62,15 @@ public class CadastroProdutor extends AppCompatActivity implements View.OnClickL
     private CheckBox checkBoxPropTaque;
     private EditText numProd;
     List<Produtor> list = null;
+    private TextView outraForma;
+    private TextView logarGoogle;
+    private LinearLayout linerLayout;
+
 
     FirebaseDatabase firebaseDatabase;
     DatabaseReference databaseReference;
+
+
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,23 +80,63 @@ public class CadastroProdutor extends AppCompatActivity implements View.OnClickL
         Dao bd = new Dao(this);
         list = bd.selecionarProdutor();
 
+
         nomeProp = findViewById(R.id.idnomeProd);
         checkBoxPropTaque = findViewById(R.id.idradioBTdonoTaque);
         numProd = findViewById(R.id.idNumProd);
+
+        ImageView btAuteticar = findViewById(R.id.idBtAutetificação);
+        outraForma = findViewById(R.id.formardelogin);
+        logarGoogle = findViewById(R.id.textview200);
+
+        linerLayout = findViewById(R.id.idBtAutetificaçãoLinear);
+
+        linerLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(isOnline()) {
+                    startActivity(new Intent(CadastroProdutor.this, AutentificacaoFireBase.class));
+                }else{
+
+                    AlertDialog.Builder builder = new AlertDialog.Builder(CadastroProdutor.this);
+                    builder.setTitle("Produtor não Cadastrado. Sem Conexão com a internet!");
+                    builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Toast.makeText(CadastroProdutor.this,  "", Toast.LENGTH_SHORT);
+
+                            if(list.size()== 0){
+                                finish();
+                                startActivity(new Intent(CadastroProdutor.this, MainActivity.class));
+                            }
+
+                        }
+                    });
+                    builder.show();
+
+                }
+            }
+        });
+
+
 
         if(list.size()== 0){
             checkBoxPropTaque.setChecked(true);
             checkBoxPropTaque.setEnabled(false);
             this.setTitle("Cadastro do Gestor");
+
+        }else{
+            btAuteticar.setVisibility(View.INVISIBLE);
+            logarGoogle.setVisibility(View.INVISIBLE);
+            outraForma.setVisibility(View.INVISIBLE);
         }
         inicializarFireBase();
-        Button btSalvar = findViewById(R.id.idBtsalvar);
-        btSalvar.setOnClickListener(this);
-
-
 
 
     }
+
+
+
     public boolean onCreateOptionsMenu(Menu menu){
         getMenuInflater().inflate(R.menu.menu, menu);
         return true;
@@ -223,4 +293,6 @@ public class CadastroProdutor extends AppCompatActivity implements View.OnClickL
         firebaseDatabase = FirebaseDatabase.getInstance();
         databaseReference = firebaseDatabase.getReference();
     }
+
+
 }
